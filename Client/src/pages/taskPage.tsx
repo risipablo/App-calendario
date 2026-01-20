@@ -4,8 +4,7 @@ import "../style/task.css"
 export const TaskPage = () => {
 
     return(
-        <div className="container-taskpage">
-            <h2> Tareas del dia </h2>
+        <div className="container-pages">
             <TaskContainer/>
         </div>
     )

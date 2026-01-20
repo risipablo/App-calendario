@@ -21,7 +21,7 @@ export const TaskRow = ({
     saveTask
 }: TaskRowProps) => {
     
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
 
     useEffect(() => {
@@ -201,7 +201,7 @@ export const TaskRow = ({
                 <td className="task-content">
                     <Accordion 
                         expanded={isExpanded} 
-                        onChange={() => setIsExpanded(!isExpanded)}
+                        onChange={() => setIsExpanded(isExpanded)}
                         sx={{
                             boxShadow: 'none',
                             '&:before': { display: 'none' },

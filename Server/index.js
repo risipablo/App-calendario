@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const DB = require('./src/config/database')
 const todoRouter = require("./src/routes/taskRoute")
+const goalRouter = require("./src/routes/goalRoute")
 
 require('dotenv').config()
 
@@ -19,7 +20,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-app.use('/api',todoRouter)
+app.use('/api', todoRouter)
+app.use('/api', goalRouter)
 
 DB()
 
