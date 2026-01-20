@@ -69,7 +69,7 @@ exports.deleteTask = async (req,res) => {
         }
         res.json(task)
     } catch(err){
-        res.status(500).josn({error:err.message})
+        res.status(500).json({error:err.message})
     } 
 }
 

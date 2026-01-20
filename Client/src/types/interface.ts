@@ -1,15 +1,6 @@
 import type React from "react";
 import type { ModalConfirmProps } from "../components/layout/modalConfirm";
 
-export interface PaginateProps{
-    currentPage:number
-    setCurrentPage: (page:number) => void
-    totalItems: number;
-    itemsPerPage: number;
-    offset:number
-    pageCount:number
-}
-
 
 export interface ISubtask {
     title: string;
@@ -18,8 +9,8 @@ export interface ISubtask {
 }
 
 export interface ITodo{
-    slice(offset: number, arg1: number): unknown;
-    length: number;
+    // slice(offset: number, arg1: number): unknown;
+    // length: number;
     _id:string;
     date:string;
     title: string 
@@ -30,7 +21,6 @@ export interface ITodo{
     subtaskPriorities?: string[];
     subtaskCompleted?: boolean[];
 }
-
 
 // Form for add tasks
 export interface TaskFormProps{
@@ -72,4 +62,26 @@ export interface TaskRowProps{
     completedTask?:(taskId:string) => void;
     completedSubTasks?: (taskId: string, subTaskIndex: number) => void;
     ModalConfirm?:React.ComponentType<ModalConfirmProps>
+}
+
+
+// goal interfece
+export interface IGoal{
+    _id:string
+    title:string
+    priority:'alta'|'media'|'baja'
+    start_date: string 
+    completed:boolean
+    completed_at?: string | null
+}
+
+
+// Paginate props
+export interface PaginateProps{
+    currentPage:number
+    setCurrentPage: (page:number) => void
+    totalItems: number;
+    itemsPerPage: number;
+    offset:number
+    pageCount:number
 }

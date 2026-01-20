@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import type { ITodo } from './../types/interface';
 import toast from "react-hot-toast"
 import axios from 'axios';
+import { config } from '../config/index';
+
+const serverFront = config.Api
 
 export const UseTask = () => {
     const [task,setTask] = useState<ITodo[]>([])
@@ -9,7 +12,7 @@ export const UseTask = () => {
 
     useEffect(() => {
         setLoading(false)
-        axios.get(`http://localhost:3001/api/task`)
+        axios.get(`${serverFront}/api/task`)
         .then(response =>{
             setTask(response.data)
         })
@@ -26,7 +29,7 @@ export const UseTask = () => {
                 position: 'top-center'
             });
             
-            axios.post(`http://localhost:3001/api/task`, {
+            axios.post(`${serverFront}/api/task`, {
                 date: date,
                 title: title,
                 priority: priority,
