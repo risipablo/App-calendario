@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import type { IGoal } from "../types/interface"
 import {config} from "../config/index"
 import axios from "axios"
+import toast from "react-hot-toast"
 
 const serverFront = config.Api
 
@@ -40,6 +41,56 @@ export const useGoals = () => {
         }
     }
 
+    const deleteGoal = (id:string) => {
+        axios.delete(`${serverFront}/api/goal/${id}`)
+        .then(() => {
+            const updateGoal = goal.filter((prod) => prod._id !== id)
+            setGoal(updateGoal)
+        })
+        .catch(err => console.log(err))
+    }
 
-    return{ goal, addGoal}
+    const allDeleteGoal = () => {
+        axios.delete(`${serverFront}/api/goal`)
+        .then(response => {
+            setGoal([])
+            console.debug(response.data)
+        })
+        .catch(err => console.error(err))
+    } 
+
+    const editGoal = (id:string, editData:{title:string, priority:string, start_date:string}) => {
+        axios.patch(`${serverFront}/api/goal/${id}`,editData)
+        .then(response => {
+            const updateGoal = goal.map(goa => {
+                if(goa._id === id)
+                    return response.data
+                return goa
+            })
+            setGoal(updateGoal)
+        })
+        .catch(err => console.log(err)) 
+    }
+
+    const toogleComplete = (id:string) => {
+        axios.patch(`${serverFront}/api/goal/${id}/completedGoal`)
+        .then(response => {
+            setGoal(prev => prev.map(goa => goa._id === id ? response.data : goa))
+
+            const goal = response.data
+            const message = goal.completed ? 'Goal Completed' : 'Goal Incomplete'
+
+            toast.success(message,{
+                position:'top-center',
+                duration:1000
+            })
+        })
+        .catch(err => {
+            console.error(err)
+            toast.error("Error update goals")
+        })
+
+    }
+
+    return{ goal, addGoal, deleteGoal, editGoal, toogleComplete, allDeleteGoal}
 }
