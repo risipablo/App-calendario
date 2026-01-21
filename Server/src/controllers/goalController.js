@@ -88,10 +88,6 @@ exports.completedGoal = async (req,res) => {
         }
 
         goal.completed = !goal.completed
-        goal.completed = newCompletedState
-        goal.complete_note = newCompletedState ? new Date() : null
-
-
         await goal.save()
         res.json(goal)
     

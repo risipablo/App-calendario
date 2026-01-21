@@ -1,11 +1,12 @@
 
 import { useEffect, useState } from "react";
-import { Save, X, Pencil, Trash2, Plus, CheckSquare, ChevronUp, ChevronDown } from 'lucide-react';
+import { Save, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown, Check, SquareDashed } from 'lucide-react';
 import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Tooltip } from '@mui/material';
 import type { TaskRowProps } from "../../types/interface";
 import "../../style/task.css"
 import { ModalConfirm } from "../layout/modalConfirm";
 import { Toaster } from "react-hot-toast";
+
 
 
 
@@ -45,9 +46,9 @@ export const TaskRow = ({
     }, [tas._id]);
 
     const formatDate = (dateString: string) => {        
-        const cleanDate = dateString.split('T')[0];
-        const [year, month, day] = cleanDate.split('-');
-        return `${day}/${month}/${year}`;
+        const cleanDate = dateString.split('T')[0]
+        const [year, month, day] = cleanDate.split('-')
+        return `${day}/${month}/${year}`
     };
 
     const [isAddingSubtask, setIsAddingSubtask] = useState(false);
@@ -64,6 +65,8 @@ export const TaskRow = ({
         }
     };
 
+    
+    // Edit task
     const [isEditingDate, setIsEditingDate] = useState(false);
     const [editedTaskData, setEditedTaskData] = useState({
         date: tas.date,
@@ -161,8 +164,6 @@ export const TaskRow = ({
         return `${completedCount}/${totalItems} completados`;
     };
 
-
-
     // Loader
     if (isLoadingSkeleton) {
         return (
@@ -187,7 +188,6 @@ export const TaskRow = ({
         );
     }
 
-
     return (
         <>
             <tr className={`task-row ${tas.completed ? 'completed-task' : ''}`}>
@@ -201,7 +201,7 @@ export const TaskRow = ({
                 <td className="task-content">
                     <Accordion 
                         expanded={isExpanded} 
-                        onChange={() => setIsExpanded(isExpanded)}
+                        onChange={() => setIsExpanded(!isExpanded)}
                         sx={{
                             boxShadow: 'none',
                             '&:before': { display: 'none' },
@@ -320,18 +320,9 @@ export const TaskRow = ({
                                 </ul>
                             )}
 
-                            <div className="add-subtask-button-container">
-                                <button 
-                                    className="btn-add-subtask"
-                                    onClick={() => setIsAddingSubtask(true)}
-                                >
-                                    <Plus size={14} />
-                                    <span>Agregar subtarea</span>
-                                </button>
-                            </div>
-
+                            {/*Toogle completed all task*/}
                             {(tas.subtaskTitles && tas.subtaskTitles.length > 0) && (
-                                <div className="complete-all-button-container">
+                                <div className="complete-all-button-container" style={{ marginTop: '8px' }}>
                                     <Tooltip title="Completar todas las tareas de esta fila" arrow>
                                         <button 
                                             className="btn-complete-all"
@@ -341,14 +332,32 @@ export const TaskRow = ({
                                                 }
                                             }}
                                         >
-                                            <CheckSquare size={14} />
-                                            <span>Completar todo</span>
+                                            
+                                            {calculateProgress() === 100 ?  <Check size={14}/> : <SquareDashed  size={14}/>  }
+                                            
+                                            <span>
+                                                {calculateProgress() === 100 ? 'Todas las tareas completadas' : 'Completar todas las tareas'}
+                                            </span>
                                         </button>
                                     </Tooltip>
                                 </div>
                             )}
                         </AccordionDetails>
                     </Accordion>
+
+                    {/* add Subtask */}
+                    <div className="add-subtask-button-container" style={{ marginTop: '10px' }}>
+                        <button 
+                            className="btn-add-subtask"
+                            onClick={() => setIsAddingSubtask(true)}
+                        >
+                            <Plus size={14} />
+                            <span>Agregar subtarea</span>
+                        </button>
+                    </div>
+
+                    
+
                 </td>
         
                 <td className="task-progress">
@@ -405,7 +414,7 @@ export const TaskRow = ({
                 </td>
             </tr>
 
-            {/* Modales (sin cambios en esta parte) */}
+            {/* Modals */}
             {isEditingDate && (
                 <tr className="modal-row">
                     <td colSpan={4} className="modal-cell">
@@ -484,6 +493,7 @@ export const TaskRow = ({
                     </td>
                 </tr>
             )}
+
 
             {isAddingSubtask && (
                 <tr className="modal-row">
@@ -624,8 +634,6 @@ export const TaskRow = ({
                     cancelText="Cancelar"
                 />
             )}
-
-
 
             <Toaster/>        
         </>
