@@ -60,7 +60,7 @@ export const UseTask = () => {
     };
     // Add New tasks
     const addNewTask = (taskId: string, title:string, priority: string) => {
-        axios.post(`http://localhost:3001/api/task/${taskId}/addtask`,{
+        axios.post(`${serverFront}/api/task/${taskId}/addtask`,{
             title, priority
         })
         .then(response => {
@@ -80,7 +80,7 @@ export const UseTask = () => {
 
     // Delete principal task
     const deleteTask = (id:string) => {
-        axios.delete(`http://localhost:3001/api/task/${id}`)
+        axios.delete(`${serverFront}/api/task/${id}`)
         .then(() => {
             setTask(prev => prev.filter(tas => tas._id !== id))
             toast.success('Task deleted successfully.',{
@@ -100,7 +100,7 @@ export const UseTask = () => {
 
     // Delete principal task
     const deletePrincipalTask = (taskId:string) => {
-        axios.delete(`http://localhost:3001/api/task/${taskId}/principal`)
+        axios.delete(`${serverFront}/api/task/${taskId}/principal`)
         .then(response => {
             setTask(prev => prev.map(tas => 
                 tas._id === taskId ? response.data.updatedTask : tas
@@ -117,7 +117,7 @@ export const UseTask = () => {
 
     // Delete subtask
     const deleteSubTask = (taskId:string, subTaskIndex:number) => {
-        axios.delete(`http://localhost:3001/api/task/${taskId}/subtask/${subTaskIndex}`)
+        axios.delete(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}`)
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data:tas))
             toast.success("Task deleted succesfully.", {
@@ -133,7 +133,7 @@ export const UseTask = () => {
 
     // Delete all
     const deleteAll = () => {
-        axios.delete(`http://localhost:3001/api/task`)
+        axios.delete(`${serverFront}/api/task`)
         .then(response => {
             setTask([])
             console.debug(response.data)
@@ -148,7 +148,7 @@ export const UseTask = () => {
 
     // Edit & save principal task
     const saveTask = (id:string, editData:{date:Date, title:string, priority:string}) => {
-        axios.patch(`http://localhost:3001/api/task/${id}`, editData)
+        axios.patch(`${serverFront}/api/task/${id}`, editData)
         .then(response => {
             setTask(prev => prev.map(tas => {
                 if(tas._id === id){
@@ -169,7 +169,7 @@ export const UseTask = () => {
 
     // Edit & save subtaska
     const editSubTask = (taskId: string, subTaskIndex: number, updatedSubTask:{title?:string, priority?:string}) => {
-        axios.patch(`http://localhost:3001/api/task/${taskId}/subtask/${subTaskIndex}`, updatedSubTask)
+        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}`, updatedSubTask)
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
             toast.success("Task edited and saved correctly.",{
@@ -187,7 +187,7 @@ export const UseTask = () => {
 
     // Check all task
     const toogleAllTask = (taskId:string) => {
-        axios.patch(`http://localhost:3001/api/task/${taskId}/completeAllTask`)
+        axios.patch(`${serverFront}/api/task/${taskId}/completeAllTask`)
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
 
@@ -207,7 +207,7 @@ export const UseTask = () => {
 
     // Check principal task
     const completedTask = (taskId: string) => {
-        axios.patch(`http://localhost:3001/api/task/${taskId}/completedTask`)
+        axios.patch(`${serverFront}/api/task/${taskId}/completedTask`)
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
 
@@ -229,7 +229,7 @@ export const UseTask = () => {
 
     // Completed subtask
     const completedSubTasks = (taskId: string, subTaskIndex: number) => {
-        axios.patch(`http://localhost:3001/api/task/${taskId}/subtask/${subTaskIndex}/toggle`)
+        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}/toggle`)
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
             
