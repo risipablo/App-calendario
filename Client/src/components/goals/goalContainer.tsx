@@ -350,9 +350,10 @@ export const GoalContainer = ({
                         currentPage={currentPage}
                         setCurrentPage={setCurrentPage}
                         totalItems={goal.length}
-                        offSet={offSet}
-                        pageCount={pageCount}
-                    />
+                        offset={offSet}
+                        pageCount={pageCount} 
+                        itemsPerPage={0} 
+                        />
                 )
             }
 
