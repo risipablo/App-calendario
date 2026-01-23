@@ -51,9 +51,6 @@ export const GoalMaster = () => {
 
     
 
-
-
-
     return(
         <div className="task-table-container">
             <div className="table-header">

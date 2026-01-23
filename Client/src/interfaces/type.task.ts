@@ -9,8 +9,6 @@ export interface ISubtask {
 }
 
 export interface ITodo{
-    // slice(offset: number, arg1: number): unknown;
-    // length: number;
     _id:string;
     date:string;
     title: string 
