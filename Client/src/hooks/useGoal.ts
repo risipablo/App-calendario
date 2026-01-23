@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { IGoal } from "../types/interface"
+import type { IGoal } from "../interfaces/type.goal"
 import {config} from "../config/index"
 import axios from "axios"
 import toast from "react-hot-toast"

@@ -1,27 +1,25 @@
-
 import { useState } from "react";
+import type { GoalFormProps } from "../../interfaces/type.goal";
 import { Plus, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import type { TaskFormProps } from "../../interfaces/type.task";
-import "../../style/form.css";
+import { AnimatePresence, motion } from "framer-motion";
 
-export const TaskForm = ({
-    date,
-    title,
+export const GoalForm = ({
+    onAdd,
     priority,
-    setDate,
     setPriority,
+    setStartDate,
     setTitle,
-    onAdd
-}: TaskFormProps) => {
+    start_date,
+    title
+}:GoalFormProps) => {
 
-    const [addModal, setAddModal] = useState(false);
-  
-    return (
+    const [addModal, setAddModal] = useState(false)
+
+    return(
         <>
-            <button className="btn-add-task" onClick={() => setAddModal(true)}>
+              <button className="btn-add-task" onClick={() => setAddModal(true)}>
                 <Plus size={18} />
-                <span>Nueva Tarea</span>
+                <span>Nueva Meta</span>
             </button>
 
             <AnimatePresence>
@@ -58,8 +56,8 @@ export const TaskForm = ({
                                     <input 
                                         type="date" 
                                         className="task-input"
-                                        value={date} 
-                                        onChange={(e) => setDate(e.target.value)} 
+                                        value={start_date} 
+                                        onChange={(e) => setStartDate(e.target.value)} 
                                     />
                                 </div>
 
@@ -95,7 +93,7 @@ export const TaskForm = ({
                                             onAdd();
                                             setAddModal(false);
                                         }}
-                                        disabled={!date || !title.trim() || !priority}
+                                        disabled={!start_date || !title.trim() || !priority}
                                     >
                                         <Plus size={18} />
                                         Agregar
@@ -114,6 +112,7 @@ export const TaskForm = ({
                     </motion.div>
                 )}
             </AnimatePresence>
+
         </>
-    );
-};
+    )
+}
