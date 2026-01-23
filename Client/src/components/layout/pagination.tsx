@@ -1,6 +1,6 @@
 
 
-import type { PaginateProps } from "../../interfaces/type.task";
+import type { PaginateProps } from "../../interfaces/type";
 import { Pagination } from "@mui/material";
 
 
