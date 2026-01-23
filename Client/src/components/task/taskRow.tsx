@@ -8,6 +8,7 @@ import { ModalConfirm } from "../layout/modalConfirm";
 import { Toaster } from "react-hot-toast";
 
 
+
 export const TaskRow = ({
     tas,
     deleteTask,
@@ -20,8 +21,11 @@ export const TaskRow = ({
     saveTask
 }: TaskRowProps) => {
     
+
+
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
+
 
     useEffect(() => {
         setIsAddingSubtask(false);
@@ -36,12 +40,14 @@ export const TaskRow = ({
         });
         
         setIsLoadingSkeleton(true);
+        
         const timer = setTimeout(() => {
             setIsLoadingSkeleton(false);
-        }, 300);
+
+        }, 100);
 
         return () => clearTimeout(timer);
-    }, [tas._id]);
+    }, [tas._id, tas.date, tas.title, tas.priority]);
 
     const formatDate = (dateString: string) => {        
         const cleanDate = dateString.split('T')[0]
@@ -185,6 +191,8 @@ export const TaskRow = ({
             </tr>
         );
     }
+
+
 
     return (
         <>

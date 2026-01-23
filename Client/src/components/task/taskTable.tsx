@@ -31,11 +31,29 @@ export const TaskTable = ({
     ModalConfirm
 }: TaskTableProps) => {
 
+
+        
+    useEffect(() => {
+
+        // eslint-disable-next-line react-hooks/immutability
+        setCurrentPage(0)
+
+        const timer = setTimeout(() => {
+            // eslint-disable-next-line react-hooks/immutability
+            setLoading(false)
+            
+        }, 100);
+
+        return () => clearTimeout(timer)
+    },[task.length])
+
+
     
 
     const [date, setDate] = useState<string>("")
     const [title,setTitle] = useState<string>("")
     const [priority,setPriority] = useState<string>("")
+    const [loading ,setLoading] = useState(true)
 
     const handleAddTask = () => {
         if(date && title.trim() && priority){
@@ -88,38 +106,9 @@ export const TaskTable = ({
       const currentItems = task.slice(offset, offset + itemsPerPage)
 
 
-    const [loading ,setLoading] = useState(true)
-
     
-    useEffect(() => {
-
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setCurrentPage(0)
-
-        const timer = setTimeout(() => {
-            setLoading(false)
-        }, 1000);
-
-        return () => clearTimeout(timer)
-    },[task.length])
 
 
-    if (loading) {
-        return (
-            <div className="loading-message">
-                <ClipLoader color="#8e7cc3" size={50} />
-                <p>Cargando tareas...</p>
-            </div>
-        )
-    } else if(!task.length){
-        return (
-            <div className="empty-state-goals">
-                
-                <h3>No hay tareas establecidas</h3>
-                <p>Agrega tu primer objetivo</p>
-            </div>
-        ) 
-    }
 
     return (
         <div className="task-table-container">
@@ -151,8 +140,23 @@ export const TaskTable = ({
                 </div>
             </div>
     
-            <div className="table-wrapper">
-                <table className="tasks-table">
+            {
+                loading ? (
+                    <div className="loading-message">
+                        <ClipLoader color="#8e7cc3" size={50} />
+                        <p>Cargando tareas...</p>
+                    </div>
+                ) : !task.length  ? (
+                    <div className="empty-state-goals">
+            
+                        <h3>No hay tareas establecidas</h3>
+                        <p>Agrega tu primer objetivo</p>
+                    </div>
+                ) : (
+                    <div className="table-wrapper">
+        <table className="tasks-table">
+            
+                    <>
                     <thead>
                         <tr>
                             <th>Fecha</th>
@@ -163,25 +167,31 @@ export const TaskTable = ({
                     </thead>
                     <tbody>
                         {currentItems.map(tas => (
-                            <TaskRow 
-                                key={tas._id}
-                                tas={tas}
-                                addTask={addTask}
-                                deleteTask={onDelete}
-                                deletePrincipalTask={deletePrincipalTask}
-                                deleteSubTask={deleteSubTask}
-                                editSubTask={editSubTask}
-                                toogleAllTask={toogleAllTask}
-                                completedTask={completedTask}
-                                completedSubTasks={completedSubTasks}
-                                addNewTask={addNewTask}
-                                saveTask={saveTask}
-                                ModalConfirm={ModalConfirm}
-                            />
-                        ))}
+                                <TaskRow 
+                                    key={tas._id}
+                                    tas={tas}
+                                    addTask={addTask}
+                                    deleteTask={onDelete}
+                                    deletePrincipalTask={deletePrincipalTask}
+                                    deleteSubTask={deleteSubTask}
+                                    editSubTask={editSubTask}
+                                    toogleAllTask={toogleAllTask}
+                                    completedTask={completedTask}
+                                    completedSubTasks={completedSubTasks}
+                                    addNewTask={addNewTask}
+                                    saveTask={saveTask}
+                                    ModalConfirm={ModalConfirm}
+                                />
+                            ))}
                     </tbody>
-                </table>
-            </div>
+                </>
+                    
+            
+
+            </table>
+                    </div>
+                )
+            }
 
             {
                 pageCount > 1 && (
