@@ -1,10 +1,11 @@
-import { GoalContainer } from "../components/goals/goalContainer"
+import { GoalMaster } from "../components/goals/goalMaster"
+
 
 export const GoalPage = () => {
 
     return(
         <div className="container-pages">
-            <GoalContainer/>
+            <GoalMaster/>
         </div>
     )
 }

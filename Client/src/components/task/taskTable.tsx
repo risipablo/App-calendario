@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { Tooltip } from '@mui/material';
 import { Trash2 } from 'lucide-react';
-import type { TaskTableProps } from "../../types/interface";
+import type { TaskTableProps } from "../../interfaces/type.task";
 import { TaskRow } from "./taskRow";
 import "../../style/task.css";
 import { ModalConfirm as DefaultModalConfirm } from '../layout/modalConfirm';
 import { TaskForm } from "./taskForm";
 import { ClipLoader } from "react-spinners";
 import { PaginationComponent } from "../layout/pagination";
+
 
 
 
@@ -112,7 +113,11 @@ export const TaskTable = ({
         )
     } else if(!task.length){
         return (
-            <div className="empty-message">No hay tareas por hoy</div>
+            <div className="empty-state-goals">
+                
+                <h3>No hay tareas establecidas</h3>
+                <p>Agrega tu primer objetivo</p>
+            </div>
         ) 
     }
 

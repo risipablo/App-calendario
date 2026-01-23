@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ITodo } from './../types/interface';
+import type { ITodo } from '../interfaces/type.task';
 import toast from "react-hot-toast"
 import axios from 'axios';
 import { config } from '../config/index';

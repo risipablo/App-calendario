@@ -2,12 +2,10 @@
 import { useEffect, useState } from "react";
 import { Save, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown, Check, SquareDashed } from 'lucide-react';
 import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Tooltip } from '@mui/material';
-import type { TaskRowProps } from "../../types/interface";
+import type { TaskRowProps } from "../../interfaces/type.task";
 import "../../style/task.css"
 import { ModalConfirm } from "../layout/modalConfirm";
 import { Toaster } from "react-hot-toast";
-
-
 
 
 export const TaskRow = ({
