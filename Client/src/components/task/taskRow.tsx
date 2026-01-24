@@ -194,9 +194,10 @@ export const TaskRow = ({
 
 
 
+    // 
     return (
         <>
-            <tr className={`task-row ${tas.completed ? 'completed-task' : ''}`}>
+            <tr className={`task-row `}>
                 
                 <td className="task-date">
                     <div className="date-display">
@@ -264,7 +265,7 @@ export const TaskRow = ({
                             </div>
                         </AccordionSummary>
 
-                        <AccordionDetails sx={{ padding: 0, paddingTop: '8px' }}>
+                        <AccordionDetails sx={{ padding: 0, paddingTop: '8px' }} >
                             {tas.subtaskTitles && tas.subtaskTitles.length > 0 && (
                                 <ul className="subtasks-list">
                                     {tas.subtaskTitles.map((subtaskTitle, index) => {
