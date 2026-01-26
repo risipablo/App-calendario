@@ -1,4 +1,6 @@
-import Calendar from "../components/calendar/calender"
+import { Calendar } from "../components/calendar/calendar"
+
+
 
 
 

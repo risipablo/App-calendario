@@ -74,7 +74,7 @@ export function Navbar(){
                                     <span>Inicio</span>
                                 </NavLink>
                             
-                                <NavLink to="/calender" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                <NavLink to="/calendar" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <Calendar size={20} /> 
                                     <span>Calendario</span>
                                 </NavLink>

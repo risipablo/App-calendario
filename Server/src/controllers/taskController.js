@@ -208,7 +208,7 @@ exports.editSubtask = async (req,res) => {
     }
 }
 
-// completed principal task
+
 exports.completeAllTask = async (req,res) => {
     const { id } = req.params
     
@@ -254,6 +254,7 @@ exports.completeAllTask = async (req,res) => {
     }
 }
 
+// completed principal task
 exports.completePrincipalTask = async (req,res) => {
     const {id} = req.params
 
