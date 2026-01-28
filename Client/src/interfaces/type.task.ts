@@ -18,6 +18,7 @@ export interface ITodo{
     subtaskTitles?: string[];
     subtaskPriorities?: string[];
     subtaskCompleted?: boolean[];
+    incompletedSubtask?:boolean[]
 }
 
 // Form for add tasks
@@ -42,6 +43,7 @@ export interface TaskTableProps{
     toogleAllTask:(taskId:string) => void;
     completedTask:(taskId:string) => void;
     completedSubTasks: (taskId: string, subTaskIndex: number) => void;
+    incompletedSubtask:(taskId: string, subTaskIndex: number) => void;
     addNewTask: (taskId: string, title: string, priority: string) => void;
     saveTask: (id: string, editData: { date: Date, title:string, priority:string }) => void;
     ModalConfirm?:React.ComponentType<ModalConfirmProps>
@@ -59,6 +61,7 @@ export interface TaskRowProps{
     toogleAllTask?:(taskId:string) => void;
     completedTask?:(taskId:string) => void;
     completedSubTasks?: (taskId: string, subTaskIndex: number) => void;
+    incompletedSubtask:(taskId: string, subTaskIndex: number) => void;
     ModalConfirm?:React.ComponentType<ModalConfirmProps>
 }
 

@@ -24,6 +24,7 @@ export const TaskContainer = () => {
                 toogleAllTask={tasks.toogleAllTask}
                 completedTask={tasks.completedTask}
                 completedSubTasks={tasks.completedSubTasks}
+                incompletedSubtask={tasks.incompletedSubTask}
                 ModalConfirm={ModalConfirm}
             />
         </>

@@ -30,6 +30,10 @@ const todoSchema = new mongoose.Schema({
     subtaskCompleted: {
         type: [Boolean],
         default: []
+    },
+    incompletedSubtask:{
+        type:[Boolean],
+        default:[]
     }
 })
 

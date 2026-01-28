@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Tooltip } from '@mui/material';
-import { Trash2 } from 'lucide-react';
+import { Calendar, Trash2 } from 'lucide-react';
 import type { TaskTableProps } from "../../interfaces/type.task";
 import { TaskRow } from "./taskRow";
 import "../../style/task.css";
@@ -28,9 +28,9 @@ export const TaskTable = ({
     onDeleteAll,
     deletePrincipalTask,
     saveTask,
+    incompletedSubtask,
     ModalConfirm
 }: TaskTableProps) => {
-
 
         
     useEffect(() => {
@@ -54,6 +54,8 @@ export const TaskTable = ({
     const [title,setTitle] = useState<string>("")
     const [priority,setPriority] = useState<string>("")
     const [loading ,setLoading] = useState(true)
+    const [showToday, setShowToday] = useState(false);
+
 
     const handleAddTask = () => {
         if(date && title.trim() && priority){
@@ -94,27 +96,34 @@ export const TaskTable = ({
 
     const ModalComponent = ModalConfirm || DefaultModalConfirm;
 
+    const todayString = () => {
+        const today = new Date()
+        return today.toISOString().split('T')[0]
+    }
 
-    // Paginate task
-      
+    const filteredTasks = showToday ? task.filter(tas => {
+        const taskDate = new Date(tas.date).toISOString().split('T')[0]
+        return taskDate === todayString()
+    }) : task
+
+    // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)
       const itemsPerPage = 3;
       
       
-      const pageCount = Math.ceil(task.length / itemsPerPage)
-      const offset = currentPage * itemsPerPage
-      const currentItems = task.slice(offset, offset + itemsPerPage)
+      const pageCount = Math.ceil(filteredTasks.length / itemsPerPage);
+      const offset = currentPage * itemsPerPage;
+      const currentItems = filteredTasks.slice(offset, offset + itemsPerPage);
 
-
-    
-
-
+      
+      
 
     return (
         <div className="task-table-container">
             <div className="table-header">
                 <h2 className="table-title">Mis Tareas</h2>
-    
+
+     
                 <div className="header-actions">
                     <TaskForm 
                         date={date}
@@ -134,12 +143,27 @@ export const TaskTable = ({
                             "Eliminar Todas"
                         )}>
                             <Trash2 size={18} />
-                            Eliminar Todas ({task.length})
+                            
+                            Eliminar Todas ({showToday ? `${filteredTasks.length}` : `${task.length}`})
                         </button>
                     </Tooltip>
                 </div>
+                                    
             </div>
+
+            <div className="toogle-view">
+                <button     
+                        className="btn-toggle-view"
+                        onClick={() => setShowToday(!showToday)}
+                    >
+                        <Calendar size={18} />
+                        {showToday ? 'Ver Todas' : 'Ver Hoy'}
+                </button>
+            </div>
+                
+                
     
+            
             {
                 loading ? (
                     <div className="loading-message">
@@ -150,45 +174,47 @@ export const TaskTable = ({
                     <div className="empty-state-goals">
             
                         <h3>No hay tareas establecidas</h3>
-                        <p>Agrega tu primer objetivo</p>
+                        <p>Agrega tu primera tarea</p>
                     </div>
                 ) : (
                     <div className="table-wrapper">
-        <table className="tasks-table">
-            
-                    <>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tarea</th>
-                            <th>Progreso</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItems.map(tas => (
-                                <TaskRow 
-                                    key={tas._id}
-                                    tas={tas}
-                                    addTask={addTask}
-                                    deleteTask={onDelete}
-                                    deletePrincipalTask={deletePrincipalTask}
-                                    deleteSubTask={deleteSubTask}
-                                    editSubTask={editSubTask}
-                                    toogleAllTask={toogleAllTask}
-                                    completedTask={completedTask}
-                                    completedSubTasks={completedSubTasks}
-                                    addNewTask={addNewTask}
-                                    saveTask={saveTask}
-                                    ModalConfirm={ModalConfirm}
-                                />
-                            ))}
-                    </tbody>
-                </>
-                    
-            
+                        
+                        <table className="tasks-table">
+                            
+                                    <>
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Tarea</th>
+                                            <th>Progreso</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentItems.map(tas => (
+                                                <TaskRow 
+                                                    key={tas._id}
+                                                    tas={tas}
+                                                    addTask={addTask}
+                                                    deleteTask={onDelete}
+                                                    deletePrincipalTask={deletePrincipalTask}
+                                                    deleteSubTask={deleteSubTask}
+                                                    editSubTask={editSubTask}
+                                                    toogleAllTask={toogleAllTask}
+                                                    completedTask={completedTask}
+                                                    completedSubTasks={completedSubTasks}
+                                                    incompletedSubtask={incompletedSubtask}
+                                                    addNewTask={addNewTask}
+                                                    saveTask={saveTask}
+                                                    ModalConfirm={ModalConfirm}
+                                                />
+                                            ))}
+                                    </tbody>
+                                </>
+                                    
+                            
 
-            </table>
+                        </table>
                     </div>
                 )
             }
