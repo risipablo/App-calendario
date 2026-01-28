@@ -85,9 +85,37 @@
     border-color: var(--color-danger);
 }
 
+.toogle-view{
+    margin: 1rem auto;
+}
+
+.btn-toggle-view {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: white;
+    color: #8e7cc3;
+    border: 2px solid #8e7cc3;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-toggle-view:hover {
+    background-color: #8e7cc3;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(142, 124, 195, 0.3);
+}
+
+.btn-toggle-view:active {
+    transform: translateY(0);
+}
+
 /* accordion */
-
-
 .accordion-toggle-btn {
     background: none;
     border: none;
@@ -307,6 +335,41 @@
     opacity: 0.6;
 }
 
+.subtask-text.not-completed {
+    text-decoration: line-through;
+    color: #991b1b;
+    opacity: 0.8;
+}
+
+.subtask-item.incompleted-item {
+    background-color: #fef2f2;
+    border-left-color: #dc2626;
+}
+
+.subtask-item.incompleted-item .subtask-checkbox {
+    accent-color: #dc2626;
+    opacity: 0.6;
+}
+
+.action-btn-inline.incompleted-btn {
+    color: #6b7280;
+}
+
+.action-btn-inline.incompleted-btn:hover {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    color: #dc2626;
+}
+
+.action-btn-inline.incompleted-active {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    color: #dc2626;
+}
+
+.action-btn-inline.incompleted-active:hover {
+    background-color: #fee2e2;
+}
 
 /* Acciones que aparecen con hover */
 .hover-actions {
@@ -714,13 +777,11 @@ background-color: var(--color-bg-hover);
 }
 
 
-
-
 /* responsive mobile */
 @media (max-width: 850px) {
     .task-table-container {
-    margin-left: 0;
-    padding: 16px;
+        margin-left: 0;
+        padding: 16px;
     }
 
     .table-header {

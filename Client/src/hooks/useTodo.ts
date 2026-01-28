@@ -252,7 +252,30 @@ export const UseTask = () => {
         })
     }
 
+    // Incompleted task
+    const incompletedSubTask = (taskId: string, subTaskIndex:number) => {
+        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}/incomplete`)
+        .then(response => {
+            setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
+        
+            const task = response.data
+            const subtask = task.subtasks?.[subTaskIndex]
+
+            toast.error(
+                subtask?.completed ? "Task incomplete" : "Task as pending",
+                {
+                    position: 'top-center',
+                    duration:1000
+                }
+            )
+        })
+        .catch(err => {
+            console.log(err.message)
+            toast.error("Error actualizando subtarea")
+        })
+    }
+
     return {
-        task, loading, addTask, addNewTask, deleteTask, deleteAll, deleteSubTask, saveTask, editSubTask,completedSubTasks, completedTask, toogleAllTask,deletePrincipalTask
+        task, loading, addTask, addNewTask, deleteTask, deleteAll, deleteSubTask, saveTask, editSubTask,completedSubTasks, completedTask, toogleAllTask,deletePrincipalTask ,incompletedSubTask
     }
 }

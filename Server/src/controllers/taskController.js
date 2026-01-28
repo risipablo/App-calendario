@@ -290,7 +290,7 @@ exports.completeSubTask = async (req,res) => {
             return res.status(400).json({ error: "Índice de subtarea inválido" })
         }
 
-        // Iniciar array si no existe
+        // Se inicia el array si no existe
         if(!task.subtaskCompleted || task.completed.length === 0){
             task.subtaskCompleted = new Array(task.title.length).fill(false)
         }
@@ -307,5 +307,53 @@ exports.completeSubTask = async (req,res) => {
 
     } catch (err) {
         res.status(500).json({error: err.message})
+    }
+}
+
+exports.incompleteSubTask = async (req,res) => {
+    const {id, subTaskIndex} = req.params
+
+    try{
+        const task = await TodoModel.findById(id)
+
+        if(!task){
+            return res.status(404).json({error: 'Task not found'})
+        }
+
+        const index = parseInt(subTaskIndex)
+
+        if(index < 0 || index >= (task.subtaskTitles?.length || 0)){
+            return res.status(400).json({ error: "Índice de subtarea inválido" })
+        }
+
+
+        if(!task.incompletedSubtask){
+            task.incompletedSubtask = new Array(task.subtaskTitles.length).fill(false)
+        }
+
+        if(!task.subtaskCompleted){
+            task.subtaskCompleted = new Array(task.subtaskTitles.length).fill(false)
+        }
+
+        while(task.incompletedSubtask.length < task.subtaskTitles.length){
+            task.incompletedSubtask.push(false)
+        }
+
+
+        while(task.subtaskCompleted.length < task.subtaskTitles.length){
+            task.subtaskCompleted.push(false)
+        }
+
+        task.incompletedSubtask[index] = !task.incompletedSubtask[index]
+
+        if(task.incompletedSubtask[index]){
+            task.subtaskCompleted[index] = false
+        }
+
+        const updatedTask = await task.save()
+        res.json(updatedTask)
+
+    } catch(err){
+        res.status(500).json({error:err.message})
     }
 }

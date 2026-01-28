@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Save, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown, Check, SquareDashed } from 'lucide-react';
+import { Save, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown, Check, SquareDashed, ShieldX} from 'lucide-react';
 import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Tooltip } from '@mui/material';
 import type { TaskRowProps } from "../../interfaces/type.task";
 import "../../style/task.css"
@@ -17,6 +17,7 @@ export const TaskRow = ({
     toogleAllTask,
     completedTask,
     completedSubTasks,
+    incompletedSubtask,
     addNewTask,
     saveTask
 }: TaskRowProps) => {
@@ -141,28 +142,42 @@ export const TaskRow = ({
     };
 
     const calculateProgress = () => {
-        const totalItems = 1 + (tas.subtaskTitles?.length || 0);
+        let totalItems = 1
         let completedCount = tas.completed ? 1 : 0;
 
-        if(tas.subtaskCompleted && tas.subtaskCompleted.length > 0){
-            tas.subtaskCompleted.forEach(element => {
-                if(element) completedCount++;
-            });
+        if(tas.subtaskTitles?.length){
+            tas.subtaskTitles.forEach((_,index) => {
+                const isIncompleted = tas.incompletedSubtask?.[index]
+
+                    totalItems++
+
+                    if(tas.subtaskCompleted?.[index] && !isIncompleted){
+                        completedCount ++
+                    
+                }
+            })
         }
 
-        if (completedCount === 0) return 0;
-        if (completedCount === totalItems) return 100;
-        return Math.round((completedCount / totalItems)*100);
+        if (completedCount === 0) return 0
+        if(completedCount === totalItems) return 100
+        return Math.round((completedCount/totalItems)*100)
     };
 
     const getProgressLabel = () => {
-        const totalItems = 1 + (tas.subtaskTitles?.length || 0);
+        let totalItems = 1
         let completedCount = tas.completed ? 1 : 0;
-        
-        if (tas.subtaskCompleted && tas.subtaskCompleted.length > 0) {
-            tas.subtaskCompleted.forEach(completed => {
-                if (completed) completedCount++;
-            });
+
+        if(tas.subtaskTitles?.length){
+            tas.subtaskTitles.forEach((_,index) => {
+                const isIncompleted = tas.incompletedSubtask?.[index]
+
+                    totalItems++
+
+                    if(tas.subtaskCompleted?.[index] && !isIncompleted){
+                        completedCount ++
+                    
+                }
+            })
         }
         
         return `${completedCount}/${totalItems} completados`;
@@ -270,12 +285,13 @@ export const TaskRow = ({
                                 <ul className="subtasks-list">
                                     {tas.subtaskTitles.map((subtaskTitle, index) => {
                                         const isCompleted = tas.subtaskCompleted?.[index] || false;
+                                        const notCompleted = tas.incompletedSubtask?.[index] || false;
                                         const subtaskPriority = tas.subtaskPriorities?.[index] || 'media';
                                         
                                         return (
                                             <li 
                                                 key={`${tas._id}-subtask-${index}`} 
-                                                className="subtask-item"
+                                                className={`subtask-item ${notCompleted ? 'incompleted-item' : ''}`}
                                                 onMouseEnter={() => setHoveredSubtaskIndex(index)}
                                                 onMouseLeave={() => setHoveredSubtaskIndex(null)}
                                             >
@@ -285,9 +301,10 @@ export const TaskRow = ({
                                                         className="subtask-checkbox"
                                                         checked={isCompleted} 
                                                         onChange={() => completedSubTasks?.(tas._id, index)} 
+                                                        disabled={notCompleted}
                                                     />
                                                     
-                                                    <span className={`subtask-text ${isCompleted ? 'completed' : ''}`}>
+                                                    <span className={`subtask-text ${isCompleted ? 'completed' : ''} ${notCompleted ? 'not-completed' : ''}`}>
                                                         {subtaskTitle}
                                                     </span>
                                                     
@@ -316,6 +333,15 @@ export const TaskRow = ({
                                                                     )}
                                                                 >
                                                                     <Trash2 size={14} />
+                                                                </button>
+                                                            </Tooltip>
+                                                            <Tooltip title={notCompleted ? "Desmarcar como incompleto" : "Marcar como incompleto"} arrow>
+                                                                <button
+                                                                    className={`action-btn-inline ${notCompleted ? 'incompleted-active' : 'incompleted-btn'}`}
+                                                                    type="button"
+                                                                    onClick={() => incompletedSubtask?.(tas._id, index)}
+                                                                >
+                                                                    <ShieldX size={14} />
                                                                 </button>
                                                             </Tooltip>
                                                         </div>
@@ -500,7 +526,6 @@ export const TaskRow = ({
                     </td>
                 </tr>
             )}
-
 
             {isAddingSubtask && (
                 <tr className="modal-row">
