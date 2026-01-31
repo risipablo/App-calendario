@@ -176,10 +176,41 @@
 
 .event-indicators {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 3px;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: stretch;
   margin-top: auto;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+.calendar-note {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.calendar-note-alta {
+  background-color: #fecaca;
+  color: #991b1b;
+}
+
+.calendar-note-media {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.calendar-note-baja {
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
 .event-dot {
