@@ -32,4 +32,5 @@ export interface CalendarContainerProps{
     deleteNote:(id: string) => void
     editNote?:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
     onAddNote:() => void
+    allDeleteNote:() => void
 }

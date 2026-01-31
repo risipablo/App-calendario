@@ -120,7 +120,7 @@ export const TaskTable = ({
     return (
         <div className="task-table-container">
             <div className="table-header">
-                <h2 className="table-title">Mis Tareas</h2>
+                <h2 className="table-title">  Mis Tareas</h2>
 
      
                 <div className="header-actions">

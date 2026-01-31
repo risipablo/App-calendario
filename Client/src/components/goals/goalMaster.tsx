@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useGoals } from "../../hooks/useGoal"
 import { GoalForm } from "./goalForm"
 import { GoalContainer } from "./goalContainer"
-import { Goal, Trash2 } from "lucide-react"
+import {  Trash2 } from "lucide-react"
 import { Tooltip } from "@mui/material"
 import { ModalConfirm } from "../layout/modalConfirm"
 
@@ -55,7 +55,7 @@ export const GoalMaster = () => {
         <div className="task-table-container">
             <div className="table-header">
                 <h2 className="table-title">
-                    <Goal/> Mis Objetivos
+                     Mis Objetivos
                 </h2>
 
                 <div className="header-actions">

@@ -56,26 +56,25 @@ export const CalendarForm = ({
                             </div>
 
                             <div className="task-modal-body">
-                                <div className="task-form-group">
-                                    <label>Fecha</label>
-                                    <input 
-                                        type="date" 
-                                        className="task-input"
-                                        value={date} 
-                                        onChange={(e) => setDate(e.target.value)} 
-                                    />
-                                </div>
+                            <div className="task-form-group">
+    <label>Fecha y hora</label>
 
-                                <div className="task-form-group">
-                                    <label>hora</label>
-                                    <input 
-                                        type="time" 
-                                        className="task-input"
-                                        value={hour} 
-                                        onChange={(e) => setHour(e.target.value)} 
-                                         pattern="[0-9]{2}:[0-9]{2}"
-                                    />
-                                </div>
+    <div className="task-date-time-row">
+        <input 
+            type="date"
+            className="task-input"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+        />
+
+        <input 
+            type="time"
+            className="task-input"
+            value={hour}
+            onChange={(e) => setHour(e.target.value)}
+        />
+    </div>
+</div>
 
                                 <div className="task-form-group">
                                     <label>Título</label>
