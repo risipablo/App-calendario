@@ -1,6 +1,6 @@
 
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Tooltip } from '@mui/material';
 import { Calendar, Trash2 } from 'lucide-react';
 import type { TaskTableProps } from "../../interfaces/type.task";
@@ -96,15 +96,14 @@ export const TaskTable = ({
 
     const ModalComponent = ModalConfirm || DefaultModalConfirm;
 
-    const todayString = () => {
-        const today = new Date()
-        return today.toISOString().split('T')[0]
-    }
 
-    const filteredTasks = showToday ? task.filter(tas => {
-        const taskDate = new Date(tas.date).toISOString().split('T')[0]
-        return taskDate === todayString()
-    }) : task
+
+    const filteredTasks = useMemo(() => {
+        if (!showToday) return task;
+      
+        const todayStr = new Date().toDateString();
+        return task.filter(tas => new Date(tas.date).toDateString() === todayStr);
+      }, [task, showToday]);
 
     // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)

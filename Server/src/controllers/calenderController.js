@@ -12,32 +12,35 @@ exports.getCalender = async(req,res) => {
 // today envents
 exports.getTodayEvents = async(req,res) => {
     try{
-        const today = new Date()
-        today.setHours(0,0,0,0)
+        const {date} = req.query
 
-        const tomorrow = new Date(today)
-        tomorrow.setDate(tomorrow.getDate() + 1)
+        if(!date){
+            return res.status(400).json({message: 'Fecha requerida'})
+        }
+
+        const startDate = new Date(date + "T00:00:00.000Z")
+        const endDate = new Date(date + "T23:59:59.999Z")
 
         const events = await CalenderModel.find({
-            date: {$gte: today, $lt: tomorrow}
+            date: {$gte: startDate, $lte:endDate}
         }).sort({priority: 1})
 
         res.json(events)
-    }catch (err){
-        res.status(500).json({error:err.message})
+    } catch(err) {
+        res.status(500).json({error: err.message})
     }
 }
 
 exports.addCalender = async (req,res) => {
-    const {title, date, category, priority } = req.body
+    const {title,hour, date, category, priority } = req.body
 
-    if(!title || ! date || !category || !priority){
+    if(!title ||!hour|| ! date || !category || !priority){
         return res.status(400).json({message: 'completar todos los campos'})
     }
 
     try{
         const newNote = new CalenderModel({
-            title,date: new Date(date),category,priority
+            title,hour,date: new Date(date),category,priority
         })
         const result = await newNote.save()
         res.status(201).json(result)
@@ -64,15 +67,15 @@ exports.deleteCalender = async (req,res) => {
 
 exports.saveCalender = async (req,res) => {
     const {id} = req.params
-    const {title, priority,category} = req.body
+    const {title, priority,category,date,hour} = req.body
 
-    if(!title || !category || !priority){
+    if(!title || !category || !priority || !date || !hour){
         return res.status(400).json({message: 'completar todos los campos'})
     }
 
     try{
         const saveNote = await CalenderModel.findByIdAndUpdate(id,{
-            title,priority,category
+            title,priority,category, date , hour
         })
         res.json(saveNote)
     } catch(err){

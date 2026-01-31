@@ -6,9 +6,13 @@ const calendarSchema = new mongoose.Schema({
         type:String,
         required: true,
     },
+    hour:{
+        type:String,
+        required:true
+    },
     date:{
         type: Date,
-        required:true,
+        default: Date.now
     },
     category:{
         type:String,

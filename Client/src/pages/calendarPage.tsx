@@ -1,6 +1,4 @@
-import { Calendar } from "../components/calendar/calendar"
-
-
+import { CalendarMaster } from "../components/calendar/calendarMaster"
 
 
 
@@ -8,6 +6,6 @@ export const CalendarPage = () => {
 
     return(
         
-        <Calendar/>
+        <CalendarMaster/>
     )
 }
