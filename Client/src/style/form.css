@@ -57,9 +57,13 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
+
 .task-modal-body {
     padding: 24px;
+    max-height: 90vh;
+    overflow-y: auto;
 }
+
 
 .task-form-group {
     margin-bottom: 20px;
@@ -187,5 +191,23 @@
     .task-select {
         padding: 10px 12px;
         font-size: 14px;
+    }
+}
+
+
+
+/* style for calendar form */
+.task-date-time-row {
+    display: flex;
+    gap: 12px;
+}
+
+.task-date-time-row .task-input {
+    flex: 1;
+}
+
+@media (max-width: 480px) {
+    .task-date-time-row {
+        flex-direction: column;
     }
 }

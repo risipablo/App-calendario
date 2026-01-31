@@ -50,11 +50,23 @@ export const useCalendar = () => {
     const deleteEvents = (id:string) => {
         axios.delete(`${serverFront}/api/calendar/${id}`)
         .then(() => {
-            const updateNotes = notes.filter(note => note._id !== id)
+            const updateNotes = notes.filter((note) => note._id !== id)
             setNotes(updateNotes)
         })
         .catch(err => console.log(err))
     }
+
+
+    const deleteAllNotes = () => {
+        axios.delete(`${serverFront}/api/calendar`)
+        .then(response => {
+            setNotes([])
+            console.debug(response)
+        })
+        .catch(err => console.error(err))
+    }
+
+
 
     const editEvents = (id:string, editData:{title:string, priority:string, category:string,date:string, hour:string}) => {
         
@@ -73,6 +85,6 @@ export const useCalendar = () => {
     
 
     return{
-        notes, addNote, getTodayEvents, deleteEvents,editEvents
+        notes, addNote, getTodayEvents, deleteEvents,editEvents, deleteAllNotes
     }
 }
