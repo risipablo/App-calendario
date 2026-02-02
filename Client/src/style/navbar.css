@@ -170,9 +170,7 @@
     flex-shrink: 0;
 }
 
-/* ============================================
-   MENU FOOTER
-   ============================================ */
+
 .menu-footer {
     padding: 16px;
     border-top: 1px solid #e5e7eb;
@@ -245,9 +243,7 @@
     background-color: #fecaca !important;
 }
 
-/* ============================================
-   SCROLLBAR
-   ============================================ */
+
 .menu::-webkit-scrollbar {
     width: 8px;
 }
@@ -266,15 +262,13 @@
     border-radius: 10px;
 }
 
-/* ============================================
-   PREVENIR SCROLL CUANDO SIDEBAR ABIERTO
-   ============================================ */
+
 body.sidebar-open-mobile {
     overflow: hidden;
 }
 
 
-@media (min-width: 850px) {
+@media (min-width: 950px) {
     .menu {
         width: 260px;
     }

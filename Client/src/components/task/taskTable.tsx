@@ -100,10 +100,14 @@ export const TaskTable = ({
 
     const filteredTasks = useMemo(() => {
         if (!showToday) return task;
-      
-        const todayStr = new Date().toDateString();
-        return task.filter(tas => new Date(tas.date).toDateString() === todayStr);
-      }, [task, showToday]);
+        
+        const todayStr = new Date().toISOString().split('T')[0]; // "2024-01-16"
+        
+        return task.filter(tas => {
+            const taskDateStr = new Date(tas.date).toISOString().split('T')[0];
+            return taskDateStr === todayStr;
+        });
+    }, [task, showToday]);
 
     // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)
