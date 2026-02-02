@@ -12,6 +12,7 @@
   /* padding: 24px; */
   max-width: 1400px;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 
@@ -29,6 +30,8 @@
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .calendar-month-header {
@@ -80,6 +83,8 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .calendar-day-name {
@@ -103,6 +108,9 @@
   background: white;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .calendar-day:hover {
@@ -240,8 +248,8 @@
       padding: 16px 20px;
   }
 
-  .calendar-header h1 {
-      font-size: 24px;
+  .calendar-title{
+    margin: .9rem auto;
   }
 
   .calendar-card {
@@ -255,7 +263,10 @@
 
 @media (max-width: 768px) {
   .calendar-container {
-      padding: 16px;
+      margin-left: 0;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
   }
 
   .calendar-header {
@@ -270,7 +281,9 @@
   }
 
   .calendar-card {
-      padding: 16px;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
   }
 
   .calendar-grid {
@@ -278,49 +291,169 @@
   }
 
   .calendar-day-name {
-      font-size: 11px;
-      padding: 8px 4px;
+      font-size: 10px;
+      padding: 6px 2px;
   }
 
   .calendar-day {
       padding: 4px;
-      border-radius: 8px;
+      border-radius: 6px;
+      min-height: 60px;
   }
 
   .day-number {
-      font-size: 12px;
+      font-size: 11px;
   }
 
   .calendar-day.today .day-number {
-      width: 24px;
-      height: 24px;
-      font-size: 12px;
+      width: 20px;
+      height: 20px;
+      font-size: 11px;
   }
 
   .event-dot {
       width: 4px;
       height: 4px;
   }
+
+  .calendar-note {
+      font-size: 8px;
+      padding: 1px 4px;
+  }
+
+  .event-more {
+      font-size: 8px;
+  }
 }
 
 @media (max-width: 480px) {
-  .calendar-header h1 {
+  .calendar-container {
+      padding: 8px;
+      margin-left: 0;
+  }
+
+  .calendar-title h2 {
+    margin: 0 auto;
       font-size: 20px;
   }
 
   .calendar-month-header {
-      flex-direction: column;
-      gap: 12px;
-      align-items: flex-start;
+      flex-direction: row;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
   }
 
   .calendar-month-header h2 {
-      font-size: 18px;
+      font-size: 16px;
   }
 
   .btn-nav {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
+  }
+
+  .calendar-card {
+      padding: 8px;
+      border-radius: 8px;
+  }
+
+  .calendar-grid {
+      gap: 2px;
+  }
+
+  .calendar-day-name {
+      font-size: 9px;
+      padding: 4px 1px;
+      letter-spacing: 0;
+  }
+
+  .calendar-day {
+      padding: 2px;
+      border-radius: 4px;
+      min-height: 50px;
+  }
+
+  .day-number {
+      font-size: 10px;
+      margin-bottom: 2px;
+  }
+
+  .calendar-day.today .day-number {
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+  }
+
+  .event-indicators {
+      gap: 2px;
+  }
+
+  .event-row {
+      gap: 3px;
+  }
+
+  .calendar-note {
+      font-size: 7px;
+      padding: 1px 3px;
+  }
+
+  .event-dot {
+      width: 3px;
+      height: 3px;
+  }
+
+  .event-more {
+      font-size: 7px;
+      margin-top: 1px;
+  }
+}
+
+/* Breakpoint extra pequeño para pantallas muy pequeñas */
+@media (max-width: 360px) {
+  .calendar-container {
+      padding: 4px;
+  }
+
+  .calendar-card {
+      padding: 6px;
+  }
+
+  .calendar-month-header h2 {
+      font-size: 14px;
+  }
+
+  .btn-nav {
+      width: 24px;
+      height: 24px;
+  }
+
+  .calendar-day-name {
+      font-size: 8px;
+      padding: 3px 0;
+  }
+
+  .calendar-day {
+      min-height: 45px;
+      padding: 1px;
+  }
+
+  .day-number {
+      font-size: 9px;
+  }
+
+  .calendar-note {
+      display: none; /* Ocultar texto en pantallas muy pequeñas */
+  }
+
+  .event-indicators {
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+  }
+
+  .event-row {
+      width: auto;
   }
 }
 
