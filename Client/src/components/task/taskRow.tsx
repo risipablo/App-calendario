@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Save, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown, Check, SquareDashed, ShieldX} from 'lucide-react';
+import { Save, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown, Check, SquareDashed, ShieldX, MoreVertical} from 'lucide-react';
 import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Tooltip } from '@mui/material';
 import type { TaskRowProps } from "../../interfaces/type.task";
 import "../../style/task.css"
@@ -26,6 +26,7 @@ export const TaskRow = ({
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
+    
 
 
     useEffect(() => {
@@ -97,6 +98,8 @@ export const TaskRow = ({
     });
  
     const [hoveredSubtaskIndex, setHoveredSubtaskIndex] = useState<number | null>(null);
+    const [mobileActionsIndex, setMobileActionsIndex] = useState<number | null>(null);
+
 
     const startEditSubtask = (index: number) => {
         if (tas.subtaskTitles && tas.subtaskTitles[index]) {
@@ -289,12 +292,13 @@ export const TaskRow = ({
                                         const subtaskPriority = tas.subtaskPriorities?.[index] || 'media';
                                         
                                         return (
-                                            <li 
-                                                key={`${tas._id}-subtask-${index}`} 
-                                                className={`subtask-item ${notCompleted ? 'incompleted-item' : ''}`}
-                                                onMouseEnter={() => setHoveredSubtaskIndex(index)}
-                                                onMouseLeave={() => setHoveredSubtaskIndex(null)}
-                                            >
+                                            <li
+                                            key={`${tas._id}-subtask-${index}`}
+                                            className={`subtask-item ${notCompleted ? 'incompleted-item' : ''}`}
+                                            onMouseEnter={() => setHoveredSubtaskIndex(index)}
+                                            onMouseLeave={() => setHoveredSubtaskIndex(null)}
+                                          >
+                                          
                                                 <div className="subtask-display">
                                                     <input 
                                                         type="checkbox" 
@@ -311,9 +315,27 @@ export const TaskRow = ({
                                                     <span className={`priority-badge priority-${subtaskPriority}`}>
                                                         {subtaskPriority}
                                                     </span>
+
                                                     
-                                                    {hoveredSubtaskIndex === index && (
-                                                        <div className="inline-actions hover-actions">
+                                                    <div className="mobile-actions">
+                                                        <button
+                                                            className="action-btn-inline menu-btn"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setMobileActionsIndex(
+                                                                mobileActionsIndex === index ? null : index
+                                                                );
+                                                            }}
+                                                            
+                                                            >
+
+                                                            <MoreVertical size={14} /> 
+                                                        </button>
+                                                    </div>
+                                                                                                        
+                                                    {(hoveredSubtaskIndex === index || mobileActionsIndex === index) && (
+
+                                                        <div className="inline-actions hover-actions"   onClick={(e) => e.stopPropagation()}>
                                                             <Tooltip title="Editar" arrow>
                                                                 <button 
                                                                     className="action-btn-inline edit-btn" 
@@ -346,6 +368,8 @@ export const TaskRow = ({
                                                             </Tooltip>
                                                         </div>
                                                     )}
+
+                                                    
                                                 </div>
                                             </li>
                                         );
