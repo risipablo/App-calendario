@@ -1,11 +1,14 @@
 import type React from "react";
 import type { ModalConfirmProps } from "../components/layout/modalConfirm";
+import type { ReactNode } from "react";
 
 
 export interface ISubtask {
-    title: string;
+    id: number;
+    title?: string;
     priority: string;
     completed: boolean;
+    incompletedSubtask?:boolean
 }
 
 export interface ITodo{
@@ -65,5 +68,31 @@ export interface TaskRowProps{
     ModalConfirm?:React.ComponentType<ModalConfirmProps>
 }
 
+export interface TaskContextType{
+    task: ITodo[],
+    addTask:(date:Date, title:string, priority:string) => void
+    addNewTask:(taskId:string, title:string, priority:string) => void
+    deleteTask: (id: string) => void,
+    deletePrincipalTask: (id:string) => void
+    deleteSubTask: (taskId: string, subTaskIndex: number) => void,
+    editSubTask?: (taskId: string, subTaskIndex: number, updatedSubTask: {title?:string, priority?:string}) => void,
+    saveTask:(id:string, editData:{date:Date, title:string, priority:string}) => void
+    toogleAllTask?:(taskId:string) => void;
+    completedTask?:(taskId:string) => void;
+    completedSubTasks?: (taskId: string, subTaskIndex: number) => void;
+    incompletedSubtask:(taskId: string, subTaskIndex: number) => void;
+    getTaskDay: () => ITodo[]
+    getAllSubtasksDay: () => Array<ISubtask & { parentTask: string }>;
+    getPendigTask: () => ITodo[] 
+    getPendingSubtasks: () => Array<ISubtask & { parentTask: string }>;
+    getCompletedTask:() => ITodo[]
+    getCompletedSubtasks:() => Array<ISubtask & { parentTask: string }>;
+    getFailTask: () =>Array<ISubtask & { parentTask: string }>;
+    getTotalTasksDay: () => number
+    getTotalTaskCompleted: () => number
+    getTotalTaskIncompleted:() => number
+}
 
-
+export interface TaskProviderProps{
+    children: ReactNode
+}

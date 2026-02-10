@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 
 
 // Calendar Interface
@@ -33,4 +34,17 @@ export interface CalendarContainerProps{
     editNote?:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
     onAddNote:() => void
     allDeleteNote:() => void
+}
+
+export interface CalendarContextType{
+    notes:ICalendar[]
+    addNote:(title:string, date:string, priority:string, category:string, hour:string) => void
+    deleteNote:(id: string) => void
+    editNote?:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
+    onAddNote:() => void
+    allDeleteNote:() => void
+}
+
+export interface CalendarProviderProps{
+    children: ReactNode
 }

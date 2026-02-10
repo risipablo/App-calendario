@@ -312,6 +312,7 @@
     align-items: center;
     gap: 10px;
     position: relative;
+    flex-wrap: wrap;
 }
 
 .subtask-checkbox {
@@ -814,7 +815,43 @@ background-color: var(--color-bg-hover);
         align-items: flex-start;
     }
 
+    .subtask-display {
+        justify-content: space-between;
+    }
+    
+    .priority-badge {
+        order: 3;
+    }
+
 }
+
+@media (max-width: 767px) {
+    .hover-actions {
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: white;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 10;
+        margin-top: 4px;
+        transition: opacity 0.2s ease;
+    }
+
+    .hover-actions.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .mobile-actions {
+        display: block;
+        margin-left: auto;
+    }
+}
+
 
 @media (max-width: 480px) {
     .task-table-container {
@@ -1039,7 +1076,7 @@ background-color: var(--color-bg-hover);
 }
 
 @media (max-width: 480px) {
-    table-title{
+    .table-title{
         margin: .8rem auto;
         text-align: center;
         align-items: center;
@@ -1055,5 +1092,54 @@ background-color: var(--color-bg-hover);
         min-width: 32px;
         height: 32px;
         font-size: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .hover-actions {
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+    }
+    
+    .subtask-item:hover .hover-actions {
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .mobile-actions {
+        display: none;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .action-btn-inline {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
+    .action-btn-inline:hover {
+        background-color: transparent;
+        box-shadow: none;
+        transform: none;
+    }
+    
+    .subtask-item {
+        position: relative;
+    }
+    
+    .mobile-actions {
+        display: block;
+        margin-left: auto;
+    }
+    
+    .action-btn-inline.menu-btn {
+        color: var(--color-text-secondary);
+    }
+    
+    .action-btn-inline.menu-btn:hover {
+        background-color: var(--color-bg-hover);
     }
 }
