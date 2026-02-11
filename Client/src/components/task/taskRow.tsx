@@ -51,10 +51,15 @@ export const TaskRow = ({
         return () => clearTimeout(timer);
     }, [tas._id, tas.date, tas.title, tas.priority]);
 
-    const formatDate = (dateString: string) => {        
-        const cleanDate = dateString.split('T')[0]
-        const [year, month, day] = cleanDate.split('-')
-        return `${day}/${month}/${year}`
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        
+        return date.toLocaleDateString('es-CO', {
+            timeZone: 'America/Buenos_Aires', 
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).replace(/\//g, '/'); 
     };
 
     const [isAddingSubtask, setIsAddingSubtask] = useState(false);
@@ -297,81 +302,93 @@ export const TaskRow = ({
                                             className={`subtask-item ${notCompleted ? 'incompleted-item' : ''}`}
                                             onMouseEnter={() => setHoveredSubtaskIndex(index)}
                                             onMouseLeave={() => setHoveredSubtaskIndex(null)}
-                                          >
-                                          
-                                                <div className="subtask-display">
-                                                    <input 
-                                                        type="checkbox" 
-                                                        className="subtask-checkbox"
-                                                        checked={isCompleted} 
-                                                        onChange={() => completedSubTasks?.(tas._id, index)} 
-                                                        disabled={notCompleted}
-                                                    />
-                                                    
-                                                    <span className={`subtask-text ${isCompleted ? 'completed' : ''} ${notCompleted ? 'not-completed' : ''}`}>
-                                                        {subtaskTitle}
-                                                    </span>
-                                                    
-                                                    <span className={`priority-badge priority-${subtaskPriority}`}>
-                                                        {subtaskPriority}
-                                                    </span>
-
-                                                    
-                                                    <div className="mobile-actions">
-                                                        <button
-                                                            className="action-btn-inline menu-btn"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setMobileActionsIndex(
+                                        >
+                                            <div className="subtask-display">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="subtask-checkbox"
+                                                    checked={isCompleted} 
+                                                    onChange={() => completedSubTasks?.(tas._id, index)} 
+                                                    disabled={notCompleted}
+                                                />
+                                                
+                                                <span className={`subtask-text ${isCompleted ? 'completed' : ''} ${notCompleted ? 'not-completed' : ''}`}>
+                                                    {subtaskTitle}
+                                                </span>
+                                                
+                                                <span className={`priority-badge priority-${subtaskPriority}`}>
+                                                    {subtaskPriority}
+                                                </span>
+                                    
+                                                <div className="mobile-actions">
+                                                    <button
+                                                        className="action-btn-inline menu-btn"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setMobileActionsIndex(
                                                                 mobileActionsIndex === index ? null : index
-                                                                );
-                                                            }}
-                                                            
-                                                            >
-
-                                                            <MoreVertical size={14} /> 
-                                                        </button>
-                                                    </div>
-                                                                                                        
-                                                    {(hoveredSubtaskIndex === index || mobileActionsIndex === index) && (
-
-                                                        <div className="inline-actions hover-actions"   onClick={(e) => e.stopPropagation()}>
+                                                            );
+                                                        }}
+                                                    >
+                                                        {mobileActionsIndex === index ? <X size={16} /> : <MoreVertical size={16} />}
+                                                    </button>
+                                                </div>
+                                                                                    
+                                                {(hoveredSubtaskIndex === index || mobileActionsIndex === index) && (
+                                                    <div 
+                                                        className={`hover-actions ${mobileActionsIndex === index ? 'active' : ''}`}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <div className="inline-actions">
                                                             <Tooltip title="Editar" arrow>
                                                                 <button 
                                                                     className="action-btn-inline edit-btn" 
-                                                                    onClick={() => startEditSubtask(index)}
+                                                                    onClick={() => {
+                                                                        startEditSubtask(index);
+                                                                        setMobileActionsIndex(null);
+                                                                    }}
                                                                 >
                                                                     <Pencil size={14} />
+                                                                    <span className="mobile-label">Editar</span>
                                                                 </button>
                                                             </Tooltip>
                                                             <Tooltip title="Eliminar" arrow>
                                                                 <button 
                                                                     className="action-btn-inline delete-btn" 
-                                                                    onClick={() => openDeleteModal(
-                                                                        () => deleteSubTask?.(tas._id, index),
-                                                                        "Confirmar borrado",
-                                                                        "¿Estás seguro que deseas eliminar esta tarea?",
-                                                                        "Eliminar"
-                                                                    )}
+                                                                    onClick={() => {
+                                                                        openDeleteModal(
+                                                                            () => deleteSubTask?.(tas._id, index),
+                                                                            "Confirmar borrado",
+                                                                            "¿Estás seguro que deseas eliminar esta tarea?",
+                                                                            "Eliminar"
+                                                                        );
+                                                                        setMobileActionsIndex(null);
+                                                                    }}
                                                                 >
                                                                     <Trash2 size={14} />
+                                                                    <span className="mobile-label">Eliminar</span>
                                                                 </button>
                                                             </Tooltip>
                                                             <Tooltip title={notCompleted ? "Desmarcar como incompleto" : "Marcar como incompleto"} arrow>
                                                                 <button
                                                                     className={`action-btn-inline ${notCompleted ? 'incompleted-active' : 'incompleted-btn'}`}
                                                                     type="button"
-                                                                    onClick={() => incompletedSubtask?.(tas._id, index)}
+                                                                    onClick={() => {
+                                                                        incompletedSubtask?.(tas._id, index);
+                                                                        setMobileActionsIndex(null);
+                                                                    }}
                                                                 >
                                                                     <ShieldX size={14} />
+                                                                    <span className="mobile-label">
+                                                                        {notCompleted ? "Desmarcar incompleto" : "Marcar incompleto"}
+                                                                    </span>
                                                                 </button>
                                                             </Tooltip>
                                                         </div>
-                                                    )}
-
-                                                    
-                                                </div>
-                                            </li>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </li>
                                         );
                                     })}
                                 </ul>
