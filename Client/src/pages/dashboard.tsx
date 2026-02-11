@@ -1,6 +1,7 @@
 import { CheckCircle2, Clock, ListTodo } from "lucide-react"
 import { useTasks } from "../context/taskContex"
 import "../style/dashboard.css"
+// import { useCalendars } from "../context/calendarContext"
 
 export const Dashboard = () => {
 
@@ -16,6 +17,10 @@ export const Dashboard = () => {
       getTotalTasksDay,
       getFailTask
     } = useTasks()
+
+    // const{getNotesDay} = useCalendars()
+
+    // const notesDay = getNotesDay()
 
     const totalTasks = getTotalTasksDay()
     const completedTasks = getTotalTaskCompleted()
@@ -33,7 +38,10 @@ export const Dashboard = () => {
 
     return (
       <div className="task-table-container">
-          <h2 className="dashboard-title">Dashboard</h2>
+        <div className="table-header">
+            <h2 className="table-title">Dashboard</h2>
+        </div>
+          
 
           <div className="dashboard-cards">
 
@@ -69,6 +77,10 @@ export const Dashboard = () => {
                       <p className="card-label">Total tareas del día</p>
                   </div>
               </div>
+
+              <h3> Actividades del dia </h3>
+              
+
           </div>
 
           {/* Lista de tareas principales pendientes */}

@@ -41,8 +41,9 @@ export interface CalendarContextType{
     addNote:(title:string, date:string, priority:string, category:string, hour:string) => void
     deleteNote:(id: string) => void
     editNote?:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
-    onAddNote:() => void
-    allDeleteNote:() => void
+    onAddNote?:() => void
+    allDeleteNote?:() => void
+    getNotesDay: () => ICalendar[]
 }
 
 export interface CalendarProviderProps{
