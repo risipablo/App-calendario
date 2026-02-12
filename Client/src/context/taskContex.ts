@@ -105,9 +105,7 @@ export const TaskProvider:React.FC<TaskProviderProps> = ({children}) => {
     }
 
 
-    
 
-    
 
     const value: TaskContextType = {
         task: taskData.task,

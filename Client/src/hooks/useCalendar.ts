@@ -22,6 +22,7 @@ export const useCalendar = () => {
 
     const addNote = async(title:string, date:string, category:string, priority:string,hour:string) => {
 
+        
         try{
             const response = await axios.post(`${serverFront}/api/calendar`,{
                 title:title.trim(),

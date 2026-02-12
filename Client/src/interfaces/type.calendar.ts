@@ -44,6 +44,9 @@ export interface CalendarContextType{
     onAddNote?:() => void
     allDeleteNote?:() => void
     getNotesDay: () => ICalendar[]
+    getNotesOfWeek: () => ICalendar[]
+    getNotesImportant: () => ICalendar[]
+
 }
 
 export interface CalendarProviderProps{
