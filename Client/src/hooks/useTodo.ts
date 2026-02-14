@@ -61,6 +61,7 @@ export const UseTask = () => {
             });
         }
     };
+
     // Add New tasks
     const addNewTask = (taskId: string, title:string, priority: string) => {
         axios.post(`${serverFront}/api/task/${taskId}/addtask`,{
@@ -99,7 +100,6 @@ export const UseTask = () => {
             }) 
         })
     }
-
 
     // Delete principal task
     const deletePrincipalTask = (taskId:string) => {
