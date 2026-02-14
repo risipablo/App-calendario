@@ -101,12 +101,19 @@ export const TaskTable = ({
     const filteredTasks = useMemo(() => {
         if (!showToday) return task;
         
-        const todayStr = new Date().toISOString().split('T')[0]; // "2024-01-16"
-        
+        const timeArg = new Date().toLocaleString('en-US', {
+            timeZone: 'America/Buenos_Aires'
+        })
+
+        const todayStr = new Date(timeArg).toISOString().split('T')[0]; 
+
         return task.filter(tas => {
-            const taskDateStr = new Date(tas.date).toISOString().split('T')[0];
-            return taskDateStr === todayStr;
-        });
+            const taskDate = new Date(tas.date).toLocaleString('en-US', {
+                timeZone: 'America/Buenos_Aires'
+            })
+            const taskDateStr = new Date(taskDate).toISOString().split('T')[0]
+            return taskDateStr === todayStr
+        })
     }, [task, showToday]);
 
     // Paginate task      
