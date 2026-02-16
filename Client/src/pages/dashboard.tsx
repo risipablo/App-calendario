@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock, ListTodo, ChevronDown, ChevronUp } from "lucide-react"
+import { CheckCircle2, Clock, ListTodo, ChevronDown, ChevronUp, Calendar, CalendarDays, Star } from "lucide-react"
 import { useTasks } from "../context/taskContex"
 import { useCalendars } from "../context/calendarContext"
 import { useState, useEffect } from "react"
@@ -54,8 +54,11 @@ export const Dashboard = () => {
         return () => clearTimeout(timer)
     }, [])
 
-
-
+    const formatDate = (dateString: string) => {
+        // return dateString.split('T')[0]; 
+        const [year, month, day] = dateString.split('T')[0].split('-');
+        return `${day}/${month}/${year}`;
+    };
 
     return (
         <div className="task-table-container">
@@ -68,9 +71,6 @@ export const Dashboard = () => {
                 
                 {isLoading ? (
                     <>
-                        <CardLoader />
-                        <CardLoader />
-                        <CardLoader />
                         <CardLoader />
                         <CardLoader />
                         <CardLoader />
@@ -236,7 +236,10 @@ export const Dashboard = () => {
                                 onClick={() => setShowToday(!showNotesToday)}
                                 aria-expanded={showNotesToday}
                             >
-                                <h3 className="notes-section-title">Asuntos del día ({notesDay.length})</h3>
+                                <div className="section-title">
+                                    <Calendar size={20} />
+                                    <h3 className="notes-section-title">Asuntos del día ({notesDay.length})</h3>
+                                </div>
                                 {showNotesToday ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                             </button>
                             
@@ -271,7 +274,10 @@ export const Dashboard = () => {
                                 onClick={() => setShowWeek(!showNotesWeek)}
                                 aria-expanded={showNotesWeek}
                             >
-                                <h3 className="notes-section-title">Asuntos de la semana ({notesWeek.length})</h3>
+                                <div className="section-title">
+                                    <CalendarDays size={20} />
+                                    <h3 className="notes-section-title">Asuntos de la semana ({notesWeek.length})</h3>
+                                </div>
                                 {showNotesWeek ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                             </button>
                             
@@ -282,16 +288,29 @@ export const Dashboard = () => {
                                     <div className="notes-grid">
                                         {notesWeek.map(note => (
                                             <div key={note._id} className="note-card">
-                                                <h4 className="note-title">{note.title}</h4>
-                                                <div className="note-header">
-                                                    <span className={`note-priority priority-${note.priority}`}>
-                                                        {note.priority.toUpperCase()}
+                                                <div className="note-card-content">
+                                                    <span className="note-date">
+                                                        <Calendar />
+                                                        {formatDate(note.date)}
                                                     </span>
-                                                    <span className="note-hour">{note.hour} hs</span>
+                                                    
+                                                    <h4 className="note-title">{note.title}</h4>
+                                                    
+                                                    <div className="note-header">
+                                                        <span className={`note-priority priority-${note.priority.toLowerCase()}`}>
+                                                            {note.priority.toUpperCase()}
+                                                        </span>
+                                                        
+                                                        <span className="note-hour">
+                                                            <Clock />
+                                                            {note.hour} hs
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <span className={`note-category category-${note.category.toLowerCase()}`}>
+                                                        {note.category}
+                                                    </span>
                                                 </div>
-                                                <span className={`note-category category-${note.category}`}>
-                                                    {note.category}
-                                                </span>
                                             </div>
                                         ))}
                                     </div>
@@ -306,7 +325,10 @@ export const Dashboard = () => {
                                 onClick={() => setNotesMonth(!showNotesMonth)}
                                 aria-expanded={showNotesMonth}
                             >
-                                <h3 className="notes-section-title">Asuntos importantes del mes ({notesMonth.length})</h3>
+                                <div className="section-title">
+                                    <Star size={20} />
+                                    <h3 className="notes-section-title">Asuntos importantes del mes ({notesMonth.length})</h3>
+                                </div>
                                 {showNotesMonth ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                             </button>
                             
@@ -372,4 +394,3 @@ export const Dashboard = () => {
         </div>
     )
 }
- 

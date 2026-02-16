@@ -52,16 +52,10 @@ export const TaskRow = ({
     }, [tas._id, tas.date, tas.title, tas.priority]);
 
     const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        
-        return date.toLocaleDateString('es-CO', {
-            timeZone: 'America/Buenos_Aires', 
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }).replace(/\//g, '/'); 
+        // return dateString.split('T')[0]; 
+        const [year, month, day] = dateString.split('T')[0].split('-');
+        return `${day}/${month}/${year}`;
     };
-
     const [isAddingSubtask, setIsAddingSubtask] = useState(false);
     const [newSubtask, setNewSubtask] = useState({
         title: '',
@@ -225,6 +219,8 @@ export const TaskRow = ({
                 <td className="task-date">
                     <div className="date-display">
                         {formatDate(tas.date)}
+                        
+                         {/* {tas.date} */}
                     </div>
                 </td>
         
