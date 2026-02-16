@@ -23,7 +23,6 @@ export const TaskRow = ({
 }: TaskRowProps) => {
     
 
-
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
     
@@ -56,6 +55,7 @@ export const TaskRow = ({
         const [year, month, day] = dateString.split('T')[0].split('-');
         return `${day}/${month}/${year}`;
     };
+
     const [isAddingSubtask, setIsAddingSubtask] = useState(false);
     const [newSubtask, setNewSubtask] = useState({
         title: '',
@@ -294,97 +294,113 @@ export const TaskRow = ({
                                         
                                         return (
                                             <li
-                                            key={`${tas._id}-subtask-${index}`}
-                                            className={`subtask-item ${notCompleted ? 'incompleted-item' : ''}`}
-                                            onMouseEnter={() => setHoveredSubtaskIndex(index)}
-                                            onMouseLeave={() => setHoveredSubtaskIndex(null)}
-                                        >
-                                            <div className="subtask-display">
-                                                <input 
-                                                    type="checkbox" 
-                                                    className="subtask-checkbox"
-                                                    checked={isCompleted} 
-                                                    onChange={() => completedSubTasks?.(tas._id, index)} 
-                                                    disabled={notCompleted}
-                                                />
-                                                
-                                                <span className={`subtask-text ${isCompleted ? 'completed' : ''} ${notCompleted ? 'not-completed' : ''}`}>
-                                                    {subtaskTitle}
-                                                </span>
-                                                
-                                                <span className={`priority-badge priority-${subtaskPriority}`}>
-                                                    {subtaskPriority}
-                                                </span>
-                                    
-                                                <div className="mobile-actions">
-                                                    <button
-                                                        className="action-btn-inline menu-btn"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setMobileActionsIndex(
-                                                                mobileActionsIndex === index ? null : index
-                                                            );
-                                                        }}
-                                                    >
-                                                        {mobileActionsIndex === index ? <X size={16} /> : <MoreVertical size={16} />}
-                                                    </button>
-                                                </div>
-                                                                                    
-                                                {(hoveredSubtaskIndex === index || mobileActionsIndex === index) && (
-                                                    <div 
-                                                        className={`hover-actions ${mobileActionsIndex === index ? 'active' : ''}`}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                        <div className="inline-actions">
-                                                            <Tooltip title="Editar" arrow>
-                                                                <button 
-                                                                    className="action-btn-inline edit-btn" 
-                                                                    onClick={() => {
-                                                                        startEditSubtask(index);
-                                                                        setMobileActionsIndex(null);
-                                                                    }}
-                                                                >
-                                                                    <Pencil size={14} />
-                                                                    <span className="mobile-label">Editar</span>
-                                                                </button>
-                                                            </Tooltip>
-                                                            <Tooltip title="Eliminar" arrow>
-                                                                <button 
-                                                                    className="action-btn-inline delete-btn" 
-                                                                    onClick={() => {
-                                                                        openDeleteModal(
-                                                                            () => deleteSubTask?.(tas._id, index),
-                                                                            "Confirmar borrado",
-                                                                            "¿Estás seguro que deseas eliminar esta tarea?",
-                                                                            "Eliminar"
-                                                                        );
-                                                                        setMobileActionsIndex(null);
-                                                                    }}
-                                                                >
-                                                                    <Trash2 size={14} />
-                                                                    <span className="mobile-label">Eliminar</span>
-                                                                </button>
-                                                            </Tooltip>
-                                                            <Tooltip title={notCompleted ? "Desmarcar como incompleto" : "Marcar como incompleto"} arrow>
-                                                                <button
-                                                                    className={`action-btn-inline ${notCompleted ? 'incompleted-active' : 'incompleted-btn'}`}
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        incompletedSubtask?.(tas._id, index);
-                                                                        setMobileActionsIndex(null);
-                                                                    }}
-                                                                >
-                                                                    <ShieldX size={14} />
-                                                                    <span className="mobile-label">
-                                                                        {notCompleted ? "Desmarcar incompleto" : "Marcar incompleto"}
-                                                                    </span>
-                                                                </button>
-                                                            </Tooltip>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </li>
+    key={`${tas._id}-subtask-${index}`}
+    className={`subtask-item ${notCompleted ? 'incompleted-item' : ''}`}
+    onMouseEnter={() => {
+        // Solo activar hover en desktop
+        if (window.innerWidth > 767) {
+            setHoveredSubtaskIndex(index);
+        }
+    }}
+    onMouseLeave={() => {
+        // Solo desactivar hover en desktop
+        if (window.innerWidth > 767) {
+            setHoveredSubtaskIndex(null);
+        }
+    }}
+>
+    <div className="subtask-display">
+        <input 
+            type="checkbox" 
+            className="subtask-checkbox"
+            checked={isCompleted} 
+            onChange={() => completedSubTasks?.(tas._id, index)} 
+            disabled={notCompleted}
+        />
+        
+        <span className={`subtask-text ${isCompleted ? 'completed' : ''} ${notCompleted ? 'not-completed' : ''}`}>
+            {subtaskTitle}
+        </span>
+        
+        <span className={`priority-badge priority-${subtaskPriority}`}>
+            {subtaskPriority}
+        </span>
+
+        <div className="mobile-actions">
+            <button
+                className="action-btn-inline menu-btn"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    // Cerrar si ya está abierto, abrir si está cerrado
+                    setMobileActionsIndex(mobileActionsIndex === index ? null : index);
+                }}
+            >
+                {mobileActionsIndex === index ? <X size={16} /> : <MoreVertical size={16} />}
+            </button>
+        </div>
+                                            
+        {(hoveredSubtaskIndex === index || mobileActionsIndex === index) && (
+            <div 
+                className={`hover-actions ${mobileActionsIndex === index ? 'active' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button 
+                    className="mobile-close-btn"
+                    onClick={() => setMobileActionsIndex(null)}
+                >
+                    <X size={16} />
+                </button>
+                <div className="inline-actions">
+                    <Tooltip title="Editar" arrow>
+                        <button 
+                            className="action-btn-inline edit-btn" 
+                            onClick={() => {
+                                startEditSubtask(index);
+                                setMobileActionsIndex(null);
+                            }}
+                        >
+                            <Pencil size={14} />
+                            <span className="mobile-label">Editar</span>
+                        </button>
+                    </Tooltip>
+                    <Tooltip title="Eliminar" arrow>
+                        <button 
+                            className="action-btn-inline delete-btn" 
+                            onClick={() => {
+                                openDeleteModal(
+                                    () => deleteSubTask?.(tas._id, index),
+                                    "Confirmar borrado",
+                                    "¿Estás seguro que deseas eliminar esta tarea?",
+                                    "Eliminar"
+                                );
+                                setMobileActionsIndex(null);
+                            }}
+                        >
+                            <Trash2 size={14} />
+                            <span className="mobile-label">Eliminar</span>
+                        </button>
+                    </Tooltip>
+                    <Tooltip title={notCompleted ? "Desmarcar como incompleto" : "Marcar como incompleto"} arrow>
+                        <button
+                            className={`action-btn-inline ${notCompleted ? 'incompleted-active' : 'incompleted-btn'}`}
+                            type="button"
+                            onClick={() => {
+                                incompletedSubtask?.(tas._id, index);
+                                setMobileActionsIndex(null);
+                            }}
+                        >
+                            <ShieldX size={14} />
+                            <span className="mobile-label">
+                                {notCompleted ? "Desmarcar incompleto" : "Marcar incompleto"}
+                            </span>
+                        </button>
+                    </Tooltip>
+                </div>
+            </div>
+        )}
+    </div>
+</li>
+
                                         );
                                     })}
                                 </ul>
