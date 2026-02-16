@@ -19,11 +19,15 @@ exports.addTask = async (req,res) => {
     }
 
     try{
+        const taskDate = new Date(date)
+
         const newTask = new TodoModel({
-            date,title,priority
+            date:taskDate,title,priority
         })
+
         const result = await newTask.save()
         res.json(result)
+
     } catch (errr) {
         res.status(500).json({error: err.message})
     }
@@ -173,6 +177,8 @@ exports.saveTask = async (req,res) => {
     }
 
     try{
+        // const updateDate = new Date(date)
+
         const saveTask = await TodoModel.findByIdAndUpdate(id,{date, title, priority}, {new:true})
         res.json(saveTask)
     

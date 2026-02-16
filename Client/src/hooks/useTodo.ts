@@ -24,16 +24,13 @@ export const UseTask = () => {
     const addTask = (date: Date, title: string, priority: string) => {
         if (date && title.trim() && priority.trim() !== '') {
             
-            const latamDate = new Date(date.toLocaleString('en-US', { 
-                timeZone: 'America/Buenos_Aires' 
-            }));
-
+        
             const loadingToast = toast.loading('Subiendo tarea...', {
                 position: 'top-center'
             });
             
             axios.post(`${serverFront}/api/task`, {
-                date: latamDate,
+                date: date,
                 title: title,
                 priority: priority,
                 completed: false

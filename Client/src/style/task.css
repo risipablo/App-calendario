@@ -1,4 +1,3 @@
-
 :root {
     --color-primary: #8e7cc3;
     --color-success: #34a853;
@@ -409,11 +408,6 @@
     opacity: 0;
     transition: opacity 0.2s;
     pointer-events: none;
-}
-
-.subtask-item:hover .hover-actions {
-    opacity: 1;
-    pointer-events: all;
 }
 
 .inline-actions {
@@ -971,18 +965,19 @@
 }
 
 /* ========================================
-   RESPONSIVE - MOBILE (768px)
+   RESPONSIVE - DESKTOP (768px+)
 ======================================== */
-@media (max-width: 768px) {
-    .table-header {
-        flex-direction: column;
-        align-items: flex-start;
+@media (min-width: 768px) {
+    /* Ocultar elementos mobile en desktop */
+    .mobile-actions {
+        display: none;
+    }
+    
+    .mobile-close-btn {
+        display: none;
     }
 
-    .subtask-display {
-        justify-content: space-between;
-    }
-
+    /* Hover actions visible en desktop */
     .hover-actions {
         opacity: 0;
         transition: opacity 0.2s;
@@ -995,8 +990,31 @@
     }
 }
 
-
+/* ========================================
+   RESPONSIVE - MOBILE (767px y menos)
+======================================== */
 @media (max-width: 767px) {
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .subtask-display {
+        justify-content: space-between;
+    }
+
+    /* Botón de menú (3 puntos verticales) visible en mobile */
+    .mobile-actions {
+        display: block;
+        margin-left: 8px;
+        flex-shrink: 0;
+    }
+
+    .mobile-label {
+        display: inline;
+    }
+
+    /* Menú de acciones: OCULTO por defecto */
     .hover-actions {
         opacity: 0;
         pointer-events: none;
@@ -1014,11 +1032,13 @@
         min-width: 200px;
     }
 
+    /* Menú de acciones: VISIBLE solo cuando tiene clase 'active' */
     .hover-actions.active {
         opacity: 1;
         pointer-events: all;
     }
 
+    /* Overlay de fondo cuando el menú está abierto */
     .hover-actions::before {
         content: '';
         position: fixed;
@@ -1026,18 +1046,11 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(255, 255, 255);
+        background: rgba(0, 0, 0, 0.3);
         z-index: -1;
     }
 
-    .mobile-actions {
-        display: block;
-    }
-
-    .mobile-label {
-        display: inline;
-    }
-
+    /* Botón de cerrar (X) en el menú mobile */
     .mobile-close-btn {
         display: flex;
         position: absolute;
@@ -1058,7 +1071,10 @@
         background-color: var(--color-bg-hover);
     }
 
-    .action-btn-inline {
+    /* Botón de menú (3 puntos) estilizado */
+    .action-btn-inline.menu-btn {
+        color: var(--color-text-secondary);
+        padding: 4px;
         background-color: transparent;
         border: none;
         box-shadow: none;
@@ -1066,17 +1082,12 @@
         height: auto;
     }
 
-    .action-btn-inline:hover {
-        background-color: transparent;
-        box-shadow: none;
+    .action-btn-inline.menu-btn:hover {
+        background-color: var(--color-bg-hover);
         transform: none;
     }
 
-    .action-btn-inline.menu-btn {
-        color: var(--color-text-secondary);
-        padding: 4px;
-    }
-
+    /* Contenedor de acciones dentro del menú mobile */
     .hover-actions .inline-actions {
         flex-direction: column;
         gap: 8px;
@@ -1084,7 +1095,8 @@
         margin-top: 24px;
     }
 
-    .hover-actions .action-btn-inline {
+    /* Botones de acción dentro del menú mobile */
+    .hover-actions .action-btn-inline:not(.menu-btn) {
         width: 100%;
         justify-content: flex-start;
         padding: 8px 12px;
@@ -1094,37 +1106,21 @@
         background-color: white;
     }
 
-    .hover-actions .action-btn-inline:hover {
+    .hover-actions .action-btn-inline:not(.menu-btn):hover {
         background-color: var(--color-bg-hover);
+        transform: none;
+    }
+
+    /* NO mostrar acciones al hacer hover en el subtask-item en mobile */
+    .subtask-item:hover .hover-actions {
+        opacity: 0;
+        pointer-events: none;
     }
 
     .subtask-item {
         position: relative;
     }
 }
-
-
-@media (min-width: 768px) {
-    .mobile-actions {
-        display: none;
-    }
-    
-    .mobile-close-btn {
-        display: none;
-    }
-
-    .hover-actions {
-        opacity: 0;
-        transition: opacity 0.2s;
-        pointer-events: none;
-    }
-    
-    .subtask-item:hover .hover-actions {
-        opacity: 1;
-        pointer-events: all;
-    }
-}
-
 
 @media (max-width: 480px) {
     .task-table-container {
@@ -1188,7 +1184,6 @@
     }
 }
 
-
 @media (max-width: 1024px) {
     .pagination-wrapper {
         flex-direction: column;
@@ -1208,7 +1203,6 @@
         order: 1;
     }
 }
-
 
 @media (max-width: 768px) {
     .pagination-wrapper {
