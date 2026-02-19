@@ -10,13 +10,14 @@ import { ModalConfirm as DefaultModalConfirm } from '../layout/modalConfirm';
 import { TaskForm } from "./taskForm";
 import { ClipLoader } from "react-spinners";
 import { PaginationComponent } from "../layout/pagination";
-
-
+import { FilterPerDay } from "../layout/filter/filterPerDay";
 
 
 
 export const TaskTable = ({
     task,
+    filterTask,
+    setFilterTask,
     addTask,
     addNewTask,
     toogleAllTask,
@@ -32,6 +33,7 @@ export const TaskTable = ({
     ModalConfirm
 }: TaskTableProps) => {
 
+    
         
     useEffect(() => {
 
@@ -96,10 +98,10 @@ export const TaskTable = ({
 
     const ModalComponent = ModalConfirm || DefaultModalConfirm;
 
-
+    const baseTask = filterTask.length ? filterTask : task
 
     const filteredTasks = useMemo(() => {
-        if (!showToday) return task;
+        if (!showToday) return baseTask;
         
         const timeArg = new Date().toLocaleString('en-US', {
             timeZone: 'America/Buenos_Aires'
@@ -114,8 +116,9 @@ export const TaskTable = ({
             const taskDateStr = new Date(taskDate).toISOString().split('T')[0]
             return taskDateStr === todayStr
         })
-    }, [task, showToday]);
+    }, [baseTask, showToday]);
 
+    
     // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)
       const itemsPerPage = 3;
@@ -163,16 +166,15 @@ export const TaskTable = ({
 
             <div className="toogle-view">
                 <button     
-                        className="btn-toggle-view"
-                        onClick={() => setShowToday(!showToday)}
-                    >
-                        <Calendar size={18} />
-                        {showToday ? 'Ver Todas' : 'Ver Hoy'}
+                    className="btn-toggle-view"
+                    onClick={() => setShowToday(!showToday)}
+                >
+                    <Calendar size={18} />
+                    {showToday ? 'Ver Todas' : 'Ver Hoy'}
                 </button>
+
+                <FilterPerDay task={task} setFilterTask={setFilterTask} />
             </div>
-                
-                
-    
             
             {
                 loading ? (

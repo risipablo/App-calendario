@@ -13,6 +13,8 @@ export const TaskContainer = () => {
 
             <TaskTable
                 task={tasks.task} 
+                filterTask={tasks.filterTask}
+                setFilterTask={tasks.setFilterTask}
                 addTask={tasks.addTask}
                 onDelete={tasks.deleteTask} 
                 deletePrincipalTask={tasks.deletePrincipalTask}

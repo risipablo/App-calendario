@@ -30,6 +30,7 @@ export const Dashboard = () => {
         getFailTask,
     } = useTasks()
 
+
     const totalTasks = getTotalTasksDay()
     const completedTasks = getTotalTaskCompleted()
     const incompletedTasks = getTotalTaskIncompleted()

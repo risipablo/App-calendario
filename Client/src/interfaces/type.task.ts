@@ -37,6 +37,8 @@ export interface TaskFormProps{
 
 export interface TaskTableProps{
     task: ITodo[];
+    filterTask: ITodo[]
+    setFilterTask: React.Dispatch<React.SetStateAction<ITodo[]>>;  
     addTask:(date:Date, title:string, priority:string) => void
     onDelete: (id: string) => void;
     onDeleteAll: () => void;
