@@ -8,6 +8,7 @@ const serverFront = config.Api
 
 export const UseTask = () => {
     const [task,setTask] = useState<ITodo[]>([])
+    const [filterTask,setFilterTask] = useState<ITodo[]>([])
     const [loading,setLoading] = useState(true)
 
     useEffect(() => {
@@ -15,6 +16,7 @@ export const UseTask = () => {
         axios.get(`${serverFront}/api/task`)
         .then(response =>{
             setTask(response.data)
+            setFilterTask(response.data)
         })
         .catch(err => console.error(err))
     },[])
@@ -36,7 +38,14 @@ export const UseTask = () => {
                 completed: false
             })
             .then(response => {
-                setTask(prev => [...prev, response.data]);
+                setTask(prev => {
+                    const next = [...prev,response.data]
+
+                    setFilterTask(prevFilter => {
+                        return[...prevFilter,response.data]
+                    })
+                    return next
+                })
                 
                 
                 
@@ -83,7 +92,10 @@ export const UseTask = () => {
     const deleteTask = (id:string) => {
         axios.delete(`${serverFront}/api/task/${id}`)
         .then(() => {
+        
             setTask(prev => prev.filter(tas => tas._id !== id))
+            setFilterTask(prev => prev.filter(tas => tas._id !== id))
+            
             toast.success('Task deleted successfully.',{
                 position:'top-center',
                 duration:1000
@@ -276,6 +288,7 @@ export const UseTask = () => {
     }
 
     return {
-        task, loading, addTask, addNewTask, deleteTask, deleteAll, deleteSubTask, saveTask, editSubTask,completedSubTasks, completedTask, toogleAllTask,deletePrincipalTask ,incompletedSubTask
+        task, loading, addTask, addNewTask, deleteTask, deleteAll, deleteSubTask, saveTask, editSubTask,completedSubTasks, completedTask, toogleAllTask,deletePrincipalTask ,incompletedSubTask,
+        filterTask,setFilterTask
     }
 }

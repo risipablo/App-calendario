@@ -93,6 +93,10 @@
 
 .toogle-view {
     margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .btn-toggle-view {
