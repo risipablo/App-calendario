@@ -31,8 +31,7 @@ export interface CalendarContainerProps{
     notes:ICalendar[]
     addNote:(title:string, date:string, priority:string, category:string, hour:string) => void
     deleteNote:(id: string) => void
-    editNote?:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
-    onAddNote:() => void
+    editNote:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
     allDeleteNote:() => void
 }
 
@@ -40,9 +39,9 @@ export interface CalendarContextType{
     notes:ICalendar[]
     addNote:(title:string, date:string, priority:string, category:string, hour:string) => void
     deleteNote:(id: string) => void
-    editNote?:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
-    onAddNote?:() => void
-    allDeleteNote?:() => void
+    editNote:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
+    // onAddNote:() => void
+    allDeleteNote:() => void
     getNotesDay: () => ICalendar[]
     getNotesOfWeek: () => ICalendar[]
     getNotesImportant: () => ICalendar[]

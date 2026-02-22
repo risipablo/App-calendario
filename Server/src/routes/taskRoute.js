@@ -6,7 +6,7 @@ router.get('/task',getTask)
 router.post('/task', addTask)
 router.post('/task/:id/addtask', addMoreTask)
 router.delete('/task/:id', deleteTask)
-router.delete('/task/:id/principal', deletePrincipalTask)
+
 router.delete('/task/:id/subtask/:subTaskIndex', deleteSubTask)
 router.delete('/task', deleteAllTask)
 router.patch('/task/:id', saveTask)

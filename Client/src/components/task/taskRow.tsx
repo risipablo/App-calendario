@@ -51,7 +51,6 @@ export const TaskRow = ({
     }, [tas._id, tas.date, tas.title, tas.priority]);
 
     const formatDate = (dateString: string) => {
-        // return dateString.split('T')[0]; 
         const [year, month, day] = dateString.split('T')[0].split('-');
         return `${day}/${month}/${year}`;
     };
@@ -208,8 +207,6 @@ export const TaskRow = ({
             </tr>
         );
     }
-
-
 
     // 
     return (

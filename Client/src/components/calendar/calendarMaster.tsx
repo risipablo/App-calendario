@@ -2,15 +2,15 @@
 import { CalendarForm } from "./calendarForm"
 import { useState } from "react"
 import { CalendarContainer } from "./calendarContainer"
-import { useCalendar } from "../../hooks/useCalendar"
 import { ModalConfirm } from "../layout/modalConfirm"
 import { Trash2 } from "lucide-react"
 import { Tooltip } from "@mui/material"
+import { useCalendars } from "../../context/calendarContext"
 
 
 export const CalendarMaster = () => {
     
-    const{addNote,notes,deleteEvents,editEvents,deleteAllNotes} = useCalendar()
+    const{notes,addNote,deleteNote,editNote,allDeleteNote} = useCalendars()
 
     const [title,setTitle] = useState<string>("")
     const [category,setCategory] = useState<string>("")
@@ -86,7 +86,7 @@ export const CalendarMaster = () => {
                     
                     <Tooltip title="Eliminar todas las tareas" arrow>
                         <button className="delete-all-btn" onClick={() => openDeleteModal(
-                            deleteAllNotes,
+                            allDeleteNote,
                             "Confirmar borrado",
                             `¿Estás seguro que deseas eliminar todas las metas (${notes.length})?`,
                             "Eliminar Todas"
@@ -100,11 +100,10 @@ export const CalendarMaster = () => {
 
             <CalendarContainer 
                 notes={notes}
-                addNote={addNote}
-                deleteNote={deleteEvents}
-                editNote={editEvents}
-                onAddNote={handleAddNote}
-                allDeleteNote={deleteAllNotes}
+                addNote={handleAddNote}
+                deleteNote={deleteNote}
+                editNote={editNote}
+                allDeleteNote={allDeleteNote}
             />
 
 

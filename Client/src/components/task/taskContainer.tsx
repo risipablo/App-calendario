@@ -1,32 +1,47 @@
 
-import { UseTask } from "../../hooks/useTodo"
+
 import { TaskTable } from "./taskTable"
 import { ModalConfirm } from "../layout/modalConfirm"
+import { useTasks } from "../../context/taskContex"
 
 
 export const TaskContainer = () => {
-    const tasks = UseTask()
+    const { 
+        task,
+        filterTask,
+        setFilterTask,
+        addTask,
+        deleteTask,
+        deleteAll,
+        addNewTask,
+        deleteSubTask,
+        editSubTask,
+        saveTask,
+        toogleAllTask,
+        completedTask,
+        completedSubTasks,
+        incompletedSubtask
+    } = useTasks()
 
 
     return(
         <>
 
             <TaskTable
-                task={tasks.task} 
-                filterTask={tasks.filterTask}
-                setFilterTask={tasks.setFilterTask}
-                addTask={tasks.addTask}
-                onDelete={tasks.deleteTask} 
-                deletePrincipalTask={tasks.deletePrincipalTask}
-                onDeleteAll={tasks.deleteAll}
-                addNewTask={tasks.addNewTask}
-                deleteSubTask={tasks.deleteSubTask}
-                editSubTask={tasks.editSubTask}
-                saveTask={tasks.saveTask}
-                toogleAllTask={tasks.toogleAllTask}
-                completedTask={tasks.completedTask}
-                completedSubTasks={tasks.completedSubTasks}
-                incompletedSubtask={tasks.incompletedSubTask}
+                task={task}
+                filterTask={filterTask}
+                setFilterTask={setFilterTask}
+                addTask={addTask}
+                onDelete={deleteTask}
+                onDeleteAll={deleteAll}
+                addNewTask={addNewTask}
+                deleteSubTask={deleteSubTask}
+                editSubTask={editSubTask}
+                saveTask={saveTask}
+                toogleAllTask={toogleAllTask}
+                completedTask={completedTask}
+                completedSubTasks={completedSubTasks}
+                incompletedSubtask={incompletedSubtask}
                 ModalConfirm={ModalConfirm}
             />
         </>

@@ -3,6 +3,7 @@ import { TaskPage } from "./taskPage"
 import { GoalPage } from "./goalPage"
 import { CalendarPage } from "./calendarPage"
 import { Dashboard } from "./dashboard"
+import { ResumeChart } from "./resumePage"
 
 
 
@@ -14,6 +15,7 @@ export const Home = () => {
         <Route path="/calendar" element={<CalendarPage/>}/>
         <Route path="/task" element={<TaskPage/>} />
         <Route path="/goals" element={<GoalPage/>}/>
+        <Route path="/resume" element={<ResumeChart/>}/>
     </Routes>
     </>
     

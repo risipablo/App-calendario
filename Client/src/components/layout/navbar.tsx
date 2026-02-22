@@ -1,7 +1,7 @@
 
 
 import { Task } from "@mui/icons-material"
-import { Calendar, Goal, House} from "lucide-react"
+import { Calendar, ChartLine, Goal, House} from "lucide-react"
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import "../../style/navbar.css"
@@ -88,6 +88,12 @@ export function Navbar(){
                                     <Goal size={20} /> 
                                     <span>Metas</span>
                                 </NavLink>
+
+                                <NavLink to="/resume" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                    <ChartLine/>
+                                    <span>Resumen</span>
+                                </NavLink>
+                                
                             </div>
 
                             

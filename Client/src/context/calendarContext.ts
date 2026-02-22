@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useCallback, useContext, useMemo } from "react";
 import type { CalendarContextType, CalendarProviderProps, ICalendar } from "../interfaces/type.calendar";
 import { useCalendar } from "../hooks/useCalendar";
 
@@ -17,15 +17,15 @@ export const useCalendars = () => {
 export const CalendarProvider:React.FC<CalendarProviderProps> = ({children}) => {
     const notesDate = useCalendar()
 
-    const getNotesDay = ():ICalendar[] => {
+    const getNotesDay = useCallback(():ICalendar[] => {
         const todayDate = new Date().toISOString().split('T')[0];
         return notesDate.notes.filter((n: ICalendar) => {
             const noteDate = new Date(n.date).toISOString().split('T')[0];
             return noteDate === todayDate;
         });
-    }
+    },[notesDate])
 
-    const getNotesOfWeek = ():ICalendar[] => {
+    const getNotesOfWeek = useCallback(():ICalendar[] => {
         const today = new Date()
         const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
 
@@ -33,9 +33,9 @@ export const CalendarProvider:React.FC<CalendarProviderProps> = ({children}) => 
             const notesWeek = new Date(note.date)
             return notesWeek >= today && notesWeek <= nextWeek
         })
-    }
+    },[notesDate])
 
-    const getNotesOfMonth = ():ICalendar[] => {
+    const getNotesOfMonth = useCallback(():ICalendar[] => {
         const today = new Date()
 
         const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
@@ -45,26 +45,41 @@ export const CalendarProvider:React.FC<CalendarProviderProps> = ({children}) => 
             const noteDate = new Date(note.date)
             return noteDate >= firstDay && noteDate <= lastDay
         })
-    }
+    },[notesDate])
 
-    const getNotesImportant = ():ICalendar[] => {
+    const getNotesImportant = useCallback(():ICalendar[] => {
         return getNotesOfMonth().filter(note => note.priority === 'alta')
-    }
-
+    },[getNotesOfMonth])
 
     
 
-    const value: CalendarContextType = {
+    const value: CalendarContextType = useMemo(
+        () => (
+        {
         notes: notesDate.notes,
         addNote: notesDate.addNote,
         deleteNote: notesDate.deleteEvents,
+        editNote:notesDate.editEvents,
+        allDeleteNote:notesDate.deleteAllNotes,
+        onAddNote:notesDate.addNote,
         getNotesDay,
-        getNotesOfWeek,
         getNotesImportant,
+        getNotesOfWeek
         
+        }),
+        [
+            notesDate.notes,
+            notesDate.addNote,
+            notesDate.deleteEvents,
+            notesDate.editEvents,
+            notesDate.deleteAllNotes,
+            getNotesDay,
+            getNotesImportant,
+            getNotesOfWeek
         
-   
-    }
+        ]
+
+    )
 
     return React.createElement(
         CalendarContext.Provider,
