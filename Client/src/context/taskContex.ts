@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, } from "react";
+import React, { createContext, useCallback, useContext, useMemo, } from "react";
 import { UseTask } from "../hooks/useTodo";
 import type { ISubtask, ITodo, TaskContextType, TaskProviderProps } from "../interfaces/type.task";
 
@@ -17,24 +17,17 @@ export const useTasks = () =>{
 export const TaskProvider:React.FC<TaskProviderProps> = ({children}) => {
     const taskData = UseTask()
 
-    // useEffect(() => {
-    //     console.log("Tareas: ", taskData.task)
-    //     taskData.task.forEach(task => {
-    //         console.log(`Task: ${task.title}`)
-    //         console.log('Subtask: ' , task.subtasks)
-    //     })
-    // },[taskData.task])
-
-    const getTaskDay = ():ITodo[] => {
-        const today = new Date().toISOString().split('T')[0]
+    const getTaskDay = useCallback((): ITodo[] => {
+        const todayStr = new Date().toLocaleDateString('en-CA'); 
         return taskData.task.filter((t: ITodo) => {
-            const taskDate = new Date(t.date).toISOString().split('T')[0]
-            return taskDate === today
-        })
-    }
+            
+            const taskDateStr = t.date.split('T')[0];
+            return taskDateStr === todayStr;
+        });
+    },[taskData.task])
 
     // Obtener las subTask
-    const getAllSubtasksDay = (): Array<ISubtask & { parentTask: string }> => {
+    const getAllSubtasksDay = useCallback((): Array<ISubtask & { parentTask: string }> => {
         const todayTasks = getTaskDay()
         const allSubtasks: Array<ISubtask & { parentTask: string }> = []
         
@@ -55,86 +48,113 @@ export const TaskProvider:React.FC<TaskProviderProps> = ({children}) => {
         })
         
         return allSubtasks
-    }
+    },[getTaskDay])
 
     // Tareas pendientes
-    const getPendigTask = ():ITodo[] => {
+    const getPendigTask = useCallback(():ITodo[] => {
         return getTaskDay().filter(t => !t.completed)
-    }
+    },[getTaskDay])
 
     // Sub tareas pendientes 
-    const getPendingSubtasks = (): Array<ISubtask & {parentTask:string}> => {
+    const getPendingSubtasks = useCallback((): Array<ISubtask & {parentTask:string}> => {
         return getAllSubtasksDay().filter(sub => !sub.completed)
-    }
+    },[getAllSubtasksDay])
 
     // Tarea Principal
-    const getCompletedTask = ():ITodo[] => {
+    const getCompletedTask = useCallback(():ITodo[] => {
         return getTaskDay().filter(t => t.completed)
-    }
+    },[getTaskDay])
 
 
     // Subtareas completas
-    const getCompletedSubtasks = (): Array<ISubtask & {parentTask:string}> => {
+    const getCompletedSubtasks = useCallback((): Array<ISubtask & {parentTask:string}> => {
         return getAllSubtasksDay().filter(sub => sub.completed)
-    }
+    },[getAllSubtasksDay])
 
     // Subtareas no realizas
-    const getFailTask = ():Array<ISubtask & {parentTask:string}> => {
+    const getFailTask = useCallback(():Array<ISubtask & {parentTask:string}> => {
         return getAllSubtasksDay().filter(sub => sub.incompletedSubtask)
-    }
+    },[getAllSubtasksDay])
 
     // Contador de tareas 
-    const getTotalTasksDay = ():number => {
+    const getTotalTasksDay = useCallback(():number => {
         const mainTask = getTaskDay().length
         const subtasks = getAllSubtasksDay().length
         return mainTask + subtasks
-    }
+    },[getAllSubtasksDay,getTaskDay])
 
     // Contador de tareas completas
-    const getTotalTaskCompleted = ():number => {
+    const getTotalTaskCompleted = useCallback(():number => {
         const mainTask = getCompletedTask().length
         const subtasks = getCompletedSubtasks().length
         return mainTask + subtasks
-    }
+    },[getCompletedSubtasks,getCompletedTask])
 
     // Contador de tareas pendientes
-    const getTotalTaskIncompleted = ():number => {
+    const getTotalTaskIncompleted = useCallback(():number => {
         const mainTask = getPendigTask().length
         const subtasks = getPendingSubtasks().length
         return mainTask + subtasks
-    }
+    },[getPendigTask,getPendingSubtasks])
 
 
-
-
-    const value: TaskContextType = {
-        task: taskData.task,
-        // loading: taskData.loading,
-        addTask: taskData.addTask,
-        addNewTask: taskData.addNewTask,
-        deleteTask: taskData.deleteTask,
-        // deleteAll: taskData.deleteAll,
-        deleteSubTask: taskData.deleteSubTask,
-        saveTask: taskData.saveTask,
-        editSubTask: taskData.editSubTask,
-        completedSubTasks: taskData.completedSubTasks,
-        completedTask: taskData.completedTask,
-        toogleAllTask: taskData.toogleAllTask,
-        deletePrincipalTask: taskData.deletePrincipalTask,
-        incompletedSubtask: taskData.incompletedSubTask,
-        getTaskDay,
-        getAllSubtasksDay,
-        getCompletedSubtasks,
-        getCompletedTask,
-        getPendigTask,
-        getPendingSubtasks,
-        getTotalTaskCompleted,
-        getTotalTaskIncompleted,
-        getTotalTasksDay,
-        getFailTask
-        
-    }
-
+    const value: TaskContextType = useMemo(
+        () =>(
+            {
+                task: taskData.task,
+                filterTask:taskData.filterTask,
+                setFilterTask: taskData.setFilterTask,
+                addTask: taskData.addTask,
+                addNewTask: taskData.addNewTask,
+                deleteTask: taskData.deleteTask,
+                deleteAll: taskData.deleteAll,
+                deleteSubTask: taskData.deleteSubTask,
+                saveTask: taskData.saveTask,
+                editSubTask: taskData.editSubTask,
+                completedSubTasks: taskData.completedSubTasks,
+                completedTask: taskData.completedTask,
+                toogleAllTask: taskData.toogleAllTask,
+                incompletedSubtask: taskData.incompletedSubTask,
+                getTaskDay,
+                getAllSubtasksDay,
+                getCompletedSubtasks,
+                getCompletedTask,
+                getPendigTask,
+                getPendingSubtasks,
+                getTotalTaskCompleted,
+                getTotalTaskIncompleted,
+                getTotalTasksDay,
+                getFailTask,
+                
+            }) ,
+            [
+                taskData.task,
+                taskData.filterTask,
+                taskData.setFilterTask,
+                taskData.addTask,
+                taskData.addNewTask,
+                taskData.deleteTask,
+                taskData.deleteAll,
+                taskData.deleteSubTask,
+                taskData.editSubTask,
+                taskData.saveTask,
+                taskData.toogleAllTask,
+                taskData.completedTask,
+                taskData.completedSubTasks,
+                taskData.incompletedSubTask,
+                getTaskDay,
+                getAllSubtasksDay,
+                getPendigTask,
+                getPendingSubtasks,
+                getCompletedTask,
+                getCompletedSubtasks,
+                getFailTask,
+                getTotalTasksDay,
+                getTotalTaskCompleted,
+                getTotalTaskIncompleted,
+            ]
+        )
+    
     return React.createElement(
         TaskContext.Provider,
         { value },
@@ -142,3 +162,5 @@ export const TaskProvider:React.FC<TaskProviderProps> = ({children}) => {
     );
 
 }
+
+// const today = new Date().toISOString().split('T')[0]

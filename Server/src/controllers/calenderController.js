@@ -74,9 +74,11 @@ exports.saveCalender = async (req,res) => {
     }
 
     try{
-        const saveNote = await CalenderModel.findByIdAndUpdate(id,{
-            title,priority,category, date , hour
-        })
+        const saveNote = await CalenderModel.findByIdAndUpdate(
+            id,
+            { title, priority, category, date, hour },
+            { new: true }
+        )
         res.json(saveNote)
     } catch(err){
         res.status(500).json({error:err.message})

@@ -27,25 +27,18 @@ export const TaskTable = ({
     editSubTask,
     onDelete,
     onDeleteAll,
-    deletePrincipalTask,
     saveTask,
     incompletedSubtask,
     ModalConfirm
 }: TaskTableProps) => {
-
     
-        
     useEffect(() => {
-
         // eslint-disable-next-line react-hooks/immutability
         setCurrentPage(0)
-
         const timer = setTimeout(() => {
             // eslint-disable-next-line react-hooks/immutability
             setLoading(false)
-            
         }, 100);
-
         return () => clearTimeout(timer)
     },[task.length])
 
@@ -116,7 +109,7 @@ export const TaskTable = ({
             const taskDateStr = new Date(taskDate).toISOString().split('T')[0]
             return taskDateStr === todayStr
         })
-    }, [baseTask, showToday]);
+    }, [baseTask, showToday, task]);
 
     
     // Paginate task      
@@ -209,7 +202,6 @@ export const TaskTable = ({
                                                     tas={tas}
                                                     addTask={addTask}
                                                     deleteTask={onDelete}
-                                                    deletePrincipalTask={deletePrincipalTask}
                                                     deleteSubTask={deleteSubTask}
                                                     editSubTask={editSubTask}
                                                     toogleAllTask={toogleAllTask}

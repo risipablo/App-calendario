@@ -125,6 +125,7 @@ export const CalendarContainer = ({
       hour: editData.hour
     })
     setEditingId(null);
+    
   }
 
   const handleCancelEdit = () => {

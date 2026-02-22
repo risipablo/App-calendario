@@ -22,7 +22,9 @@ exports.addTask = async (req,res) => {
         const taskDate = new Date(date)
 
         const newTask = new TodoModel({
-            date:taskDate,title,priority
+            date:taskDate,
+            title,
+            priority
         })
 
         const result = await newTask.save()
@@ -77,57 +79,57 @@ exports.deleteTask = async (req,res) => {
     } 
 }
 
-// delete principal task
-exports.deletePrincipalTask = async(req,res) => {
-    const {id} = req.params
+// // delete principal task
+// exports.deletePrincipalTask = async(req,res) => {
+//     const {id} = req.params
 
-    try{
-        const task = await TodoModel.findById(id)
+//     try{
+//         const task = await TodoModel.findById(id)
 
-        if(!task){
-            return res.status(404).json({error: "Task principal not found"})
-        }
+//         if(!task){
+//             return res.status(404).json({error: "Task principal not found"})
+//         }
 
-        if(!task.subtaskTitles || task.subtaskTitles.length === 0)
-            return res.json({
-            message: "Task deleted",
-            deleted: true
-        })
+//         if(!task.subtaskTitles || task.subtaskTitles.length === 0)
+//             return res.json({
+//             message: "Task deleted",
+//             deleted: true
+//         })
 
-        // convertir las subtask como principal tarea
-        const taskTitle = task.subtaskTitles[0]
-        const taskPriority = task.subtaskPriorities?.[0] || 'media'
-        const taskCompleted = task.subtaskCompleted?.[0] || false
+//         // convertir las subtask como principal tarea
+//         const taskTitle = task.subtaskTitles[0]
+//         const taskPriority = task.subtaskPriorities?.[0] || 'media'
+//         const taskCompleted = task.subtaskCompleted?.[0] || false
 
-        task.title = taskTitle
-        task.priority = taskPriority
-        task.completed = taskCompleted
+//         task.title = taskTitle
+//         task.priority = taskPriority
+//         task.completed = taskCompleted
 
-        // Eliminar la primera subtarea de los array
-        task.subtaskTitles.splice(0, 1);
-        if (task.subtaskPriorities && task.subtaskPriorities.length > 0) {
-            task.subtaskPriorities.splice(0, 1);
-        }
-        if (task.subtaskCompleted && task.subtaskCompleted.length > 0) {
-            task.subtaskCompleted.splice(0, 1);
-        }
+//         // Eliminar la primera subtarea de los array
+//         task.subtaskTitles.splice(0, 1);
+//         if (task.subtaskPriorities && task.subtaskPriorities.length > 0) {
+//             task.subtaskPriorities.splice(0, 1);
+//         }
+//         if (task.subtaskCompleted && task.subtaskCompleted.length > 0) {
+//             task.subtaskCompleted.splice(0, 1);
+//         }
 
-        await task.save()
+//         await task.save()
 
-        res.json({
+//         res.json({
     
-            updatedTask: task,
-            deletedSubtask: {
-                title: taskTitle,
-                priority: taskPriority,
-                completed: taskCompleted
-            }
-        })
+//             updatedTask: task,
+//             deletedSubtask: {
+//                 title: taskTitle,
+//                 priority: taskPriority,
+//                 completed: taskCompleted
+//             }
+//         })
 
-     } catch (err){
-        console.error(err)
-     }
-}
+//      } catch (err){
+//         console.error(err)
+//      }
+// }
 
 // delete subtask
 exports.deleteSubTask = async (req,res) => {
