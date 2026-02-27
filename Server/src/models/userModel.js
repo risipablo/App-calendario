@@ -37,25 +37,26 @@ const userSchema = new mongoose.Schema({
 
 // Generate password for the user
 userSchema.pre('save', async function(next){
-    if (!this.isModified('password')) return next
+    if (!this.isModified('password')) return next()
 
     try{
         const salt = await bcrypt.genSalt(12)
         this.password = await bcrypt.hash(this.password, salt)
         next()
     } catch (error){
-        next (error)
+       throw error
     }
+    next()
 })
 
 userSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password)
 }
 
-userSchema.method.generatePasswordResetToken = function(){
+userSchema.methods.generatePasswordResetToken = function(){
     const token = crypto.randomBytes(20).toString('hex')
     this.resetPasswordToken = token
-    this.resetPasswordToken = Date.now() + 3600000 
+    this.resetPasswordToken = Date.now() + 3600000  
     return token
 }
 

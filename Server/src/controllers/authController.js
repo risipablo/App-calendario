@@ -18,7 +18,7 @@ exports.registerUser = async(req,res) => {
         if(userExists){
             return res.status(400).json({error: "This email has exist "})
         } else if (nameExists){
-            return res.status(400).json({erro:"This name has exist "})
+            return res.status(400).json({error:"This name has exist "})
         }
 
         const newUser = new userModel({email,password,name})
@@ -26,7 +26,8 @@ exports.registerUser = async(req,res) => {
         
         res.status(201).json({ message: 'Success registration user'})
     } catch (err){
-        res.status(500).json({error: 'Error'})
+        console.log("Error en registro:", err)  
+        res.status(500).json({error: 'Error', details: err.message}) 
     }
 }
 
@@ -153,7 +154,8 @@ exports.changePassword = async (req,res) => {
         // hash and save the new password
         user.password = newPassword
         await user.save()
-    
+        res.status(200).json({message: "Password updated successfully"})
+
     } catch(err){
         res.status(500).json({error: err.message})
     }
@@ -165,7 +167,7 @@ exports.forgotPassword = async (req,res) => {
     try{
         const user = await userModel.findOne({email})
         if(!user){
-            return res.status(200).json({ message: 'That email exists, you will receive instructions'})
+            return res.status(400).json({ message: 'That email exists, you will receive instructions'})
         }
 
         const token = crypto.randomBytes(20).toString('hex')
