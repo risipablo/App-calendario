@@ -1,9 +1,10 @@
 
 import axios, { AxiosError }  from "axios";
-import { config } from "../config/index";
+// import { config } from "../config/index";
 import type { ApiError, AuthResponse, LoginData, RegisterData } from "../interfaces/type.user";
 
-const serverFront = config.Api
+// const serverFront = config.Api
+const serverFront = 'http://localhost:3001'
 
 class AuthService{
     
@@ -21,7 +22,7 @@ class AuthService{
     async login(credentials: LoginData): Promise<AuthResponse>{
         try{
             const response = await axios.post<AuthResponse>(`${serverFront}/api/auth/login`, credentials)
-
+            
             if(response.data.token){
                 localStorage.setItem('token',response.data.token)
             }

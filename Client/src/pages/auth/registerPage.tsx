@@ -1,0 +1,134 @@
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import type { RegisterData } from "../../interfaces/type.user";
+import { UseAuth } from "../../hooks/useAuth";
+import { AuthLayout } from "../../components/auth/common/authLayout";
+import { motion } from "framer-motion";
+import { PasswordInput } from "../../components/auth/passwordInput";
+import { AuthButton } from "../../components/auth/common/authButton";
+import { NavLink } from "react-router-dom";
+import { PasswordRequirements } from "../../components/auth/common/passwordRequirements";
+
+interface RegisterFromData extends RegisterData{
+    confirmPassword: string
+}
+
+export const RegisterPage:React.FC = () => {
+    const[formData, setFormData] = useState<RegisterFromData>({
+        email: '',
+        name: '',
+        password: '',
+        confirmPassword: ''
+    })
+
+    const [show,setShow] = useState<boolean>(true)
+
+    const {register, loading,error, success} = UseAuth()
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>{
+        const {name,value,type} = e.target
+
+        if(type === 'email'){
+            setFormData({...formData, email:value})
+        } else {
+            setFormData({...formData, [name]:value})
+        }
+    }
+
+    const handleSubmit = async(e:FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault()
+
+        if(formData.password !== formData.confirmPassword){
+            alert("Las contraseñas no coinciden")
+            return
+        }
+
+        try{
+            await register({
+                email: formData.email,
+                password: formData.password,
+                name: formData.name
+            })
+        } catch(err){
+            console.error(err)
+        }
+    }
+
+    return(
+        <AuthLayout title="Registrarse">
+            <motion.form
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            >
+                
+            <motion.input
+            type="email"
+            name="email"
+            placeholder="Ingrese Correo electrónico"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            whileFocus={{ scale: 1.05 }}
+            />
+
+            <motion.input
+            type="text"
+            name="name"
+            placeholder="Ingrese Nombre de Usuario"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            whileFocus={{ scale: 1.05 }}
+            />
+
+            <PasswordInput
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Crea una Contraseña"
+            delay={0.2}
+            />
+
+            <PasswordInput
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirme Contraseña"
+            delay={0.3}
+            />
+
+            <AuthButton loading={loading} text="Confirmar" />
+
+            {(error || success) && (
+            <motion.p 
+                className={`message ${error ? 'error' : 'success'}`}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+            >
+                {error || success}
+            </motion.p>
+            )}
+        </motion.form>
+
+        <motion.div 
+            className="count"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+        >
+            <NavLink to="/login">
+            <p>¡Ya tengo cuenta!</p>
+            </NavLink>
+        </motion.div>
+
+        <PasswordRequirements 
+            show={show}
+            onToggle={() => setShow(!show)}
+        />
+        </AuthLayout>
+    )
+
+
+}
