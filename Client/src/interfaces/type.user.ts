@@ -32,6 +32,7 @@ export interface LoginData {
   }
   
   export interface ApiError {
+    error: string;
     response?: {
       data?: {
         error?: string;

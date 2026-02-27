@@ -9,7 +9,7 @@ export interface UseAuthReturn{
     error:string
     success: string
     register: (useData : RegisterData) => Promise<void>
-    login?: (credentials: LoginData) => Promise<void>;
+    login: (credentials: LoginData) => Promise<void>;
     setError: (error: string) => void;
     setSuccess: (success: string) => void;
 }
@@ -39,8 +39,28 @@ export const UseAuth = ():UseAuthReturn => {
         }
 
     }
+
+
+    const login = async(credentials: LoginData) : Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        try{
+            const data = await authService.login(credentials)
+            setSuccess(data.message || 'Login exitoso')
+            setTimeout(() => {
+               navigate('/dashboard') 
+            }, 1000);
+        } catch (err){
+            setError((err as Error).message)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
     
     return{
+        login,
         loading,
         error,
         success,
