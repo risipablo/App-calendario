@@ -56,17 +56,22 @@ exports.loginUser = async (req,res) => {
         // create access token
         const token = jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET,{ expiresIn: '1h' })
 
-        res.cookie('token', token,{
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', 
-            sameSite: 'strict', 
+        // res.cookie('token', token,{
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === 'production', 
+        //     sameSite: 'strict', 
+        // })
+
+        res.json({
+            message: 'Success login', 
+            token: token,  
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
         })
 
-        res.json({message: 'Seccess login', user:{
-            id: user._id,
-            name: user.name,
-            email: user.email
-        }})
 
     } catch(err){
         res.status(500).json({error: "Error in the server: " + err.message})

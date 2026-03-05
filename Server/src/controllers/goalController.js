@@ -2,7 +2,7 @@ const GoalModel = require("../models/goalModel")
 
 exports.getGoal = async (req,res) => {
     try{
-        const goal = await GoalModel.find()
+        const goal = await GoalModel.find({userId: req.user.id})
         res.json(goal)
     } catch (err) {
         res.status(500).json({error:err.message})
@@ -18,7 +18,7 @@ exports.addGoal = async (req,res) => {
 
     try{
         const newGoal = new GoalModel({
-            title,start_date,priority
+            title,start_date,priority, userId:req.user.id
         })
         const result = await newGoal.save()
         res.json(result)
@@ -31,7 +31,7 @@ exports.deleteGoal = async (req,res) => {
     const {id} = req.params
 
     try{
-        const goal = await GoalModel.findByIdAndDelete(id)
+        const goal = await GoalModel.findOneAndDelete({_id:id, userId: req.user.id})
 
         if(!goal){
             return res.status(404).json({error: "Error delete goal"})
@@ -45,7 +45,7 @@ exports.deleteGoal = async (req,res) => {
 
 exports.deleteAllGoal = async (req,res) => {
     try{
-        const result = await GoalModel.deleteMany({})
+        const result = await GoalModel.deleteMany({userId: req.user.id})
         res.json(result)
     } catch (err){
         res.status(500).json({error: err.message})
@@ -61,8 +61,8 @@ exports.saveGoal = async (req,res) => {
     }
 
     try{
-        const goalSave = await GoalModel.findByIdAndUpdate(
-            id, 
+        const goalSave = await GoalModel.findOneAndUpdate(
+            {_id: id, userId: req.user.id},
             {target_date,title,priority,start_date},
             {new:true}
         )
@@ -81,7 +81,7 @@ exports.completedGoal = async (req,res) => {
     const {id} = req.params
 
     try{
-        const goal = await GoalModel.findById(id)
+        const goal = await GoalModel.findOne({_id: id, userId: req.user.id},)
 
         if(!goal){
             return res.status(404).json({error: "goal not found"})

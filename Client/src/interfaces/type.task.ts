@@ -95,4 +95,5 @@ export interface TaskContextType{
 
 export interface TaskProviderProps{
     children: ReactNode
+    isAuthenticated: boolean | null;
 }

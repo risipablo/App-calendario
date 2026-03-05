@@ -22,6 +22,11 @@ const goalSchema = new mongoose.Schema({
     complete_note:{
         type:Date,
         default:null
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 })
 

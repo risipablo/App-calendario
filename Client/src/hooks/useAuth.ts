@@ -3,19 +3,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { LoginData, RegisterData } from "../interfaces/type.user";
 import authService from "../service/authService";
+import type { UseAuthReturn } from "../interfaces/type.auth";
+import { useUser } from "./useUser";
 
-export interface UseAuthReturn{
-    loading:boolean
-    error:string
-    success: string
-    register: (useData : RegisterData) => Promise<void>
-    login: (credentials: LoginData) => Promise<void>;
-    setError: (error: string) => void;
-    setSuccess: (success: string) => void;
-}
+
 
 export const UseAuth = ():UseAuthReturn => {
-
+    
+    const{fetchUserData} = useUser()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
     const [success, setSuccess] = useState<string>('')
@@ -47,10 +42,13 @@ export const UseAuth = ():UseAuthReturn => {
 
         try{
             const data = await authService.login(credentials)
+            
             setSuccess(data.message || 'Login exitoso')
+            await fetchUserData()
             setTimeout(() => {
                navigate('/dashboard') 
             }, 1000);
+
         } catch (err){
             setError((err as Error).message)
             throw err
