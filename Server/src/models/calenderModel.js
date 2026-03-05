@@ -23,6 +23,11 @@ const calendarSchema = new mongoose.Schema({
         type: String,
         enum: ['alta', 'media', 'baja'],
         default: 'media'
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
      
 })

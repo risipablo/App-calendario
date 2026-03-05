@@ -3,24 +3,36 @@ import type { ITodo } from '../interfaces/type.task';
 import toast from "react-hot-toast"
 import axios from 'axios';
 import { config } from '../config/index';
+import axiosInstance from '../utils/axiosIntance';
 
 const serverFront = config.Api
 
 export const UseTask = () => {
     const [task,setTask] = useState<ITodo[]>([])
     const [loading,setLoading] = useState(true)
-
+    
     useEffect(() => {
-        setLoading(false)
-        axios.get(`${serverFront}/api/task`)
+        const token = localStorage.getItem('token')
+    
+        if(!token){
+            console.error('No token')
+            setLoading(false) 
+            return
+        }
+    
+        axiosInstance.get(`/api/task`,{
+        })
         .then(response =>{
             setTask(response.data)
+            setLoading(false) 
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+            console.error(err)
+            setLoading(false) 
+        })
     },[])
 
     
-
     const addTask = (date: Date, title: string, priority: string) => {
         if (date && title.trim() && priority.trim() !== '') {
             
@@ -29,7 +41,7 @@ export const UseTask = () => {
                 position: 'top-center'
             });
             
-            axios.post(`${serverFront}/api/task`, {
+            axiosInstance.post(`/api/task`, {
                 date: date,
                 title: title,
                 priority: priority,
@@ -37,8 +49,6 @@ export const UseTask = () => {
             })
             .then(response => {
                 setTask(prev => [...prev, response.data]);
-                
-                
                 
                 toast.success('Tarea agregada exitosamente', {
                     id: loadingToast,  
@@ -61,8 +71,15 @@ export const UseTask = () => {
 
     // Add New tasks
     const addNewTask = (taskId: string, title:string, priority: string) => {
+        const token = localStorage.getItem('token')
+
         axios.post(`${serverFront}/api/task/${taskId}/addtask`,{
             title, priority
+        },{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
         })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
@@ -81,7 +98,13 @@ export const UseTask = () => {
 
     // Delete principal task
     const deleteTask = (id:string) => {
-        axios.delete(`${serverFront}/api/task/${id}`)
+        const token = localStorage.getItem('token')
+        axios.delete(`${serverFront}/api/task/${id}`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(() => {
             setTask(prev => prev.filter(tas => tas._id !== id))
             toast.success('Task deleted successfully.',{
@@ -100,7 +123,14 @@ export const UseTask = () => {
 
     // Delete principal task
     const deletePrincipalTask = (taskId:string) => {
-        axios.delete(`${serverFront}/api/task/${taskId}/principal`)
+        const token = localStorage.getItem('token')
+
+        axios.delete(`${serverFront}/api/task/${taskId}/principal`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => 
                 tas._id === taskId ? response.data.updatedTask : tas
@@ -117,7 +147,14 @@ export const UseTask = () => {
 
     // Delete subtask
     const deleteSubTask = (taskId:string, subTaskIndex:number) => {
-        axios.delete(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}`)
+        const token = localStorage.getItem('token')
+
+        axios.delete(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data:tas))
             toast.success("Task deleted succesfully.", {
@@ -133,7 +170,14 @@ export const UseTask = () => {
 
     // Delete all
     const deleteAll = () => {
-        axios.delete(`${serverFront}/api/task`)
+        const token = localStorage.getItem('token')
+
+        axios.delete(`${serverFront}/api/task`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask([])
             console.debug(response.data)
@@ -148,7 +192,14 @@ export const UseTask = () => {
 
     // Edit & save principal task
     const saveTask = (id:string, editData:{date:Date, title:string, priority:string}) => {
-        axios.patch(`${serverFront}/api/task/${id}`, editData)
+        const token = localStorage.getItem('token')
+
+        axios.patch(`${serverFront}/api/task/${id}`, editData,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => {
                 if(tas._id === id){
@@ -169,7 +220,14 @@ export const UseTask = () => {
 
     // Edit & save subtaska
     const editSubTask = (taskId: string, subTaskIndex: number, updatedSubTask:{title?:string, priority?:string}) => {
-        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}`, updatedSubTask)
+        const token = localStorage.getItem('token')
+
+        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}`, updatedSubTask,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
             toast.success("Task edited and saved correctly.",{
@@ -187,7 +245,14 @@ export const UseTask = () => {
 
     // Check all task
     const toogleAllTask = (taskId:string) => {
-        axios.patch(`${serverFront}/api/task/${taskId}/completeAllTask`)
+        const token = localStorage.getItem('token')
+
+        axios.patch(`${serverFront}/api/task/${taskId}/completeAllTask`, {}, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
 
@@ -207,7 +272,14 @@ export const UseTask = () => {
 
     // Check principal task
     const completedTask = (taskId: string) => {
-        axios.patch(`${serverFront}/api/task/${taskId}/completedTask`)
+        const token = localStorage.getItem('token')
+
+        axios.patch(`${serverFront}/api/task/${taskId}/completedTask`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
 
@@ -229,7 +301,14 @@ export const UseTask = () => {
 
     // Completed subtask
     const completedSubTasks = (taskId: string, subTaskIndex: number) => {
-        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}/toggle`)
+        const token = localStorage.getItem('token')
+
+        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}/toggle`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
             
@@ -254,7 +333,14 @@ export const UseTask = () => {
 
     // Incompleted task
     const incompletedSubTask = (taskId: string, subTaskIndex:number) => {
-        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}/incomplete`)
+        const token = localStorage.getItem('token')
+
+        axios.patch(`${serverFront}/api/task/${taskId}/subtask/${subTaskIndex}/incomplete`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
         .then(response => {
             setTask(prev => prev.map(tas => tas._id === taskId ? response.data : tas))
         

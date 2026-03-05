@@ -5,9 +5,12 @@ import { Calendar, Goal, House} from "lucide-react"
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import "../../style/navbar.css"
+import  { useUser } from "../../hooks/useUser"
+import type { AuthenticatedProps } from "../../App"
 
-export function Navbar(){
+export function Navbar({setIsAuthenticated}:AuthenticatedProps){
 
+    const {user} = useUser()
     const [isopen, setIsOpen] = useState(false)
 
     const toggleMenu = () => {
@@ -36,6 +39,10 @@ export function Navbar(){
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
+
+    const handleLogout = () => {
+        setIsAuthenticated(false)
+    }
 
     return(
         <>
@@ -69,7 +76,7 @@ export function Navbar(){
 
                             
                             <div className="menu-links">
-                                <NavLink to="/" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                <NavLink to="/dashboard" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <House size={20} /> 
                                     <span>Inicio</span>
                                 </NavLink>
@@ -95,11 +102,11 @@ export function Navbar(){
                                 <div className="user-info">
                                     <div className="user-avatar">U</div>
                                     <div className="user-details">
-                                        <p className="user-name">Usuario</p>
+                                        <p className="user-name">{user?.name}</p>
                                         <p className="user-email">user@example.com</p>
                                     </div>
                                 </div>
-                                <NavLink to="/logout" onClick={closeToggle} className="logout-btn">
+                                <NavLink to="/logout" onClick={handleLogout} className="logout-btn">
                                     Cerrar Sesión
                                 </NavLink>
                             </div>

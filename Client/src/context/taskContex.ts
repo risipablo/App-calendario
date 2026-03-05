@@ -14,16 +14,23 @@ export const useTasks = () =>{
     return context
 }
 
-export const TaskProvider:React.FC<TaskProviderProps> = ({children}) => {
-    const taskData = UseTask()
+export const TaskProvider:React.FC<TaskProviderProps> = ({children, isAuthenticated}) => {
+    const taskData = isAuthenticated ? UseTask() :  {
+        task: [],
+        loading: false,
+        addTask: () => {},
+        addNewTask: () => {},
+        deleteTask: () => {},
+        deleteSubTask: () => {},
+        saveTask: () => {},
+        editSubTask: () => {},
+        completedSubTasks: () => {},
+        completedTask: () => {},
+        toogleAllTask: () => {},
+        deletePrincipalTask: () => {},
+        incompletedSubTask: () => {}
+    }
 
-    // useEffect(() => {
-    //     console.log("Tareas: ", taskData.task)
-    //     taskData.task.forEach(task => {
-    //         console.log(`Task: ${task.title}`)
-    //         console.log('Subtask: ' , task.subtasks)
-    //     })
-    // },[taskData.task])
 
     const getTaskDay = ():ITodo[] => {
         const today = new Date().toISOString().split('T')[0]

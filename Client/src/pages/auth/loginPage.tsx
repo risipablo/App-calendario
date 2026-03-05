@@ -1,7 +1,7 @@
 // src/components/auth/Login.tsx
 import React, { useState, type ChangeEvent, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import type { LoginData } from '../../interfaces/type.user';
 import { PasswordInput } from '../../components/auth/passwordInput';
 import { AuthLayout } from '../../components/auth/common/authLayout';
@@ -9,12 +9,18 @@ import { AuthButton } from '../../components/auth/common/authButton';
 import { UseAuth } from '../../hooks/useAuth';
 
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  setIsAuthenticated:  React.Dispatch<React.SetStateAction<boolean | null>> 
+}
+
+
+const LoginPage = ({setIsAuthenticated}:LoginPageProps) => {
   const [formData, setFormData] = useState<LoginData>({
     email: '',
     password: ''
   });
   const { login, loading, error } = UseAuth();
+  const navigate = useNavigate()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value, type } = e.target;
@@ -29,6 +35,8 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     await login(formData)
+    setIsAuthenticated(true)
+    navigate('/dashboard')
   };
 
   return (

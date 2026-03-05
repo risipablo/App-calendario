@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import { config } from "../config";
 import type { ICalendar } from "../interfaces/type.calendar";
-import axios from "axios";
+import axiosInstance from "../utils/axiosIntance";
 
-
-
-const serverFront = config.Api
-
+// const serverFront = config.Api
 
 export const useCalendar = () => {
 
     const [notes, setNotes] = useState<ICalendar[]>([])
 
     useEffect(() =>{
-        axios.get(`${serverFront}/api/calendar`)
+        
+        axiosInstance.get('/api/calendar')
         .then(response =>{
             setNotes(response.data)
         })
@@ -24,7 +21,7 @@ export const useCalendar = () => {
 
         
         try{
-            const response = await axios.post(`${serverFront}/api/calendar`,{
+            const response = await axiosInstance.post('/api/calendar',{
                 title:title.trim(),
                 priority:priority || 'media',
                 category:category || 'personal',
@@ -41,7 +38,7 @@ export const useCalendar = () => {
     const getTodayEvents = async() => {
         const today = new Date().toISOString().split('T')[0]
 
-        const response = await axios.get(`${serverFront}/api/calendar/today`,{
+        const response = await axiosInstance.get('/api/calendar/today',{
             params:{date:today}
         })
         return response.data
@@ -49,7 +46,7 @@ export const useCalendar = () => {
 
 
     const deleteEvents = (id:string) => {
-        axios.delete(`${serverFront}/api/calendar/${id}`)
+        axiosInstance.delete(`/api/calendar/${id}`)
         .then(() => {
             const updateNotes = notes.filter((note) => note._id !== id)
             setNotes(updateNotes)
@@ -59,7 +56,7 @@ export const useCalendar = () => {
 
 
     const deleteAllNotes = () => {
-        axios.delete(`${serverFront}/api/calendar`)
+        axiosInstance.delete(`/api/calendar`)
         .then(response => {
             setNotes([])
             console.debug(response)
@@ -71,7 +68,7 @@ export const useCalendar = () => {
 
     const editEvents = (id:string, editData:{title:string, priority:string, category:string,date:string, hour:string}) => {
         
-        axios.patch(`${serverFront}/api/calendar/${id}`, editData)
+        axiosInstance.patch(`/api/calendar/${id}`, editData)
         .then(response => {
             const updateNotes = notes.map( note => {
                 if(note._id === id)

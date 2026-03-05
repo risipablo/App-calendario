@@ -1,10 +1,11 @@
 
 import axios, { AxiosError }  from "axios";
-// import { config } from "../config/index";
+import { config } from "../config/index";
 import type { ApiError, AuthResponse, LoginData, RegisterData } from "../interfaces/type.user";
 
-// const serverFront = config.Api
-const serverFront = 'http://localhost:3001'
+ const serverFront = config.Api
+
+
 
 class AuthService{
     
@@ -22,13 +23,15 @@ class AuthService{
     async login(credentials: LoginData): Promise<AuthResponse>{
         try{
             const response = await axios.post<AuthResponse>(`${serverFront}/api/auth/login`, credentials)
-            
-            if(response.data.token){
-                localStorage.setItem('token',response.data.token)
-            }
-
-            return response.data
+            console.log('Respuesta del login:', response.data) // DEBUG
         
+            if(response.data.token){
+                console.log('Guardando token:', response.data.token) // DEBUG
+                localStorage.setItem('token', response.data.token)
+                console.log('Token guardado:', localStorage.getItem('token')) // DEBUG
+            }
+            return response.data
+            
         } catch(error){
             this.handleError(error as AxiosError<ApiError>);
             
