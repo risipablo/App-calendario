@@ -1,13 +1,17 @@
- import { BrowserRouter } from 'react-router-dom'
+ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Navbar } from './components/layout/navbar'
 import { Home } from './pages/home'
 import { TaskProvider } from './context/taskContex'
 import { CalendarProvider } from './context/calendarContext'
 import { UserProvider } from './context/userProvider'
-// import { Loader } from './components/layout/loader'
+import { Loader } from './components/layout/loader'
 import { useState, type Dispatch, type SetStateAction, useEffect } from 'react'
 import axios from 'axios'
 import { config } from './config/index'
+import "../src/style/authStyle.css"
+import LoginPage from './pages/auth/loginPage'
+import { RegisterPage } from './pages/auth/registerPage'
+
 
 const serverFront = config.Api
 
@@ -51,40 +55,48 @@ function App() {
         localStorage.removeItem('token')
         setIsAuthenticated(false)
         console.error(error)
+         window.location.href = '/login'
       }
     }
     validateToken()
   },[])
 
-  if(isAuthenticated === null || loading){
-    return <p>Cargando...</p>
-  }
 
-  // if(isAuthenticated === null || loading){
-  //   return(
-  //     <Loader
-  //       setLoading={setLoading}
-  //       onComplete={() => {}}
-  //     />
-  //     // <p> Cargando </p>
-  //   )
-  // }
+
+  if(isAuthenticated === null || loading){
+    return(
+      <Loader
+        setLoading={setLoading}
+        onComplete={() => {}}
+      />
+      
+    )
+  }
   
   return(
     <BrowserRouter>
-    <UserProvider>
-      <CalendarProvider isAuthenticated={isAuthenticated}>
+    <UserProvider >
+      
         {isAuthenticated ? (
+          
+          <CalendarProvider isAuthenticated={isAuthenticated}>
           <TaskProvider isAuthenticated={isAuthenticated}>
+            
             <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
             <Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
           </TaskProvider>
-        ) : (
+          </CalendarProvider>
           
-          <Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
+        ) : (
+         <Routes>
+            <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />} />
+            <Route path="/register" element={<RegisterPage  setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+         </Routes>
+          
+
           
         )}
-      </CalendarProvider>
     </UserProvider>
   </BrowserRouter>
   )

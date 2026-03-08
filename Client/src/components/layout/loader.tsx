@@ -22,7 +22,9 @@ export const Loader = ({ setLoading, onComplete }: LoaderProps) => {
                 size={80}
                 aria-label="loading-spinner"
             />
+             
             <h2>Espere un momento, por favor</h2>
+            <p>Cargando...</p>
         </div>
     )
 }

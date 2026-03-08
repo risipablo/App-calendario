@@ -10,10 +10,11 @@ import { useUser } from "./useUser";
 
 export const UseAuth = ():UseAuthReturn => {
     
-    const{fetchUserData} = useUser()
+    const{fetchUserData, setUser} = useUser()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
     const [success, setSuccess] = useState<string>('')
+    
     const navigate = useNavigate()
 
     const register = async (userData : RegisterData): Promise<void> => {
@@ -56,6 +57,23 @@ export const UseAuth = ():UseAuthReturn => {
             setLoading(false)
         }
     }
+
+    const logout = async() :Promise<void> => {
+        setLoading(true)
+
+        try{
+            await authService.logout()
+            setUser(null)
+            navigate('/login')
+        } catch(err){
+            console.error('error en logut', err)
+            localStorage.removeItem('token')
+            setUser(null)
+            navigate('/login')
+        } finally {
+            setLoading(false)
+        }
+    }
     
     return{
         login,
@@ -63,6 +81,7 @@ export const UseAuth = ():UseAuthReturn => {
         error,
         success,
         register,
+        logout,
         setError,
         setSuccess
     }

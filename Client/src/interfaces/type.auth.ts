@@ -14,13 +14,14 @@ export interface UseAuthReturn{
     success: string
     register: (useData : RegisterData) => Promise<void>
     login: (credentials: LoginData) => Promise<void>;
+    logout: () => Promise<void>;
     setError: (error: string) => void;
     setSuccess: (success: string) => void;
 }
 
 export interface UserContextType{
     user: User | null
-    setUser?: (user: User) => void
+    setUser: (user: User | null) => void
     fetchUserData: () => Promise<void>
     error:string
 }
