@@ -4,7 +4,7 @@ const { protect } = require('../middleware/authMiddleware')
 const router = express.Router()
 
 router.post('/register', authController.registerUser)
-router.post('/login', authController.loginLimiter, authController.loginUser,)
+router.post('/login',authController.loginUser,)
 router.post('/logout', protect,authController.logoutUser)
 router.post('/forgot-password', authController.forgotPassword,  authController.forgotPasswordLimiter)
 router.patch('/reset-password', authController.resetPassword)

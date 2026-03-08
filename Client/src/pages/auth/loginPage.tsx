@@ -7,14 +7,13 @@ import { PasswordInput } from '../../components/auth/passwordInput';
 import { AuthLayout } from '../../components/auth/common/authLayout';
 import { AuthButton } from '../../components/auth/common/authButton';
 import { UseAuth } from '../../hooks/useAuth';
+import type { AuthenticatedProps } from '../../App';
 
 
-interface LoginPageProps {
-  setIsAuthenticated:  React.Dispatch<React.SetStateAction<boolean | null>> 
-}
 
 
-const LoginPage = ({setIsAuthenticated}:LoginPageProps) => {
+
+const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
   const [formData, setFormData] = useState<LoginData>({
     email: '',
     password: ''

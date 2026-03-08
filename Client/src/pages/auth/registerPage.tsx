@@ -5,14 +5,15 @@ import { AuthLayout } from "../../components/auth/common/authLayout";
 import { motion } from "framer-motion";
 import { PasswordInput } from "../../components/auth/passwordInput";
 import { AuthButton } from "../../components/auth/common/authButton";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { PasswordRequirements } from "../../components/auth/common/passwordRequirements";
+import type { AuthenticatedProps } from "../../App";
 
 interface RegisterFromData extends RegisterData{
     confirmPassword: string
 }
 
-export const RegisterPage:React.FC = () => {
+export const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
     const[formData, setFormData] = useState<RegisterFromData>({
         email: '',
         name: '',
@@ -23,6 +24,7 @@ export const RegisterPage:React.FC = () => {
     const [show,setShow] = useState<boolean>(true)
 
     const {register, loading,error, success} = UseAuth()
+    const navigate = useNavigate()
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>{
         const {name,value,type} = e.target
@@ -48,6 +50,8 @@ export const RegisterPage:React.FC = () => {
                 password: formData.password,
                 name: formData.name
             })
+            setIsAuthenticated(true)
+            navigate('/dashboard')
         } catch(err){
             console.error(err)
         }

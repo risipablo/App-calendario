@@ -3,15 +3,18 @@
 import { Task } from "@mui/icons-material"
 import { Calendar, Goal, House} from "lucide-react"
 import { useState, useEffect } from "react"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import "../../style/navbar.css"
 import  { useUser } from "../../hooks/useUser"
 import type { AuthenticatedProps } from "../../App"
+import { UseAuth } from "../../hooks/useAuth"
 
 export function Navbar({setIsAuthenticated}:AuthenticatedProps){
 
     const {user} = useUser()
+    const {logout} = UseAuth()
     const [isopen, setIsOpen] = useState(false)
+    const navigate = useNavigate()
 
     const toggleMenu = () => {
         setIsOpen(!isopen)
@@ -40,8 +43,17 @@ export function Navbar({setIsAuthenticated}:AuthenticatedProps){
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
-    const handleLogout = () => {
-        setIsAuthenticated(false)
+    const handleLogout = async() => {
+        try{
+            setIsAuthenticated(false)
+            await logout()
+            navigate('/login')
+        } catch (error) {
+            console.error('Error en logout:', error)
+            setIsAuthenticated(false)
+            localStorage.removeItem('token')
+            navigate('/login')
+        }
     }
 
     return(
@@ -103,12 +115,12 @@ export function Navbar({setIsAuthenticated}:AuthenticatedProps){
                                     <div className="user-avatar">U</div>
                                     <div className="user-details">
                                         <p className="user-name">{user?.name}</p>
-                                        <p className="user-email">user@example.com</p>
+                                        <p className="user-email">{user?.email}</p>
                                     </div>
                                 </div>
-                                <NavLink to="/logout" onClick={handleLogout} className="logout-btn">
+                                <button onClick={handleLogout} className="logout-btn">
                                     Cerrar Sesión
-                                </NavLink>
+                                </button>
                             </div>
                         </div>
                     </div>

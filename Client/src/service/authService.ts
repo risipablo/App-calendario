@@ -38,9 +38,27 @@ class AuthService{
         }
     }
 
-    logout():void{
-        localStorage.removeItem('token')
-    }
+    async logout(): Promise<void>{
+        try{
+            const token = this.getToken()
+
+            await axios.post(
+                `${serverFront}/api/auth/logout`, 
+                {},  
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    withCredentials: true
+                }
+            )
+
+            localStorage.removeItem('token')
+        } catch(error){
+            console.error('Error en logout del backend:', error)
+            localStorage.removeItem('token')
+        }
+    } 
 
     getToken():string | null{
         return localStorage.getItem('token')
