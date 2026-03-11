@@ -104,39 +104,57 @@ exports.verifyEmail = async (req,res) => {
     }
 }
 
-exports.changeUserName = async (req,res) => {
-    const {newName} = req.body
-    const userId = req.user.id
+exports.changeUserName = async (req, res) => {
+    const { newName } = req.body;  
+    const userId = req.user.id;
 
-    if(!newName){
-        return res.status(400).json({error: "The new name is required."})
+    if (!newName ) {
+        return res.status(400).json({ error: "El nuevo nombre y email son requeridos." });
     }
 
-    try{
-        const user = await userModel.findById(userId)
-        if(!user){
-            return res.status(404).json({error: 'User not found'})
+    try {
+
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        const nameExists = await userModel.findOne({name:newName})
-        if(nameExists){
-            return res.status(400).json({error: 'This name exist, put anothe one'})
-        }
 
-        user.name = newName
-        await user.save()
-        res.status(200).json({message: "Username update successfully"})
+        const nameExists = await userModel.findOne({ 
+            name: newName, 
+            _id: { $ne: userId }
+         });
+
+ 
+        user.name = newName;
+        await user.save();
+
+        const token = jwt.sign(
+            { id: user._id, role: user.role, name: user.name },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ 
+            message: "Nombre de usuario actualizado exitosamente",
+            token: token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
     
-    } catch(err){
-        res.status(500).json({err})
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-}
+};
 
 exports.changePassword = async (req,res) => {
-    const {currentPassword, newPassword} = req.body
+    const {currentPasword, newPassword} = req.body
     const userId = req.user.id
 
-    if(!currentPassword || !newPassword){
+    if(!currentPasword || !newPassword){
         return res.status(400).json({error: "both password are required"})
     }
 
@@ -151,7 +169,7 @@ exports.changePassword = async (req,res) => {
         }
 
         // checkout the passwords
-        const isMatch = await user.comparePassword(currentPassword)
+        const isMatch = await user.comparePassword(currentPasword)
         if (!isMatch){
             return res.status(401).json({error: 'Password incorrect'})
         }
@@ -225,11 +243,11 @@ exports.resetPassword = async (req,res) => {
 exports.userName = async (req,res) => {
     try {
         
-        const user = await userModel.findById(req.user.id).select('name')
+        const user = await userModel.findById(req.user.id).select('name email')
         if(!user){
             return res.status(404).json({error: 'user not found'})
         }
-        res.status(200).json({user:{name:user.name}})
+        res.status(200).json({user:{name:user.name, email:user.email}})
     
     } catch(err){
         res.status(500).json({error: err.message})

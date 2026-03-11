@@ -1,13 +1,14 @@
 
 import axios, { AxiosError }  from "axios";
 import { config } from "../config/index";
-import type { ApiError, AuthResponse, LoginData, RegisterData } from "../interfaces/type.user";
+import type { ApiError, AuthResponse, IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../interfaces/type.user";
 
- const serverFront = config.Api
 
+const serverFront = config.Api
 
 
 class AuthService{
+    
     
     async register(userData: RegisterData): Promise<AuthResponse>{
         try{
@@ -23,18 +24,102 @@ class AuthService{
     async login(credentials: LoginData): Promise<AuthResponse>{
         try{
             const response = await axios.post<AuthResponse>(`${serverFront}/api/auth/login`, credentials)
-            console.log('Respuesta del login:', response.data) // DEBUG
+            // console.log('Respuesta del login:', response.data)
         
             if(response.data.token){
-                console.log('Guardando token:', response.data.token) // DEBUG
+                // console.log('Guardando token:', response.data.token) 
                 localStorage.setItem('token', response.data.token)
-                console.log('Token guardado:', localStorage.getItem('token')) // DEBUG
+                // console.log('Token guardado:', localStorage.getItem('token')) 
             }
             return response.data
             
         } catch(error){
             this.handleError(error as AxiosError<ApiError>);
             
+        }
+    }
+
+    async changeName(credentials: IChangeUserName): Promise<AuthResponse>{
+        try{
+
+            const token = this.getToken()
+
+
+            const response = await axios.patch<AuthResponse>(
+                `${serverFront}/api/auth/change-user`, { newName: credentials.newName}
+                ,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`, 
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            )
+
+            if(response.data.token){
+                localStorage.setItem('token',response.data.token)
+            }
+            return response.data
+        } catch(error){
+            this.handleError(error as AxiosError<ApiError>)
+        }
+    }
+
+
+    async ResetPassword(credentials: ResetPasswordData): Promise<AuthResponse>{
+        try{
+            const token = this.getToken()
+
+            if (!token) {
+                throw new Error('No hay token de autenticación');
+            }
+
+
+            const response = await axios.patch<AuthResponse>(
+                `${serverFront}/api/auth/change-password`,
+                {newPassword:credentials.newPassword, currentPasword: credentials.currentPassword}
+                ,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`, 
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            )
+
+            
+            if(response.data.token){
+                localStorage.setItem('token',response.data.token)
+            }
+
+            return response.data
+            
+        }  catch(error){
+            console.error('❌ Error en resetPassword:', error);
+            this.handleError(error as AxiosError<ApiError>)
+        }
+    }
+
+    async VerifyEmail(credentials: VerifyEmailData): Promise<AuthResponse>{
+        try{
+            const token = this.getToken()
+
+            const response = await axios.post<AuthResponse>(`${serverFront}/api/auth/verify-email`,
+                {email: credentials.email},
+                {  
+                    headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json'
+                    },
+                withCredentials: true}
+            )
+            if(response.data.token){
+                localStorage.setItem('token',response.data.token)
+            }
+            
+            return response.data
+        } catch(error){
+            this.handleError(error as AxiosError<ApiError>)
         }
     }
 

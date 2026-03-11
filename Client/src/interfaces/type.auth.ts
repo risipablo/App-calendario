@@ -1,6 +1,6 @@
 
 import type { ReactNode } from "react"
-import type { LoginData, RegisterData } from "./type.user"
+import type { IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "./type.user"
 
 export interface User {
     id: string;
@@ -14,6 +14,9 @@ export interface UseAuthReturn{
     success: string
     register: (useData : RegisterData) => Promise<void>
     login: (credentials: LoginData) => Promise<void>;
+    userChange: (credentials: IChangeUserName) => Promise<void>
+    resetPassword: (credentials: ResetPasswordData) => Promise<void>
+    verifyEmail: (credentials: VerifyEmailData) => Promise<void>
     logout: () => Promise<void>;
     setError: (error: string) => void;
     setSuccess: (success: string) => void;
@@ -27,5 +30,7 @@ export interface UserContextType{
 }
 
 export interface UserProviderProps{
-    children:ReactNode
+    children:ReactNode 
+    isAuthenticated: boolean | null;
+
 }
