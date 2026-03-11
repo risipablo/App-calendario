@@ -1,11 +1,10 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-
 import type { ChangeUserNameProps, IChangeUserName } from "../../interfaces/type.user";
 import { UseAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-
-
+import { AlertCircle, CheckCircle, User } from "lucide-react";
+import "../../style/userSettings.css"
 
 
 export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
@@ -13,7 +12,8 @@ export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
         email:'',
         newName: ''
     })
-    const [showSucces,setShowSucces] = useState(false)
+    const [showSuccess,setShowSucces] = useState(false)
+    const [showError, setShowError] = useState<string>('')
 
     const {userChange, loading, error, success }= UseAuth()
     const navigate = useNavigate()
@@ -38,85 +38,124 @@ export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
             },3000)
             
         } catch(err){
+            setShowError('Error cambiando nombre de usuario.')
             console.error('Error cambiando nombre de usuario:', err)
         }
     }
     
-    return(
+    return (
         <div className="task-table-container">
-        
-
-        <div>
-            <h3><strong>Ingrese su nuevo nombre de usuario</strong></h3>
-
-            <form onSubmit={handleSubmitChangeName}>
-                <input 
-                          id="newName"
-                          type="text"
-                          name="newName"
-                          placeholder="Nuevo nombre de usuario"
-                          value={formData.newName}
-                          onChange={handleChangeName}
-                          required
-                          disabled={loading || showSucces}
-                          className="form-input"
+          <div className="form-wrapper">
+            <motion.div
+              className="form-header"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="form-icon user-icon-large">
+                <User size={32} />
+              </div>
+              <h2>Cambiar Nombre de Usuario</h2>
+              <p>Elige un nuevo nombre para tu perfil</p>
+            </motion.div>
+    
+            <form onSubmit={handleSubmitChangeName} className="auth-form">
+              <motion.div
+                className="form-group"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <label htmlFor="email">Correo Electrónico</label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="tu@correo.com"
+                  value={formData.email}
+                  onChange={handleChangeName}
+                  required
+                  disabled={loading || showSuccess}
+                  className="auth-input"
                 />
-                <button type="submit" disabled={loading || showSucces}>
-                    {loading ? "Procesando..." : "Confirmar"}
-                </button>
+              </motion.div>
+    
+              <motion.div
+                className="form-group"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <label htmlFor="newName">Nuevo Nombre de Usuario</label>
+                <input
+                  id="newName"
+                  type="text"
+                  name="newName"
+                  placeholder="Mi Nuevo Usuario"
+                  value={formData.newName}
+                  onChange={handleChangeName}
+                  required
+                  disabled={loading || showSuccess}
+                  className="auth-input"
+                />
+              </motion.div>
+    
+              <motion.button
+                type="submit"
+                disabled={loading || showSuccess}
+                className="submit-button"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                {loading ? "Procesando..." : showSuccess ? "¡Éxito!" : "Confirmar Cambio"}
+              </motion.button>
             </form>
-            
+    
             <AnimatePresence>
-                    {showSucces && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.5 }}
-                            className="success-container"
-                        >
-                            <div className="success-icon">✓</div>
-                            <p className="message success">
-                                {success || "¡Cambio de usuario exitoso!"}
-                            </p>
-                            <p className="redirect-message">
-                                Serás redirigido al dashboard en 2 segundos...
-                            </p>
-                            <div className="progress-bar">
-                                <motion.div 
-                                    className="progress-fill"
-                                    initial={{ width: "0%" }}
-                                    animate={{ width: "100%" }}
-                                    transition={{ duration: 2, ease: "linear" }}
-                                />
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Mensaje de error */}
-                <AnimatePresence>
-                    {error && !showSucces && (
-                        <motion.p 
-                            className="message error"
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: -20, opacity: 0 }}
-                        >
-                            {error}
-                        </motion.p>
-                    )}
-                </AnimatePresence>
-                {loading && !showSucces && (
-                    <motion.div 
-                        className="loading-container"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                    >
-                        <p>Procesando cambio de nombre...</p>
-                    </motion.div>
-                )}
+              {showSuccess && (
+                <motion.div
+                  className="message success-message"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <CheckCircle size={20} />
+                  <div>
+                    <p className="message-title">¡Nombre actualizado exitosamente!</p>
+                    <p className="message-subtitle">Serás redirigido en 3 segundos...</p>
+                  </div>
+                </motion.div>
+              )}
+    
+              {(showError || error) && !showSuccess && (
+                <motion.div
+                  className="message error-message"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <AlertCircle size={20} />
+                  <div>
+                    <p className="message-title">Error</p>
+                    <p className="message-subtitle">{showError || error}</p>
+                  </div>
+                </motion.div>
+              )}
+    
+              {success && !showError && !showSuccess && (
+                <motion.p
+                  className="message success-message"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                >
+                  {success}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-    </div>
-    )
+      )
 }

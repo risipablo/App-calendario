@@ -82,7 +82,7 @@ function App() {
           <CalendarProvider isAuthenticated={isAuthenticated}>
           <TaskProvider isAuthenticated={isAuthenticated}>
             
-            <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+            <Navbar  />
             <Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
           </TaskProvider>
           </CalendarProvider>

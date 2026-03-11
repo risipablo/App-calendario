@@ -32,7 +32,7 @@ export const Home = ({isAuthenticated,setIsAuthenticated}:AuthenticatedProps) =>
         <Route path="/goals" element={isAuthenticated ? <GoalPage/> : <Navigate to="/" replace/>}/>
         <Route path="/change-name" element={isAuthenticated ? <ChangeUserName setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
         <Route path="/change-password" element={isAuthenticated ? <ResetPasswordPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
-        <Route path="/config-user" element={isAuthenticated ? <ConfigPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
+        <Route path="/settings" element={isAuthenticated ? <ConfigPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
         <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace/>}/>
     </Routes>
     </>
