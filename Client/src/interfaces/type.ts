@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 
 // Paginate props
 export interface PaginateProps{
@@ -8,3 +9,16 @@ export interface PaginateProps{
     offset:number
     pageCount:number
 }
+
+
+export interface LoaderProps {
+    setLoading: Dispatch<SetStateAction<boolean>>;
+    onComplete?: () => void;
+  }
+  
+  export interface AuthenticatedProps{
+    isAuthenticated: boolean | null  
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>  
+  }
+  
+  

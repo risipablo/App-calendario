@@ -1,5 +1,6 @@
 
 
+
 export interface RegisterData{
     email:string
     password:string
@@ -10,23 +11,35 @@ export interface LoginData {
     email: string;
     password: string;
   }
+
+export interface IChangeUserName{
+    email?:string,
+    newName:string
+}
+
+export interface ChangeUserNameProps {
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
   
   export interface ForgotPasswordData {
     email: string;
   }
   
   export interface ResetPasswordData {
-    password: string;
-    confirmPassword: string;
-    token: string;
+    newPassword: string;
+    currentPassword: string;
+  }
+
+  export interface VerifyEmailData{
+    email:string
   }
   
   export interface AuthResponse {
-    message: string;
+    message?: string;
     token?: string;
     user?: {
       id: string;
-      email: string;
+      email?: string;
       name: string;
     };
   }
@@ -69,3 +82,5 @@ export interface PasswordRequirementsProps{
     show:boolean
     onToggle: () => void
 }
+
+

@@ -22,8 +22,8 @@ export interface LoaderProps {
 }
 
 export interface AuthenticatedProps{
-  isAuthenticated: boolean | null  // Cambia aquí
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>  // Y aquí
+  isAuthenticated: boolean | null  
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>  
 }
 
 
@@ -75,8 +75,8 @@ function App() {
   
   return(
     <BrowserRouter>
-    <UserProvider >
-      
+    
+    <UserProvider isAuthenticated={isAuthenticated}>
         {isAuthenticated ? (
           
           <CalendarProvider isAuthenticated={isAuthenticated}>
@@ -86,6 +86,7 @@ function App() {
             <Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
           </TaskProvider>
           </CalendarProvider>
+          
           
         ) : (
          <Routes>

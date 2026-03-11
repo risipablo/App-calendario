@@ -1,15 +1,14 @@
-// src/components/auth/Login.tsx
+
 import React, { useState, type ChangeEvent, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useNavigate } from 'react-router-dom';
 import type { LoginData } from '../../interfaces/type.user';
-import { PasswordInput } from '../../components/auth/passwordInput';
+
 import { AuthLayout } from '../../components/auth/common/authLayout';
 import { AuthButton } from '../../components/auth/common/authButton';
 import { UseAuth } from '../../hooks/useAuth';
 import type { AuthenticatedProps } from '../../App';
-
-
+import { PasswordInput } from '../../components/auth/common/passwordInput';
 
 
 

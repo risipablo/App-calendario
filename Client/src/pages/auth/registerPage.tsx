@@ -3,11 +3,12 @@ import type { RegisterData } from "../../interfaces/type.user";
 import { UseAuth } from "../../hooks/useAuth";
 import { AuthLayout } from "../../components/auth/common/authLayout";
 import { motion } from "framer-motion";
-import { PasswordInput } from "../../components/auth/passwordInput";
+
 import { AuthButton } from "../../components/auth/common/authButton";
 import { NavLink, useNavigate } from "react-router-dom";
 import { PasswordRequirements } from "../../components/auth/common/passwordRequirements";
 import type { AuthenticatedProps } from "../../App";
+import { PasswordInput } from "../../components/auth/common/passwordInput";
 
 interface RegisterFromData extends RegisterData{
     confirmPassword: string

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import type { LoginData, RegisterData } from "../interfaces/type.user";
+import type { IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../interfaces/type.user";
 import authService from "../service/authService";
 import type { UseAuthReturn } from "../interfaces/type.auth";
 import { useUser } from "./useUser";
@@ -58,6 +58,62 @@ export const UseAuth = ():UseAuthReturn => {
         }
     }
 
+    const userChange = async(credentials: IChangeUserName) : Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        try{
+            const data = await authService.changeName(credentials)
+            setSuccess(data.message || 'Cambio de nombre del usuario exitoso')
+            navigate('/dashboard')
+            
+            
+
+            } catch (err){
+                setError((err as Error).message)
+                throw err
+            } finally {
+                setLoading(false)
+            }
+        
+    }
+
+    const resetPassword = async(credentials: ResetPasswordData) : Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        
+        try{
+            const data = await authService.ResetPassword(credentials)
+            setSuccess(data.message || 'Cambio de nombre de contraseña exitoso')
+
+            localStorage.removeItem('token')
+            navigate('/login')
+        } catch (err){
+            setError((err as Error).message)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    
+    }
+
+    const verifyEmail = async(credentials: VerifyEmailData): Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        try{
+            const data = await authService.VerifyEmail(credentials)
+            setSuccess(data.message || 'Cambio de nombre de contraseña exitoso')
+            
+        } catch (err){
+            setError((err as Error).message)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const logout = async() :Promise<void> => {
         setLoading(true)
 
@@ -74,7 +130,8 @@ export const UseAuth = ():UseAuthReturn => {
             setLoading(false)
         }
     }
-    
+
+
     return{
         login,
         loading,
@@ -82,6 +139,9 @@ export const UseAuth = ():UseAuthReturn => {
         success,
         register,
         logout,
+        userChange,
+        resetPassword,
+        verifyEmail,
         setError,
         setSuccess
     }

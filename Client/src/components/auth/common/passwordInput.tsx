@@ -1,6 +1,7 @@
 import { useState } from "react"
-import type { PasswordInputProps } from "../../interfaces/type.user"
+
 import { Eye, EyeClosed } from "lucide-react"
+import type { PasswordInputProps } from "../../../interfaces/type.user"
 
 
 export const PasswordInput = ({
