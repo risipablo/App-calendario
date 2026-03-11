@@ -1,5 +1,3 @@
-
-
 import { Task } from "@mui/icons-material"
 import { Calendar, EllipsisVertical, Goal, House} from "lucide-react"
 import { useState, useEffect } from "react"
@@ -94,6 +92,11 @@ export function Navbar(){
                                     <Goal size={20} /> 
                                     <span>Metas</span>
                                 </NavLink>
+
+                                <NavLink to="/settings" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                    <EllipsisVertical size={20} /> 
+                                    <span>Configuración</span>
+                                </NavLink>
                             </div>
 
                             
@@ -104,13 +107,7 @@ export function Navbar(){
                                         <p className="user-name">{user?.name}</p>
                                         <p className="user-email">{user?.email}</p>
                                     </div>
-
-                                    <NavLink to="/config-user" onClick={closeToggle} >
-                                        <EllipsisVertical />
-                                    </NavLink>
-                                    
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
