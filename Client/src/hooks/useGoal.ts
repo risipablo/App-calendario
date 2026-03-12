@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react"
 import type { IGoal } from "../interfaces/type.goal"
-import {config} from "../config/index"
-import axios from "axios"
 import toast from "react-hot-toast"
+import axiosInstance from "../utils/axiosIntance"
 
-const serverFront = config.Api
-
+// const serverFront = config.Api
 
 export const useGoals = () => {
 
     const [goal,setGoal] = useState<IGoal[]>([])
+    const [loading,setLoading] = useState(true)
     
-
     useEffect(() => {
-        axios.get(`${serverFront}/api/goal`)
+        const token = localStorage.getItem('token')
+        
+        if(!token){
+            console.error('No token')
+            // setLoading(false) 
+            return
+        }
+
+        axiosInstance.get(`/api/goal`)
         .then(response => {
             setGoal(response.data)
+            setLoading(false)
         })
         .catch(error => console.log(error))
     },[])
@@ -27,7 +34,7 @@ export const useGoals = () => {
         }
 
         try{
-            const response = await axios.post(`${serverFront}/api/goal`,{
+            const response = await axiosInstance.post(`/api/goal`,{
                 title:title.trim(),
                 priority:priority || 'media',
                 start_date:start_date || null,
@@ -42,7 +49,7 @@ export const useGoals = () => {
     }
 
     const deleteGoal = (id:string) => {
-        axios.delete(`${serverFront}/api/goal/${id}`)
+        axiosInstance.delete(`/api/goal/${id}`)
         .then(() => {
             const updateGoal = goal.filter((prod) => prod._id !== id)
             setGoal(updateGoal)
@@ -51,7 +58,7 @@ export const useGoals = () => {
     }
 
     const allDeleteGoal = () => {
-        axios.delete(`${serverFront}/api/goal`)
+        axiosInstance.delete(`/api/goal`)
         .then(response => {
             setGoal([])
             console.debug(response.data)
@@ -60,7 +67,7 @@ export const useGoals = () => {
     } 
 
     const editGoal = (id:string, editData:{title:string, priority:string, start_date:string}) => {
-        axios.patch(`${serverFront}/api/goal/${id}`,editData)
+        axiosInstance.patch(`/api/goal/${id}`,editData)
         .then(response => {
             const updateGoal = goal.map(goa => {
                 if(goa._id === id)
@@ -73,7 +80,7 @@ export const useGoals = () => {
     }
 
     const toogleComplete = (id:string) => {
-        axios.patch(`${serverFront}/api/goal/${id}/completedGoal`)
+        axiosInstance.patch(`/api/goal/${id}/completedGoal`)
         .then(response => {
             setGoal(prev => prev.map(goa => goa._id === id ? response.data : goa))
 
@@ -92,5 +99,5 @@ export const useGoals = () => {
 
     }
 
-    return{ goal, addGoal, deleteGoal, editGoal, toogleComplete, allDeleteGoal}
+    return{ goal,loading, addGoal, deleteGoal, editGoal, toogleComplete, allDeleteGoal}
 }

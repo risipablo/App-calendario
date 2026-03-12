@@ -1,21 +1,105 @@
- import { BrowserRouter } from 'react-router-dom'
+ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Navbar } from './components/layout/navbar'
 import { Home } from './pages/home'
 import { TaskProvider } from './context/taskContex'
 import { CalendarProvider } from './context/calendarContext'
-// import { CalendarPage } from './pages/calendarPage'
+import { UserProvider } from './context/userProvider'
+import { Loader } from './components/layout/loader'
+import { useState, type Dispatch, type SetStateAction, useEffect } from 'react'
+import axios from 'axios'
+import { config } from './config/index'
+import "../src/style/authStyle.css"
+import LoginPage from './pages/auth/loginPage'
+import { RegisterPage } from './pages/auth/registerPage'
+
+
+const serverFront = config.Api
+
+
+export interface LoaderProps {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  onComplete?: () => void;
+}
+
+export interface AuthenticatedProps{
+  isAuthenticated: boolean | null  
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>  
+}
 
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [loading,setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const validateToken = async () => {
+      const token = localStorage.getItem('token')
+      console.log('Token:', token)
+
+      if(!token){
+        setIsAuthenticated(false)
+        setLoading(false)
+        return
+      }
+
+      try{
+        await axios.get(`${serverFront}/api/auth/validate-token`,{
+          headers:{
+            Authorization:`Bearer ${token}`
+          },
+          withCredentials: true
+        })
+        setIsAuthenticated(true)
+        setLoading(false)
+      } catch(error){
+        localStorage.removeItem('token')
+        setIsAuthenticated(false)
+        console.error(error)
+         window.location.href = '/login'
+      }
+    }
+    validateToken()
+  },[])
+
+
+
+  if(isAuthenticated === null || loading){
+    return(
+      <Loader
+        setLoading={setLoading}
+        onComplete={() => {}}
+      />
+      
+    )
+  }
+  
   return(
-    <CalendarProvider>
-    <TaskProvider>
-        <BrowserRouter>
-      <Navbar/>
-      <Home/>
-    </BrowserRouter>
-    </TaskProvider>
-    </CalendarProvider>
+    <BrowserRouter>
+    
+    <UserProvider isAuthenticated={isAuthenticated}>
+        {isAuthenticated ? (
+          
+          <CalendarProvider isAuthenticated={isAuthenticated}>
+          <TaskProvider isAuthenticated={isAuthenticated}>
+            
+            <Navbar  />
+            <Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
+          </TaskProvider>
+          </CalendarProvider>
+          
+          
+        ) : (
+         <Routes>
+            <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />} />
+            <Route path="/register" element={<RegisterPage  setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+         </Routes>
+          
+
+          
+        )}
+    </UserProvider>
+  </BrowserRouter>
   )
 }
 

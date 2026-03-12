@@ -2,7 +2,7 @@ const CalenderModel = require('../models/calenderModel')
 
 exports.getCalender = async(req,res) => {
     try{
-        const calender = await CalenderModel.find().sort({date:1})
+        const calender = await CalenderModel.find({userId: req.user.id}).sort({date:1})
         res.json(calender)
     } catch(err){
         res.status(500).json({error: err.message})
@@ -21,7 +21,8 @@ exports.getTodayEvents = async(req,res) => {
         const startDate = new Date(date + "T00:00:00.000Z")
         const endDate = new Date(date + "T23:59:59.999Z")
 
-        const events = await CalenderModel.find({
+        const events = await CalenderModel({
+            _id:id, userId:req.user.id,
             date: {$gte: startDate, $lte:endDate}
         }).sort({priority: 1})
 
@@ -40,7 +41,7 @@ exports.addCalender = async (req,res) => {
 
     try{
         const newNote = new CalenderModel({
-            title,hour,date: new Date(date),category,priority
+            title,hour,date: new Date(date),category,priority,userId:req.user.id
         })
         const result = await newNote.save()
         res.status(201).json(result)
@@ -54,7 +55,7 @@ exports.deleteCalender = async (req,res) => {
     const {id} = req.params
 
     try{
-        const notes = await CalenderModel.findByIdAndDelete(id)
+        const notes = await CalenderModel.findOneAndDelete({_id:id, userId:req.user.id})
 
         if(!notes){
             return res.status(401).json({error:"Nota no encontrada"})
@@ -74,11 +75,19 @@ exports.saveCalender = async (req,res) => {
     }
 
     try{
+<<<<<<< HEAD
         const saveNote = await CalenderModel.findByIdAndUpdate(
             id,
             { title, priority, category, date, hour },
             { new: true }
         )
+=======
+        const saveNote = await CalenderModel.findOneAndUpdate(
+            {_id: id, userId: req.user.id},
+            {
+            title,priority,category, date , hour
+        })
+>>>>>>> feature/auth
         res.json(saveNote)
     } catch(err){
         res.status(500).json({error:err.message})
@@ -87,7 +96,7 @@ exports.saveCalender = async (req,res) => {
 
 exports.deleteAllNotes = async (req,res) => {
     try{
-        const result = await CalenderModel.deleteMany({})
+        const result = await CalenderModel.deleteMany({ userId: req.user.id})
         res.json(result)
     } catch(err){
         res.status(500).json({error: err.message})

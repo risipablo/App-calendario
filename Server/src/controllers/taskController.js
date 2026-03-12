@@ -3,7 +3,7 @@ const TodoModel = require("../models/taskModel")
 // get task
 exports.getTask = async (req,res) => {
     try{
-        const task = await TodoModel.find()
+        const task = await TodoModel.find({userId: req.user.id})
         res.json(task)
     } catch (err) {
         res.status(500).json({error: err.message})
@@ -22,9 +22,13 @@ exports.addTask = async (req,res) => {
         const taskDate = new Date(date)
 
         const newTask = new TodoModel({
+<<<<<<< HEAD
             date:taskDate,
             title,
             priority
+=======
+            date:taskDate,title,priority, userId:req.user.id
+>>>>>>> feature/auth
         })
 
         const result = await newTask.save()
@@ -45,7 +49,7 @@ exports.addMoreTask = async (req,res) => {
     }
 
     try{
-        const task = await TodoModel.findById(id)
+        const task = await TodoModel.findOne({_id:id, userId: req.user.id})
 
         if(!task){
             return res.status(404).json({error: "Tarea no encontrada"})
@@ -69,7 +73,7 @@ exports.deleteTask = async (req,res) => {
     const {id} = req.params
 
     try{
-        const task = await TodoModel.findByIdAndDelete(id)
+        const task = await TodoModel.findOneAndDelete({_id:id, userId: req.user.id})
         if(!task){
             return res.status(401).json({error:" Tarea no encontrada "})
         }
@@ -83,8 +87,13 @@ exports.deleteTask = async (req,res) => {
 // exports.deletePrincipalTask = async(req,res) => {
 //     const {id} = req.params
 
+<<<<<<< HEAD
 //     try{
 //         const task = await TodoModel.findById(id)
+=======
+    try{
+        const task = await TodoModel.findOneAndDelete({_id:id, userId: req.user.id})
+>>>>>>> feature/auth
 
 //         if(!task){
 //             return res.status(404).json({error: "Task principal not found"})
@@ -137,7 +146,7 @@ exports.deleteSubTask = async (req,res) => {
     const {id,subTaskIndex} = req.params
 
     try{
-        const task = await TodoModel.findById(id)
+        const task = await TodoModel.findOne({_id: id, userId: req.user.id})
 
         if(!task){
             return res.status(404).json({error: "Tarea no encontrada"})
@@ -162,7 +171,7 @@ exports.deleteSubTask = async (req,res) => {
 // delete all 
 exports.deleteAllTask = async (req,res) => {
     try{
-        const result = await TodoModel.deleteMany({})
+        const result = await TodoModel.deleteMany({userId: req.user.id})
         res.json(result)
     } catch (err) {
         res.status(500).json({error:err.message})
@@ -180,8 +189,11 @@ exports.saveTask = async (req,res) => {
 
     try{
         // const updateDate = new Date(date)
-
-        const saveTask = await TodoModel.findByIdAndUpdate(id,{date, title, priority}, {new:true})
+        const saveTask = await TodoModel.findOneAndUpdate(
+            {_id: id, userId: req.user.id},
+            {date, title, priority}, 
+            {new: true}
+        )
         res.json(saveTask)
     
     } catch(err) {
@@ -195,7 +207,7 @@ exports.editSubtask = async (req,res) => {
     const updates = req.body;
 
     try{
-        const task = await TodoModel.findById(id)
+        const task = await TodoModel.findOne({_id: id, userId: req.user.id})
         if(!task) return res.status(404).json({error: "Tarea no encontrada"})
             
         const index = parseInt(subTaskIndex)
@@ -221,7 +233,7 @@ exports.completeAllTask = async (req,res) => {
     const { id } = req.params
     
     try {
-        const task = await TodoModel.findById(id)
+        const task = await TodoModel.findOne({_id:id, userId:req.user.id})
         if (!task) {
             return res.status(404).json({ error: "Tarea no encontrada" })
         }
@@ -267,7 +279,7 @@ exports.completePrincipalTask = async (req,res) => {
     const {id} = req.params
 
     try{
-        const task = await TodoModel.findById(id)
+        const task = await TodoModel.findOne({_id: id, userId: req.user.id})
 
         if(!task){
             return res.status(404).json({error: "task not found"})
@@ -286,7 +298,7 @@ exports.completeSubTask = async (req,res) => {
     const {id,subTaskIndex} = req.params
 
     try{
-        const task = await  TodoModel.findById(id)
+        const task = await  TodoModel.findOne({_id: id, userId: req.user.id})
         if(!task){
             return res.status(404).json({error: "Tarea no encontrada"})
         }
@@ -322,7 +334,7 @@ exports.incompleteSubTask = async (req,res) => {
     const {id, subTaskIndex} = req.params
 
     try{
-        const task = await TodoModel.findById(id)
+        const task = await TodoModel.findOne({_id: id, userId: req.user.id})
 
         if(!task){
             return res.status(404).json({error: 'Task not found'})

@@ -14,11 +14,31 @@ export const useTasks = () =>{
     return context
 }
 
-export const TaskProvider:React.FC<TaskProviderProps> = ({children}) => {
-    const taskData = UseTask()
+export const TaskProvider:React.FC<TaskProviderProps> = ({children, isAuthenticated}) => {
+    const taskData = isAuthenticated ? UseTask() :  {
+        task: [],
+        loading: false,
+        addTask: () => {},
+        addNewTask: () => {},
+        deleteTask: () => {},
+        deleteSubTask: () => {},
+        saveTask: () => {},
+        editSubTask: () => {},
+        completedSubTasks: () => {},
+        completedTask: () => {},
+        toogleAllTask: () => {},
+        deletePrincipalTask: () => {},
+        incompletedSubTask: () => {}
+    }
 
+<<<<<<< HEAD
     const getTaskDay = useCallback((): ITodo[] => {
         const todayStr = new Date().toLocaleDateString('en-CA'); 
+=======
+
+    const getTaskDay = ():ITodo[] => {
+        const today = new Date().toISOString().split('T')[0]
+>>>>>>> feature/auth
         return taskData.task.filter((t: ITodo) => {
             
             const taskDateStr = t.date.split('T')[0];

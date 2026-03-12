@@ -50,4 +50,5 @@ export interface CalendarContextType{
 
 export interface CalendarProviderProps{
     children: ReactNode
+    isAuthenticated: boolean | null;
 }
