@@ -1,14 +1,20 @@
-
-
 import { Task } from "@mui/icons-material"
+<<<<<<< HEAD
 import { Calendar, ChartLine, Goal, House} from "lucide-react"
+=======
+import { Calendar, EllipsisVertical, Goal, House} from "lucide-react"
+>>>>>>> feature/auth
 import { useState, useEffect } from "react"
-import { NavLink } from "react-router-dom"
+import { NavLink} from "react-router-dom"
 import "../../style/navbar.css"
+import  { useUser } from "../../hooks/useUser"
+
 
 export function Navbar(){
 
+    const {user} = useUser()
     const [isopen, setIsOpen] = useState(false)
+    
 
     const toggleMenu = () => {
         setIsOpen(!isopen)
@@ -36,6 +42,8 @@ export function Navbar(){
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
+
+
 
     return(
         <>
@@ -69,7 +77,7 @@ export function Navbar(){
 
                             
                             <div className="menu-links">
-                                <NavLink to="/" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                <NavLink to="/dashboard" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <House size={20} /> 
                                     <span>Inicio</span>
                                 </NavLink>
@@ -89,11 +97,18 @@ export function Navbar(){
                                     <span>Metas</span>
                                 </NavLink>
 
+<<<<<<< HEAD
                                 <NavLink to="/resume" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <ChartLine/>
                                     <span>Resumen</span>
                                 </NavLink>
                                 
+=======
+                                <NavLink to="/settings" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                    <EllipsisVertical size={20} /> 
+                                    <span>Configuración</span>
+                                </NavLink>
+>>>>>>> feature/auth
                             </div>
 
                             
@@ -101,13 +116,10 @@ export function Navbar(){
                                 <div className="user-info">
                                     <div className="user-avatar">U</div>
                                     <div className="user-details">
-                                        <p className="user-name">Usuario</p>
-                                        <p className="user-email">user@example.com</p>
+                                        <p className="user-name">{user?.name}</p>
+                                        <p className="user-email">{user?.email}</p>
                                     </div>
                                 </div>
-                                <NavLink to="/logout" onClick={closeToggle} className="logout-btn">
-                                    Cerrar Sesión
-                                </NavLink>
                             </div>
                         </div>
                     </div>

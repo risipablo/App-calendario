@@ -34,6 +34,11 @@ const todoSchema = new mongoose.Schema({
     incompletedSubtask:{
         type:[Boolean],
         default:[]
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 })
 

@@ -95,7 +95,14 @@ export interface TaskContextType {
     getTotalTaskIncompleted: () => number;
 }
 
+<<<<<<< HEAD
 
 export interface TaskProviderProps {
     children: ReactNode;
 }
+=======
+export interface TaskProviderProps{
+    children: ReactNode
+    isAuthenticated: boolean | null;
+}
+>>>>>>> feature/auth
