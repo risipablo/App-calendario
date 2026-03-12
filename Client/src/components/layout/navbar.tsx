@@ -1,9 +1,5 @@
 import { Task } from "@mui/icons-material"
-<<<<<<< HEAD
-import { Calendar, ChartLine, Goal, House} from "lucide-react"
-=======
 import { Calendar, EllipsisVertical, Goal, House} from "lucide-react"
->>>>>>> feature/auth
 import { useState, useEffect } from "react"
 import { NavLink} from "react-router-dom"
 import "../../style/navbar.css"
@@ -97,18 +93,10 @@ export function Navbar(){
                                     <span>Metas</span>
                                 </NavLink>
 
-<<<<<<< HEAD
-                                <NavLink to="/resume" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
-                                    <ChartLine/>
-                                    <span>Resumen</span>
-                                </NavLink>
-                                
-=======
                                 <NavLink to="/settings" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <EllipsisVertical size={20} /> 
                                     <span>Configuración</span>
                                 </NavLink>
->>>>>>> feature/auth
                             </div>
 
                             
