@@ -22,13 +22,7 @@ exports.addTask = async (req,res) => {
         const taskDate = new Date(date)
 
         const newTask = new TodoModel({
-<<<<<<< HEAD
-            date:taskDate,
-            title,
-            priority
-=======
             date:taskDate,title,priority, userId:req.user.id
->>>>>>> feature/auth
         })
 
         const result = await newTask.save()
@@ -87,13 +81,8 @@ exports.deleteTask = async (req,res) => {
 // exports.deletePrincipalTask = async(req,res) => {
 //     const {id} = req.params
 
-<<<<<<< HEAD
-//     try{
-//         const task = await TodoModel.findById(id)
-=======
-    try{
-        const task = await TodoModel.findOneAndDelete({_id:id, userId: req.user.id})
->>>>>>> feature/auth
+    // try{
+    //     const task = await TodoModel.findOneAndDelete({_id:id, userId: req.user.id})
 
 //         if(!task){
 //             return res.status(404).json({error: "Task principal not found"})
