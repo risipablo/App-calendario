@@ -5,6 +5,7 @@ import { GoalContainer } from "./goalContainer"
 import {  Trash2 } from "lucide-react"
 import { Tooltip } from "@mui/material"
 import { ModalConfirm } from "../layout/modalConfirm"
+import  { Helmet } from 'react-helmet';
 
 export const GoalMaster = () => {
 
@@ -53,6 +54,9 @@ export const GoalMaster = () => {
 
     return(
         <div className="task-table-container">
+            <Helmet>
+                Metas 
+            </Helmet>
             <div className="table-header">
                 <h2 className="table-title">
                      Mis Objetivos

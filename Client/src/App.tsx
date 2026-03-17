@@ -11,6 +11,8 @@ import { config } from './config/index'
 import "../src/style/authStyle.css"
 import LoginPage from './pages/auth/loginPage'
 import { RegisterPage } from './pages/auth/registerPage'
+import { ResetPasswordPage } from './components/auth/resetPassword'
+import { ForgotPasswordPage } from './pages/auth/forgotPasswordPage'
 
 
 const serverFront = config.Api
@@ -92,6 +94,8 @@ function App() {
          <Routes>
             <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />} />
             <Route path="/register" element={<RegisterPage  setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
          </Routes>
           

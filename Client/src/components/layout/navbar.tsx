@@ -1,5 +1,5 @@
 import { Task } from "@mui/icons-material"
-import { Calendar, EllipsisVertical, Goal, House} from "lucide-react"
+import { Calendar, ChartLine, EllipsisVertical, Goal, House} from "lucide-react"
 import { useState, useEffect } from "react"
 import { NavLink} from "react-router-dom"
 import "../../style/navbar.css"
@@ -91,6 +91,11 @@ export function Navbar(){
                                 <NavLink to="/goals" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <Goal size={20} /> 
                                     <span>Metas</span>
+                                </NavLink>
+
+                                <NavLink to="/resume" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
+                                    <ChartLine size={20} />
+                                    <span>Estadisticas</span>
                                 </NavLink>
 
                                 <NavLink to="/settings" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>

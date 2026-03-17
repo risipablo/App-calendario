@@ -3,6 +3,7 @@
 import { TaskTable } from "./taskTable"
 import { ModalConfirm } from "../layout/modalConfirm"
 import { useTasks } from "../../context/taskContex"
+import { Helmet } from "react-helmet"
 
 
 export const TaskContainer = () => {
@@ -26,6 +27,9 @@ export const TaskContainer = () => {
 
     return(
         <>
+            <Helmet>
+                Tareas 
+            </Helmet>
 
             <TaskTable
                 task={task}

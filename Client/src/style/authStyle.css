@@ -1,13 +1,13 @@
-/* ===== VARIABLES IMPERIO ROMANO + MINIMALISMO GOOGLE ===== */
+
 :root {
     /* Colores Imperio Romano */
-    --roman-purple: #663399;       /* Púrpura Imperial */
-    --roman-gold: #D4AF37;         /* Oro Romano */
-    --roman-red: #A41E3A;          /* Rojo Imperial */
-    --roman-cream: #F9F7F4;        /* Crema antiguo */
-    --roman-dark: #1A1410;         /* Negro profundo */
+    --roman-purple: #663399;       
+    --roman-gold: #D4AF37;        
+    --roman-red: #A41E3A;          
+    --roman-cream: #F9F7F4;        
+    --roman-dark: #1A1410;         
     
-    /* Colores Neutros (Google Style) */
+  
     --gray-50: #F8F9FA;
     --gray-100: #F1F3F5;
     --gray-300: #E0E0E0;
@@ -33,29 +33,27 @@
   }
   
 
-  
-  
   .login-background {
+    background-image: url('../assets/images/fondo2.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-md);
-    background: linear-gradient(180deg, var(--gray-50) 0%, #FFFFFF 100%);
     position: relative;
+    padding: 2rem 1rem;
   }
-  
-  /* Decoración minimalista: línea vertical sutil */
+   
   .login-background::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, var(--roman-purple) 0%, transparent 50%, var(--roman-gold) 100%);
-    opacity: 0.3;
+    inset: 0;
+    z-index: 0;
   }
+  
+   
   
   /* ===== CONTAINER LOGIN ===== */
   .container-login {

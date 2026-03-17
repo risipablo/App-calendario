@@ -1,7 +1,7 @@
 
 import axios, { AxiosError }  from "axios";
 import { config } from "../config/index";
-import type { ApiError, AuthResponse, IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../interfaces/type.user";
+import type { ApiError, AuthResponse, ForgotPasswordData, IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../interfaces/type.user";
 
 
 const serverFront = config.Api
@@ -66,7 +66,7 @@ class AuthService{
     }
 
 
-    async ResetPassword(credentials: ResetPasswordData): Promise<AuthResponse>{
+    async ChangePassword(credentials: ResetPasswordData): Promise<AuthResponse>{
         try{
             const token = this.getToken()
 
@@ -122,6 +122,42 @@ class AuthService{
             this.handleError(error as AxiosError<ApiError>)
         }
     }
+
+    async ForgotPassword(credentials: ForgotPasswordData):Promise<AuthResponse>{
+        try{
+            const response = await axios.post<AuthResponse>(
+                `${serverFront}/api/auth/forgot-password`,
+                {email:credentials.email},
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            return response.data
+        } catch (err){
+            this.handleError(err as AxiosError<ApiError>)
+        }
+    }
+
+    async ResetPasswords(credentials:{token: string; newPassword:string}):Promise<AuthResponse>{
+        try{
+            const response = await axios.post<AuthResponse>(
+                `${serverFront}/api/auth/reset-password`,
+                {
+                    token: credentials.token,
+                    newPassword: credentials.newPassword
+                },          {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            return response.data
+        }  catch (error) {
+            this.handleError(error as AxiosError<ApiError>);
+        }
+    } 
 
     async logout(): Promise<void>{
         try{

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import type { IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../interfaces/type.user";
+import type { ForgotPasswordData, IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "../interfaces/type.user";
 import authService from "../service/authService";
 import type { UseAuthReturn } from "../interfaces/type.auth";
 import { useUser } from "./useUser";
@@ -35,7 +35,6 @@ export const UseAuth = ():UseAuthReturn => {
         }
 
     }
-
 
     const login = async(credentials: LoginData) : Promise<void> => {
         setLoading(true)
@@ -78,13 +77,13 @@ export const UseAuth = ():UseAuthReturn => {
         
     }
 
-    const resetPassword = async(credentials: ResetPasswordData) : Promise<void> => {
+    const changePassword = async(credentials: ResetPasswordData) : Promise<void> => {
         setLoading(true)
         setError('')
 
         
         try{
-            const data = await authService.ResetPassword(credentials)
+            const data = await authService.ChangePassword(credentials)
             setSuccess(data.message || 'Cambio de nombre de contraseña exitoso')
 
             localStorage.removeItem('token')
@@ -114,6 +113,42 @@ export const UseAuth = ():UseAuthReturn => {
         }
     }
 
+    const forgotPassword = async(credentials: ForgotPasswordData): Promise<void> => {
+        setLoading(true)
+        setError('')
+        setSuccess('')
+
+        try{
+            const data = await authService.ForgotPassword(credentials)
+            setSuccess(data.message || 'Instrucciones enviadas a tu correo');
+        } catch (err) {
+            setError((err as Error).message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const resetPassword = async (credentials: { token: string; newPassword: string }): Promise<void> => {
+        setLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const data = await authService.ResetPasswords(credentials);
+            setSuccess(data.message || 'Contraseña actualizada exitosamente');
+            
+            localStorage.removeItem('token');
+            setUser(null);
+        } catch (err) {
+            setError((err as Error).message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     const logout = async() :Promise<void> => {
         setLoading(true)
 
@@ -132,6 +167,7 @@ export const UseAuth = ():UseAuthReturn => {
     }
 
 
+
     return{
         login,
         loading,
@@ -140,8 +176,10 @@ export const UseAuth = ():UseAuthReturn => {
         register,
         logout,
         userChange,
-        resetPassword,
+        changePassword,
         verifyEmail,
+        forgotPassword,
+        resetPassword,
         setError,
         setSuccess
     }

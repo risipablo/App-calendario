@@ -184,32 +184,6 @@ exports.changePassword = async (req,res) => {
     }
 }
 
-exports.forgotPassword = async (req,res) => {
-    const {email} = req.body
-
-    try{
-        const user = await userModel.findOne({email})
-        if(!user){
-            return res.status(400).json({ message: 'That email exists, you will receive instructions'})
-        }
-
-        const token = crypto.randomBytes(20).toString('hex')
-        user.resetPasswordToken = token
-        user.resetPasswordExpires = Date.now() + 15 * 60 * 1000
-        await user.save()
-        
-        res.status(200).json({ message: 'Reset token generated' })
-    
-    } catch(err){
-        res.status(500).json({ message: "Error in the server", error:err})
-    }
-}
-
-exports.forgotPasswordLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hora
-    max: 3,
-    message: { error: 'Too many requests, try again later' }
-})
 
 exports.resetPassword = async (req,res) => {
     const {token, newPassword} = req.body
@@ -239,6 +213,33 @@ exports.resetPassword = async (req,res) => {
         res.status(500).json({ message: "Error in the server", error: error.message });
     }
 }
+
+exports.forgotPassword = async (req,res) => {
+    const {email} = req.body
+
+    try{
+        const user = await userModel.findOne({email})
+        if(!user){
+            return res.status(400).json({ message: 'That email exists, you will receive instructions'})
+        }
+
+        const token = crypto.randomBytes(20).toString('hex')
+        user.resetPasswordToken = token
+        user.resetPasswordExpires = Date.now() + 15 * 60 * 1000
+        await user.save()
+        
+        res.status(200).json({ message: 'Reset token generated' })
+    
+    } catch(err){
+        res.status(500).json({ message: "Error in the server", error:err})
+    }
+}
+
+exports.forgotPasswordLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hora
+    max: 3,
+    message: { error: 'Too many requests, try again later' }
+})
 
 exports.userName = async (req,res) => {
     try {

@@ -36,7 +36,7 @@ export function ResetPasswordPage({ setIsAuthenticated }: ChangeUserNameProps) {
     confirm: false
   });
 
-  const { resetPassword, verifyEmail, loading, error, success } = UseAuth()
+  const { changePassword, verifyEmail, loading, error, success } = UseAuth()
   const navigate = useNavigate()
 
   const toggleShow = (field: keyof ShowState): void => {
@@ -77,7 +77,7 @@ export function ResetPasswordPage({ setIsAuthenticated }: ChangeUserNameProps) {
     }
 
     try {
-      await resetPassword(formData)
+      await changePassword(formData)
       setShowSuccess(true)
 
       setTimeout(() => {
@@ -91,7 +91,7 @@ export function ResetPasswordPage({ setIsAuthenticated }: ChangeUserNameProps) {
   }
 
   return (
-    <div className="task-table-container settings-form">
+    <div className="task-table-container">
       <div className="form-wrapper">
         <motion.div
           className="form-header"

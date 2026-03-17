@@ -11,6 +11,7 @@ import { TaskForm } from "./taskForm";
 import { ClipLoader } from "react-spinners";
 import { PaginationComponent } from "../layout/pagination";
 import { FilterPerDay } from "../layout/filter/filterPerDay";
+import { Helmet } from "react-helmet";
 
 
 
@@ -126,6 +127,11 @@ export const TaskTable = ({
 
     return (
         <div className="task-table-container">
+
+            <Helmet>
+                Tareas 
+            </Helmet>
+
             <div className="table-header">
                 <h2 className="table-title">  Mis Tareas</h2>
 
