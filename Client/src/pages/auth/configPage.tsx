@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { LogOutComponent } from "../../components/auth/logout";
-import { Settings } from "lucide-react";
+import { DoorOpen, Settings, User, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
@@ -38,7 +38,7 @@ export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
         >
           <NavLink to="/change-name" className="config-link change-name-link">
             <div className="link-icon user-icon">
-              <span>👤</span>
+              <span> <User /> </span>
             </div>
             <div className="link-content">
               <h3>Cambiar Nombre de Usuario</h3>
@@ -56,7 +56,7 @@ export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
         >
           <NavLink to="/change-password" className="config-link change-password-link">
             <div className="link-icon lock-icon">
-              <span>🔐</span>
+              <span> <Lock /> </span>
             </div>
             <div className="link-content">
               <h3>Cambiar Contraseña</h3>
@@ -74,7 +74,7 @@ export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
         >
           <div className="config-link logout-link">
             <div className="link-icon logout-icon">
-              <span>🚪</span>
+              <span><DoorOpen /></span>
             </div>
             <div className="link-content">
               <LogOutComponent setIsAuthenticated={setIsAuthenticated} />

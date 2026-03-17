@@ -9,6 +9,7 @@ import type { AuthenticatedProps } from "../App"
 import { ChangeUserName } from "../components/auth/changeuserName"
 import { ResetPasswordPage } from "../components/auth/resetPassword"
 import { ConfigPage } from "./auth/configPage"
+import { ResumeChart } from "./resumePage"
 
 
 
@@ -30,6 +31,7 @@ export const Home = ({isAuthenticated,setIsAuthenticated}:AuthenticatedProps) =>
         <Route path="/calendar" element={isAuthenticated ? <CalendarPage/> : <Navigate to='/' replace/>}/>
         <Route path="/task" element={isAuthenticated ? <TaskPage/> : <Navigate to="/" replace/>} />
         <Route path="/goals" element={isAuthenticated ? <GoalPage/> : <Navigate to="/" replace/>}/>
+        <Route path="/resume" element={isAuthenticated ? <ResumeChart/> : <Navigate to="/" replace/>}/>
         <Route path="/change-name" element={isAuthenticated ? <ChangeUserName setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
         <Route path="/change-password" element={isAuthenticated ? <ResetPasswordPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
         <Route path="/settings" element={isAuthenticated ? <ConfigPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
