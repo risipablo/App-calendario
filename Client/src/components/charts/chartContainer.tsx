@@ -14,6 +14,14 @@ import {
     Filler
 } from 'chart.js';
 import { Bar, Pie, Doughnut, Line } from 'react-chartjs-2';
+import { 
+    
+    CheckCircle2, 
+    Clock, 
+    XCircle, 
+    ListTodo,
+    Inbox
+} from 'lucide-react';
 import { useTaskFilters, type PeriodType } from "../filter/useTaskFilter"
 import "../../style/chart.css";
 import type { ISubtask, ITodo } from "../../interfaces/type.task";
@@ -180,8 +188,6 @@ export const ChartContainer: React.FC = () => {
             tooltip: {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 padding: 12,
-                // Chart.js expects `weight` to be a specific union (e.g. "bold" | "normal" | numbers).
-                // Without a contextual type, TS can widen "'bold'" to `string`, which breaks assignability.
                 titleFont: { size: 13, weight: 'bold' as const },
                 bodyFont: { size: 12 },
                 borderColor: 'rgba(0, 0, 0, 0.2)',
@@ -197,8 +203,6 @@ export const ChartContainer: React.FC = () => {
                 beginAtZero: true,
                 ticks: {
                     stepSize: 1,
-                    // Chart.js can pass `tickValue` as `string | number` depending on scale/data.
-                    // Normalize to number so the callback matches Chart.js' expected signature.
                     callback: (value: string | number) => Math.floor(Number(value)),
                 },
             },
@@ -298,9 +302,13 @@ export const ChartContainer: React.FC = () => {
             {/* Header con controles */}
             <div className="dashboard-header">
                 <h1>Dashboard de Tareas</h1>
-                
-                <div className="controls-container">
-                    <div className="control-group">
+    
+            </div>
+
+            
+            <div className='controls-container'>
+            <div className="stats-cards">
+              <div className="control-group">
                         <label>Período:</label>
                         <div className="period-selector">
                             <button 
@@ -328,72 +336,11 @@ export const ChartContainer: React.FC = () => {
                                 Todas
                             </button>
                         </div>
-                    </div>
-
-                    <div className="control-group">
-                        <label>Tipo de Gráfico:</label>
-                        <div className="chart-type-selector">
-                            <button 
-                                className={chartType === 'bar' ? 'active' : ''} 
-                                onClick={() => setChartType('bar')}
-                                title="Gráfico de barras"
-                            >
-                                Barras
-                            </button>
-                            <button 
-                                className={chartType === 'pie' ? 'active' : ''} 
-                                onClick={() => setChartType('pie')}
-                                title="Gráfico de pastel"
-                            >
-                                Pastel
-                            </button>
-                            <button 
-                                className={chartType === 'doughnut' ? 'active' : ''} 
-                                onClick={() => setChartType('doughnut')}
-                                title="Gráfico de dona"
-                            >
-                                Dona
-                            </button>
-                            <button 
-                                className={chartType === 'line' ? 'active' : ''} 
-                                onClick={() => setChartType('line')}
-                                title="Gráfico de línea"
-                            >
-                                Línea
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="control-group">
-                        <label>Filtros:</label>
-                        <div className="filter-buttons">
-                            <button 
-                                className={`filter-btn completed ${!showCompleted ? 'inactive' : ''}`}
-                                onClick={() => setShowCompleted(!showCompleted)}
-                            >
-                                Completadas
-                            </button>
-                            <button 
-                                className={`filter-btn pending ${!showPending ? 'inactive' : ''}`}
-                                onClick={() => setShowPending(!showPending)}
-                            >
-                                Pendientes
-                            </button>
-                            <button 
-                                className={`filter-btn failed ${!showFailed ? 'inactive' : ''}`}
-                                onClick={() => setShowFailed(!showFailed)}
-                            >
-                                No Realizadas
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Tarjetas de estadísticas */}
-            <div className="stats-cards">
+              </div>
                 <div className="stat-card total">
-                    <div className="stat-icon">📋</div>
+                    <div className="stat-icon">
+                        <ListTodo size={28} />
+                    </div>
                     <div className="stat-content">
                         <h3>Total</h3>
                         <p className="stat-number">{stats.total}</p>
@@ -404,7 +351,9 @@ export const ChartContainer: React.FC = () => {
                 </div>
                 
                 <div className="stat-card completed">
-                    <div className="stat-icon">✅</div>
+                    <div className="stat-icon">
+                        <CheckCircle2 size={28} />
+                    </div>
                     <div className="stat-content">
                         <h3>Completadas</h3>
                         <p className="stat-number">{stats.completed.total}</p>
@@ -417,7 +366,9 @@ export const ChartContainer: React.FC = () => {
                 </div>
                 
                 <div className="stat-card pending">
-                    <div className="stat-icon">⏳</div>
+                    <div className="stat-icon">
+                        <Clock size={28} />
+                    </div>
                     <div className="stat-content">
                         <h3>Pendientes</h3>
                         <p className="stat-number">{stats.pending.total}</p>
@@ -430,7 +381,9 @@ export const ChartContainer: React.FC = () => {
                 </div>
                 
                 <div className="stat-card failed">
-                    <div className="stat-icon">❌</div>
+                    <div className="stat-icon">
+                        <XCircle size={28} />
+                    </div>
                     <div className="stat-content">
                         <h3>No Realizadas</h3>
                         <p className="stat-number">{stats.failed.total}</p>
@@ -442,55 +395,132 @@ export const ChartContainer: React.FC = () => {
                     </div>
                 </div>
             </div>
+            </div>
+
 
             {/* Gráfico */}
-            <div className="chart-wrapper">
-                <div className="chart-header">
-                    <h2>Visualización - {getPeriodLabel()}</h2>
-                    {stats.total > 0 && (
-                        <div className="chart-legend">
-                            <span className="legend-item main-task">Tareas principales</span>
-                            <span className="legend-item subtask">Subtareas</span>
-                        </div>
-                    )}
-                </div>
-                <div className="chart-container">
-                    {renderChart()}
-                </div>
+            <div className='controls-container'>
+              <div className="control-group">
+                      <label>Tipo de Gráfico:</label>
+                      <div className="chart-type-selector">
+                          <button 
+                              className={chartType === 'bar' ? 'active' : ''} 
+                              onClick={() => setChartType('bar')}
+                              title="Gráfico de barras"
+                          >
+                              Barras
+                          </button>
+                          <button 
+                              className={chartType === 'pie' ? 'active' : ''} 
+                              onClick={() => setChartType('pie')}
+                              title="Gráfico de pastel"
+                          >
+                              Pastel
+                          </button>
+                          <button 
+                              className={chartType === 'doughnut' ? 'active' : ''} 
+                              onClick={() => setChartType('doughnut')}
+                              title="Gráfico de dona"
+                          >
+                              Dona
+                          </button>
+                          <button 
+                              className={chartType === 'line' ? 'active' : ''} 
+                              onClick={() => setChartType('line')}
+                              title="Gráfico de línea"
+                          >
+                              Línea
+                          </button>
+                      </div>
+              </div>
+              <div className="chart-wrapper">
+
+              <div className="chart-header">
+                  <h2>Visualización - {getPeriodLabel()}</h2>
+                  {stats.total > 0 && (
+                      <div className="chart-legend">
+                          <span className="legend-item main-task">Tareas principales</span>
+                          <span className="legend-item subtask">Subtareas</span>
+                      </div>
+                  )}
+              </div>
+              <div className="chart-container">
+                  {renderChart()}
+              </div>
+              </div>
             </div>
+            
 
             {/* Lista detallada de tareas */}
-            <div className="tasks-details">
-                {showCompleted && (
-                    <div className="tasks-column completed">
-                        <h3>✅ Completadas ({completedTasks.length + completedSubtasks.length})</h3>
-                        {renderTaskList(completedTasks, completedSubtasks)}
-                    </div>
-                )}
+            
+            <div className='controls-container'>
+              <div className="control-group">
+                          <label>Filtros:</label>
+                          <div className="filter-buttons">
+                              <button 
+                                  className={`filter-btn completed ${!showCompleted ? 'inactive' : ''}`}
+                                  onClick={() => setShowCompleted(!showCompleted)}
+                              >
+                                  Completadas
+                              </button>
+                              <button 
+                                  className={`filter-btn pending ${!showPending ? 'inactive' : ''}`}
+                                  onClick={() => setShowPending(!showPending)}
+                              >
+                                  Pendientes
+                              </button>
+                              <button 
+                                  className={`filter-btn failed ${!showFailed ? 'inactive' : ''}`}
+                                  onClick={() => setShowFailed(!showFailed)}
+                              >
+                                  No Realizadas
+                              </button>
+                          </div>
+              </div>
 
-                {showPending && (
-                    <div className="tasks-column pending">
-                        <h3>⏳ Pendientes ({pendingTasks.length + pendingSubtasks.length})</h3>
-                        {renderTaskList(pendingTasks, pendingSubtasks)}
-                    </div>
-                )}
+              <div className="tasks-details">
+                  {showCompleted && (
+                      <div className="tasks-column completed">
+                          <h3>
+                              <CheckCircle2 size={20} style={{ display: 'inline', marginRight: '8px' }} />
+                              Completadas ({completedTasks.length + completedSubtasks.length})
+                          </h3>
+                          {renderTaskList(completedTasks, completedSubtasks)}
+                      </div>
+                  )}
 
-                {showFailed && (
-                    <div className="tasks-column failed">
-                        <h3>❌ No Realizadas ({failedTasks.length + failedSubtasks.length})</h3>
-                        {renderTaskList(failedTasks, failedSubtasks)}
-                    </div>
-                )}
+                  {showPending && (
+                      <div className="tasks-column pending">
+                          <h3>
+                              <Clock size={20} style={{ display: 'inline', marginRight: '8px' }} />
+                              Pendientes ({pendingTasks.length + pendingSubtasks.length})
+                          </h3>
+                          {renderTaskList(pendingTasks, pendingSubtasks)}
+                      </div>
+                  )}
+
+                  {showFailed && (
+                      <div className="tasks-column failed">
+                          <h3>
+                              <XCircle size={20} style={{ display: 'inline', marginRight: '8px' }} />
+                              No Realizadas ({failedTasks.length + failedSubtasks.length})
+                          </h3>
+                          {renderTaskList(failedTasks, failedSubtasks)}
+                      </div>
+                  )}
+              </div>
             </div>
 
-            {/* Mensaje cuando no hay datos */}
+
+            
             {stats.total === 0 && (
                 <div className="empty-state">
-                    <span className="empty-icon">📭</span>
+                    <Inbox size={48} style={{ marginBottom: '16px' }} />
                     <p>No hay tareas para el período seleccionado</p>
                     <small>Prueba cambiando el período o agregando nuevas tareas</small>
                 </div>
             )}
+
         </div>
     );
 };
