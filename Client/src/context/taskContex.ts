@@ -33,6 +33,8 @@ export const TaskProvider:React.FC<TaskProviderProps> = ({children, isAuthentica
         incompletedSubTask: () => {}
     }
 
+    
+
     const getTaskDay = useCallback(():ITodo[] => {
         const today = new Date().toISOString().split('T')[0];
         return taskData.task.filter((t: ITodo) => {

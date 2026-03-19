@@ -99,3 +99,28 @@ export interface TaskProviderProps{
     children: ReactNode
     isAuthenticated: boolean | null;
 }
+
+
+export interface TaskStats {
+    total: number;
+    completed: {
+        tasks: number;
+        subtasks: number;
+        total: number;
+    };
+    pending: {
+        tasks: number;
+        subtasks: number;
+        total: number;
+    };
+    failed: {
+        tasks: number;
+        subtasks: number;
+        total: number;
+    };
+    byPriority: {
+        alta: { completed: number; pending: number; failed: number };
+        media: { completed: number; pending: number; failed: number };
+        baja: { completed: number; pending: number; failed: number };
+    };
+}
