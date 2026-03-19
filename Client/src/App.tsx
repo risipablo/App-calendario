@@ -34,16 +34,17 @@ function App() {
   const [loading,setLoading] = useState<boolean>(true)
 
   useEffect(() => {
+
+    const token = localStorage.getItem('token')
+
+    if(!token){
+      setIsAuthenticated(false)
+      setLoading(false)
+      return
+    }
+    
     const validateToken = async () => {
-      const token = localStorage.getItem('token')
-      console.log('Token:', token)
-
-      if(!token){
-        setIsAuthenticated(false)
-        setLoading(false)
-        return
-      }
-
+   
       try{
         await axios.get(`${serverFront}/api/auth/validate-token`,{
           headers:{
@@ -52,12 +53,15 @@ function App() {
           withCredentials: true
         })
         setIsAuthenticated(true)
-        setLoading(false)
+        
       } catch(error){
+        
         localStorage.removeItem('token')
         setIsAuthenticated(false)
         console.error(error)
-         window.location.href = '/login'
+         
+      } finally{
+        setLoading(false)
       }
     }
     validateToken()

@@ -246,7 +246,7 @@ export const ChartContainer: React.FC = () => {
             <>
                 {tasksList.length > 0 && (
                     <div className="task-group">
-                        <h4>Tareas Principales:</h4>
+                        <h4>Tareas:</h4>
                         <ul>
                             {tasksList.map(task => (
                                 <li key={task._id} className="task-item">
@@ -345,7 +345,7 @@ export const ChartContainer: React.FC = () => {
                         <h3>Total</h3>
                         <p className="stat-number">{stats.total}</p>
                         <small>
-                            {tasks.length} tarea{tasks.length !== 1 ? 's' : ''} | {subtasks.length} subtarea{subtasks.length !== 1 ? 's' : ''}
+                            {tasks.length + subtasks.length} tareas totales
                         </small>
                     </div>
                 </div>
@@ -358,10 +358,7 @@ export const ChartContainer: React.FC = () => {
                         <h3>Completadas</h3>
                         <p className="stat-number">{stats.completed.total}</p>
                         <small>{percentages.completed}% del total</small>
-                        <div className="stat-detail">
-                            <span>📌 {stats.completed.tasks}</span>
-                            <span>📎 {stats.completed.subtasks}</span>
-                        </div>
+                        
                     </div>
                 </div>
                 
@@ -373,10 +370,7 @@ export const ChartContainer: React.FC = () => {
                         <h3>Pendientes</h3>
                         <p className="stat-number">{stats.pending.total}</p>
                         <small>{percentages.pending}% del total</small>
-                        <div className="stat-detail">
-                            <span>📌 {stats.pending.tasks}</span>
-                            <span>📎 {stats.pending.subtasks}</span>
-                        </div>
+                        
                     </div>
                 </div>
                 
@@ -388,10 +382,7 @@ export const ChartContainer: React.FC = () => {
                         <h3>No Realizadas</h3>
                         <p className="stat-number">{stats.failed.total}</p>
                         <small>{percentages.failed}% del total</small>
-                        <div className="stat-detail">
-                            <span>📌 {stats.failed.tasks}</span>
-                            <span>📎 {stats.failed.subtasks}</span>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

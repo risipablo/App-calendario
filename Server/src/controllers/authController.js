@@ -2,6 +2,7 @@ const userModel = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const rateLimit = require('express-rate-limit')
+const { sendPasswordEmail } = require('../service/emailService')
 require('dotenv').config()
 
 exports.registerUser = async(req,res) => {
@@ -217,28 +218,48 @@ exports.resetPassword = async (req,res) => {
 exports.forgotPassword = async (req,res) => {
     const {email} = req.body
 
+    if(!email){
+        return res.status(400).json({error: 'El email es requerido'})
+    }
+
     try{
         const user = await userModel.findOne({email})
+
         if(!user){
-            return res.status(400).json({ message: 'That email exists, you will receive instructions'})
+            return res.status(200).json({
+                message: 'Si el correo existe, recibirás instrucciones para recuperar tu contraseña.' 
+            })
         }
 
-        const token = crypto.randomBytes(20).toString('hex')
-        user.resetPasswordToken = token
+        const resetToken = crypto.randomBytes(32).toString('hex')
+
+        const hashedToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex')
+
+        user.resetPasswordToken = hashedToken
         user.resetPasswordExpires = Date.now() + 15 * 60 * 1000
         await user.save()
-        
-        res.status(200).json({ message: 'Reset token generated' })
-    
-    } catch(err){
-        res.status(500).json({ message: "Error in the server", error:err})
+
+        await sendPasswordEmail(user.email, resetToken, user.name)
+        res.status(200).json({ 
+            message: 'Instrucciones enviadas a tu correo electrónico.' 
+        });
+    }  catch (err) {
+        console.error('Error en forgotPassword:', err);
+        res.status(500).json({ 
+            message: "Error en el servidor. Intenta más tarde." 
+        });
     }
 }
 
 exports.forgotPasswordLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hora
-    max: 3,
-    message: { error: 'Too many requests, try again later' }
+    windowMs: 60 * 60 * 1000, 
+    max: 3, 
+    message: { error: 'Demasiados intentos. Intenta nuevamente en una hora.' },
+    standardHeaders: true,
+    legacyHeaders: false,
 })
 
 exports.userName = async (req,res) => {

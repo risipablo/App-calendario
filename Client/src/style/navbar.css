@@ -285,7 +285,7 @@ body.sidebar-open-mobile {
     .menu {
         width: 100%;
         max-width: 280px;
-        max-height: 99vh;
+        max-height: 90vh;
     }
 
     .menu-header {
