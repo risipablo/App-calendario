@@ -8,7 +8,7 @@ const sendPasswordEmail = async(email,resetToken, userName = 'Usuario') => {
 
     try{
         const {data,error} = await resend.emails.send({
-            from: process.env.EMAIL_FROM || 'Servicio tecnico My Calendar',
+            from: 'Tu App <noreply@tudominio.com>',
             to: [email],
             subject: 'Recuperación de contraseña',
             html: `
@@ -29,7 +29,7 @@ const sendPasswordEmail = async(email,resetToken, userName = 'Usuario') => {
                         <p style="font-size: 16px;">Recibimos una solicitud para restablecer la contraseña de tu cuenta. Haz clic en el siguiente botón para crear una nueva contraseña:</p>
                         
                         <div style="text-align: center; margin: 30px 0;">
-                            <a href="${resetUrl}" 
+                            <a href="${resultUrl}" 
                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                                       color: white; 
                                       padding: 14px 28px; 
@@ -48,7 +48,7 @@ const sendPasswordEmail = async(email,resetToken, userName = 'Usuario') => {
                         <div style="background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 20px 0;">
                             <p style="font-size: 14px; margin: 0; word-break: break-all;">
                                 <strong>O copia este enlace en tu navegador:</strong><br>
-                                <a href="${resetUrl}" style="color: #667eea;">${resetUrl}</a>
+                                <a href="${resultUrl}" style="color: #667eea;">${resultUrl}</a>
                             </p>
                         </div>
                         

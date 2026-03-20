@@ -185,36 +185,6 @@ exports.changePassword = async (req,res) => {
     }
 }
 
-
-exports.resetPassword = async (req,res) => {
-    const {token, newPassword} = req.body
-
-    if (!newPassword || newPassword.length < 9) {
-        return res.status(400).json({ error: 'Password must be at least 9 characters' })
-    }
-
-    try{
-        const user = await userModel.findOne({
-            resetPasswordToken: token,
-            resetPasswordExpires: {$gt: Date.now()}
-        })
-
-        if(!user){
-            return res.status(400).json({message: 'Invalidad or expire token'})
-        }
-
-        user.password = newPassword
- 
-
-        user.resetPasswordToken = undefined
-        user.resetPasswordExpires = undefined
-        await user.save()
-        res.json({message: 'Success update password'})
-    } catch (error) {
-        res.status(500).json({ message: "Error in the server", error: error.message });
-    }
-}
-
 exports.forgotPassword = async (req,res) => {
     const {email} = req.body
 
@@ -261,6 +231,62 @@ exports.forgotPasswordLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 })
+
+exports.resetPassword = async (req,res) => {
+    const {token, newPassword} = req.body
+
+    if(!token){
+        return res.status(400).json({error: 'Token requerido'})
+    }
+
+    if(!newPassword || newPassword.length < 8){
+        return res.status(400).json({ 
+            error: 'La contraseña debe tener al menos 8 caracteres' 
+        });
+    }
+
+    if (!/[A-Z]/.test(newPassword)) {
+        return res.status(400).json({ 
+            error: 'La contraseña debe contener al menos una mayúscula' 
+        });
+    }
+
+    try{
+        const hashedToken = crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
+
+    // Buscar usuario con token válido y no expirado
+    const user = await userModel.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        return res.status(400).json({ 
+            message: 'Token inválido o expirado. Solicita uno nuevo.' 
+        });
+    }
+
+        
+        user.password = newPassword;
+        
+        // Limpiar token de recuperación
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        
+        await user.save();
+        res.json({ 
+            message: 'Contraseña actualizada exitosamente. Ahora puedes iniciar sesión.' 
+        });
+    } catch (error) {
+        console.error('Error en resetPassword:', error);
+        res.status(500).json({ 
+            message: "Error en el servidor. Intenta más tarde." 
+        });
+    }
+}
 
 exports.userName = async (req,res) => {
     try {

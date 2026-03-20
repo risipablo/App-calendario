@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
     email:{
         type:String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        trim:true
     },
     name:{
         type: String,
@@ -30,8 +32,16 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'user'], 
         default: 'user' 
     },
+
     resetPasswordToken:String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+
+    // tracking of sessions
+    lastLoginAt: Date,
+    sessionVersion: {
+        type: Number,
+        default: 0
+    }
 })
 
 
