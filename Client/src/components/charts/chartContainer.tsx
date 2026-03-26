@@ -1,4 +1,4 @@
-// components/ChartContainer.tsx
+
 import React, { useState, useMemo } from 'react';
 import {
     Chart as ChartJS,
@@ -22,9 +22,11 @@ import {
     ListTodo,
     Inbox
 } from 'lucide-react';
-import { useTaskFilters, type PeriodType } from "../filter/useTaskFilter"
+
 import "../../style/chart.css";
 import type { ISubtask, ITodo } from "../../interfaces/type.task";
+import { useTaskFilter, type PeriodType } from '../filter/useTaskFilter';
+
 
 
 ChartJS.register(
@@ -49,7 +51,7 @@ export const ChartContainer: React.FC = () => {
     const [showPending, setShowPending] = useState(true);
     const [showFailed, setShowFailed] = useState(true);
 
-    const { useFilteredData } = useTaskFilters();
+    const { useFilteredData } = useTaskFilter();
     const {
         tasks,
         subtasks,
@@ -304,88 +306,102 @@ export const ChartContainer: React.FC = () => {
                 <h1>Dashboard de Tareas</h1>
     
             </div>
-
+ 
             
             <div className='controls-container'>
-            <div className="stats-cards">
-              <div className="control-group">
-                        <label>Período:</label>
-                        <div className="period-selector">
-                            <button 
-                                className={selectedPeriod === 'day' ? 'active' : ''}
-                                onClick={() => setSelectedPeriod('day')}
-                            >
-                                Hoy
-                            </button>
-                            <button 
-                                className={selectedPeriod === 'week' ? 'active' : ''}
-                                onClick={() => setSelectedPeriod('week')}
-                            >
-                                Semana
-                            </button>
-                            <button 
-                                className={selectedPeriod === 'month' ? 'active' : ''}
-                                onClick={() => setSelectedPeriod('month')}
-                            >
-                                Mes
-                            </button>
-                            <button 
-                                className={selectedPeriod === 'all' ? 'active' : ''}
-                                onClick={() => setSelectedPeriod('all')}
-                            >
-                                Todas
-                            </button>
+                
+                <div className="stats-cards">
+                    <div className="control-group">
+                                <div className="task-form-group">
+                                    <label>Prioridad</label>
+                                    <select 
+                                        className="task-select" 
+                                    >
+                                        <option value="">Selecciona una prioridad</option>
+                                        <option value="Enero">Enero</option>
+                                        <option value="Febrero">Febrero</option>
+                                        <option value="Marzo">Marzo</option>
+                                    </select>
+                                </div>
+                            
+                        
+                                <label>Período:</label>
+                                <div className="period-selector">
+                                    <button 
+                                        className={selectedPeriod === 'day' ? 'active' : ''}
+                                        onClick={() => setSelectedPeriod('day')}
+                                    >
+                                        Hoy
+                                    </button>
+                                    <button 
+                                        className={selectedPeriod === 'week' ? 'active' : ''}
+                                        onClick={() => setSelectedPeriod('week')}
+                                    >
+                                        Semana
+                                    </button>
+                                    <button 
+                                        className={selectedPeriod === 'month' ? 'active' : ''}
+                                        onClick={() => setSelectedPeriod('month')}
+                                    >
+                                        Mes
+                                    </button>
+                                    <button 
+                                        className={selectedPeriod === 'all' ? 'active' : ''}
+                                        onClick={() => setSelectedPeriod('all')}
+                                    >
+                                        Todas
+                                    </button>
+                                </div>
+                    </div>
+                    <div className="stat-card total">
+                        <div className="stat-icon">
+                            <ListTodo size={28} />
                         </div>
-              </div>
-                <div className="stat-card total">
-                    <div className="stat-icon">
-                        <ListTodo size={28} />
+                        <div className="stat-content">
+                            <h3>Total</h3>
+                            <p className="stat-number">{stats.total}</p>
+                            <small>
+                                {tasks.length + subtasks.length} tareas totales
+                            </small>
+                        </div>
                     </div>
-                    <div className="stat-content">
-                        <h3>Total</h3>
-                        <p className="stat-number">{stats.total}</p>
-                        <small>
-                            {tasks.length + subtasks.length} tareas totales
-                        </small>
+                    
+                    <div className="stat-card completed">
+                        <div className="stat-icon">
+                            <CheckCircle2 size={28} />
+                        </div>
+                        <div className="stat-content">
+                            <h3>Completadas</h3>
+                            <p className="stat-number">{stats.completed.total}</p>
+                            <small>{percentages.completed}% del total</small>
+                            
+                        </div>
                     </div>
-                </div>
-                
-                <div className="stat-card completed">
-                    <div className="stat-icon">
-                        <CheckCircle2 size={28} />
+                    
+                    <div className="stat-card pending">
+                        <div className="stat-icon">
+                            <Clock size={28} />
+                        </div>
+                        <div className="stat-content">
+                            <h3>Pendientes</h3>
+                            <p className="stat-number">{stats.pending.total}</p>
+                            <small>{percentages.pending}% del total</small>
+                            
+                        </div>
                     </div>
-                    <div className="stat-content">
-                        <h3>Completadas</h3>
-                        <p className="stat-number">{stats.completed.total}</p>
-                        <small>{percentages.completed}% del total</small>
-                        
-                    </div>
-                </div>
-                
-                <div className="stat-card pending">
-                    <div className="stat-icon">
-                        <Clock size={28} />
-                    </div>
-                    <div className="stat-content">
-                        <h3>Pendientes</h3>
-                        <p className="stat-number">{stats.pending.total}</p>
-                        <small>{percentages.pending}% del total</small>
-                        
-                    </div>
-                </div>
-                
-                <div className="stat-card failed">
-                    <div className="stat-icon">
-                        <XCircle size={28} />
-                    </div>
-                    <div className="stat-content">
-                        <h3>No Realizadas</h3>
-                        <p className="stat-number">{stats.failed.total}</p>
-                        <small>{percentages.failed}% del total</small>
-                        
+                    
+                    <div className="stat-card failed">
+                        <div className="stat-icon">
+                            <XCircle size={28} />
+                        </div>
+                        <div className="stat-content">
+                            <h3>No Realizadas</h3>
+                            <p className="stat-number">{stats.failed.total}</p>
+                            <small>{percentages.failed}% del total</small>
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
 
 

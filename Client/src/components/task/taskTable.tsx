@@ -51,7 +51,7 @@ export const TaskTable = ({
     const [priority,setPriority] = useState<string>("")
     const [loading ,setLoading] = useState(true)
     const [showToday, setShowToday] = useState(false);
-
+    
 
     const handleAddTask = () => {
         if(date && title.trim() && priority){
@@ -97,22 +97,30 @@ export const TaskTable = ({
     const filteredTasks = useMemo(() => {
         if (!showToday) return baseTask;
         
+        
+
         const timeArg = new Date().toLocaleString('en-US', {
             timeZone: 'America/Buenos_Aires'
         })
 
         const todayStr = new Date(timeArg).toISOString().split('T')[0]; 
 
-        return task.filter(tas => {
-            const taskDate = new Date(tas.date).toLocaleString('en-US', {
+        return baseTask.filter(tas => {
+            const taskDate = new Date(tas.date)
+            const taskArg = new Date(taskDate.toLocaleString('en-US',{
                 timeZone: 'America/Buenos_Aires'
-            })
-            const taskDateStr = new Date(taskDate).toISOString().split('T')[0]
+            }))
+            const taskDateStr = taskArg.toISOString().split('T')[0]
+
             return taskDateStr === todayStr
         })
-    }, [baseTask, showToday, task]);
+    }, [baseTask, showToday]);
 
-    
+    // const noTaskaFilter = useMemo(() => {
+    //     return filterTask.length === 0 && (showToday || filterTask.length > 0 || dateFil)
+    // },[])
+
+
     // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)
       const itemsPerPage = 3;

@@ -211,3 +211,57 @@
         flex-direction: column;
     }
 }
+
+/* Estilos adicionales para los botones de filtro */
+.filter-buttons-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-toggle-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-toggle-view:hover {
+    background-color: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+.btn-toggle-view.active {
+    background-color: #8e7cc3;
+    border-color: #8e7cc3;
+    color: white;
+}
+
+.btn-toggle-view.active:hover {
+    background-color: #7a6ba8;
+}
+
+.btn-reset {
+    background-color: #fee2e2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+.btn-reset:hover {
+    background-color: #fecaca;
+}
+
+.empty-state-hint {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 8px;
+}
