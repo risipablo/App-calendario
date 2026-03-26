@@ -1,6 +1,7 @@
 import type React from "react";
 import type { ModalConfirmProps } from "../components/layout/modalConfirm";
 import type { ReactNode } from "react";
+import type { PeriodType } from "../components/filter/useTaskFilter";
 
 export interface ISubtask {
     id: number;
@@ -100,7 +101,6 @@ export interface TaskProviderProps{
     isAuthenticated: boolean | null;
 }
 
-
 export interface TaskStats {
     total: number;
     completed: {
@@ -125,5 +125,15 @@ export interface TaskStats {
     };
 }
 
+export interface DateFilters{
+    type: 'period' | 'specific' | 'monthYear';
+    period?: PeriodType;
+    specificDate?: string;
+    month?: string;
+    year?: string;
+}
 
+export interface TaskFilters{
+    dateFilters: DateFilters
+}
 

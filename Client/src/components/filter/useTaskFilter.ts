@@ -1,103 +1,153 @@
-import type { TaskStats } from './../../interfaces/type.task';
 
-import { useCallback, useMemo } from "react"
-import { useTasks } from "../../context/taskContex"
-import type { ISubtask, ITodo } from "../../interfaces/type.task"
+import { useMemo, useCallback } from 'react';
+import { useTasks } from '../../context/taskContex';
+import type { ITodo, ISubtask } from '../../interfaces/type.task';
 
-export type PeriodType = 'day' | 'week' | 'month' | 'all'
+export type PeriodType = 'day' | 'week' | 'month' | 'all';
+
+interface TaskStats {
+    total: number;
+    completed: {
+        tasks: number;
+        subtasks: number;
+        total: number;
+    };
+    pending: {
+        tasks: number;
+        subtasks: number;
+        total: number;
+    };
+    failed: {
+        tasks: number;
+        subtasks: number;
+        total: number;
+    };
+    byPriority: {
+        alta: { completed: number; pending: number; failed: number };
+        media: { completed: number; pending: number; failed: number };
+        baja: { completed: number; pending: number; failed: number };
+    };
+}
 
 export const useTaskFilter = () => {
-    const {task:allTasks}= useTasks()
-    
-    const filterTasksByDate = useCallback((tasks: ITodo[], period:PeriodType):ITodo[] => {
+    const { task: allTasks } = useTasks();
 
-        const today = new Date()
-        today.setHours(0,0,0,0)
+    // Filtro por período (día, semana, mes)
+    const filterTasksByDate = useCallback((tasks: ITodo[], period: PeriodType): ITodo[] => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        switch(period){
-            case'day':{
+        switch (period) {
+            case 'day': {
                 return tasks.filter(task => {
-                    const taskDate = new Date(task.date)
-                    taskDate.setHours(0,0,0,0)
-                    return taskDate.getTime() === taskDate.getTime()
-                })
+                    if (!task.date) return false;
+                    const taskDate = new Date(task.date);
+                    taskDate.setHours(0, 0, 0, 0);
+                    return taskDate.getTime() === today.getTime();
+                });
             }
 
-            case 'week':{
-                const startOfWeek = new Date(today)
-                startOfWeek.setDate(today.getDate() - today.getDate())
+            case 'week': {
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay());
 
-                const endOfWeek = new Date(today)
-                endOfWeek.setDate(today.getDate() + (6 - today.getDate()))
+                const endOfWeek = new Date(today);
+                endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
 
                 return tasks.filter(task => {
-                    const taskDate = new Date(task.date)
-                    return taskDate >= startOfWeek && taskDate <= endOfWeek
-                })
+                    if (!task.date) return false;
+                    const taskDate = new Date(task.date);
+                    return taskDate >= startOfWeek && taskDate <= endOfWeek;
+                });
             }
 
-            case 'month':{
-                const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+            case 'month': {
+                const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
                 return tasks.filter(task => {
-                    const taskDate = new Date(task.date)
-                    return taskDate >= startOfMonth && taskDate <= endOfMonth
-                })
+                    if (!task.date) return false;
+                    const taskDate = new Date(task.date);
+                    return taskDate >= startOfMonth && taskDate <= endOfMonth;
+                });
             }
 
             case 'all':
-                    default:
-                        return tasks
+            default:
+                return tasks;
         }
+    }, []);
 
-    },[]) 
-
-
-    // Subtasks
-    // Tomar el array de las tareas para convertilas en objetos independientes
+    // Extraer subtareas
     const extractSubtasks = useCallback((tasks: ITodo[]): Array<ISubtask & { parentTask: string; parentId?: string }> => {
-        const subtasks: Array<ISubtask & { parentTask: string; parentId?: string }> = [] // almacenar cada tarea con la referencia del padre
+        const subtasks: Array<ISubtask & { parentTask: string; parentId?: string }> = [];
 
         tasks.forEach(task => {
-            if(task.subtaskTitles && task.subtaskTitles.length > 0){
-                for(let i = 0; i < task.subtaskTitles.length; i++){
+            if (task.subtaskTitles && task.subtaskTitles.length > 0) {
+                for (let i = 0; i < task.subtaskTitles.length; i++) {
                     subtasks.push({
-                        title:task.subtaskTitles[i],
+                        title: task.subtaskTitles[i],
                         priority: task.subtaskPriorities?.[i] || 'media',
                         completed: task.subtaskCompleted?.[i] || false,
                         incompletedSubtask: task.incompletedSubtask?.[i],
-                        parentTask: task.title, // a que tarea pertence
-                        parentId: task._id, // ID de la tarea de padre
-                        id: i // Indice de la subtarea
-                    })
+                        parentTask: task.title,
+                        parentId: task._id,
+                        id: i,
+                    });
                 }
             }
-        })
+        });
 
-        return subtasks
+        return subtasks;
     }, []);
 
-   
-    const useFilteredData = (period: PeriodType) => {
+    // Filtro por mes específico
+    const filterByMonth = useCallback((tasks: ITodo[], month: string, year?: string) => {
+        // Si no hay mes, devolver todas las tareas
+        if (!month || month === '') return tasks;
+        
+        const currentYear = year || new Date().getFullYear().toString();
 
-        // Filtar por fecha
-        const filteredTasks = useMemo(() => 
-            filterTasksByDate(allTasks, period),
-            [allTasks, period, filterTasksByDate]
-        );
+        return tasks.filter(task => {
+            if (!task.date) return false;
+            
+            const taskDate = task.date.split('T')[0];
+            const parts = taskDate.split('-');
+            
+            if (parts.length < 2) return false;
+            
+            const [taskYear, taskMonth] = parts;
+            return taskYear === currentYear && taskMonth === month;
+        });
+    }, []);
 
-        // subtareas filtradas
+    // Hook principal que recibe los filtros
+    const useFilteredData = (selectedMonth?: string, selectedYear?: string, period?: PeriodType) => {
+        // Aplicar filtros según prioridad
+        const filteredTasks = useMemo(() => {
+            let result = [...allTasks];
+            
+            // Prioridad 1: Filtro por mes específico
+            if (selectedMonth && selectedMonth !== '') {
+                result = filterByMonth(result, selectedMonth, selectedYear);
+            }
+            // Prioridad 2: Filtro por período (día/semana/mes actual)
+            else if (period && period !== 'all') {
+                result = filterTasksByDate(result, period);
+            }
+            
+            return result;
+        }, [allTasks, selectedMonth, selectedYear, period, filterByMonth, filterTasksByDate]);
+
+        // Extraer subtareas de las tareas filtradas
         const filteredSubtasks = useMemo(() => 
             extractSubtasks(filteredTasks),
             [filteredTasks, extractSubtasks]
         );
 
-
-        // Componente para calculcar estadisticas
+        // Calcular estadísticas
         const stats = useMemo((): TaskStats => {
-
-            // tareas completadas
+            // Tareas completadas
             const completed = {
                 tasks: filteredTasks.filter(t => t.completed).length,
                 subtasks: filteredSubtasks.filter(s => s.completed).length,
@@ -105,16 +155,15 @@ export const useTaskFilter = () => {
             };
             completed.total = completed.tasks + completed.subtasks;
 
-            // Tareas pedientes
+            // Tareas pendientes
             const pending = {
                 tasks: filteredTasks.filter(t => !t.completed && !t.incompletedSubtask).length,
-                subtasks: filteredSubtasks.filter(t => !t.completed && !t.incompletedSubtask).length,
-                total:0
-            }
+                subtasks: filteredSubtasks.filter(s => !s.completed && !s.incompletedSubtask).length,
+                total: 0
+            };
             pending.total = pending.tasks + pending.subtasks;
 
-
-            // Tareas incompletas
+            // Tareas fallidas/no realizadas
             const failed = {
                 tasks: filteredTasks.filter(t => t.incompletedSubtask).length,
                 subtasks: filteredSubtasks.filter(s => s.incompletedSubtask).length,
@@ -122,16 +171,16 @@ export const useTaskFilter = () => {
             };
             failed.total = failed.tasks + failed.subtasks;
 
-            
+            // Estadísticas por prioridad
             const byPriority = {
                 alta: { completed: 0, pending: 0, failed: 0 },
                 media: { completed: 0, pending: 0, failed: 0 },
                 baja: { completed: 0, pending: 0, failed: 0 }
             };
 
-            
+            // Contar tareas principales por prioridad
             filteredTasks.forEach(task => {
-                const priority = task.priority.toLowerCase() as keyof typeof byPriority;
+                const priority = task.priority?.toLowerCase() as keyof typeof byPriority;
                 if (priority in byPriority) {
                     if (task.completed) byPriority[priority].completed++;
                     else if (task.incompletedSubtask) byPriority[priority].failed++;
@@ -139,9 +188,9 @@ export const useTaskFilter = () => {
                 }
             });
 
-            
+            // Contar subtareas por prioridad
             filteredSubtasks.forEach(sub => {
-                const priority = sub.priority.toLowerCase() as keyof typeof byPriority;
+                const priority = sub.priority?.toLowerCase() as keyof typeof byPriority;
                 if (priority in byPriority) {
                     if (sub.completed) byPriority[priority].completed++;
                     else if (sub.incompletedSubtask) byPriority[priority].failed++;
@@ -171,11 +220,11 @@ export const useTaskFilter = () => {
         };
     };
 
-
-    return{
+    return {
         filterTasksByDate,
         extractSubtasks,
+        filterByMonth,
         useFilteredData,
         getAllTasks: () => allTasks
-    }
-}
+    };
+};
