@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import "../style/dashboard.css"
 import { CardLoader } from "../components/layout/cardLoader"
 import { ClipLoader } from "react-spinners"
+import { Helmet } from "react-helmet"
 
 export const Dashboard = () => {
     
@@ -63,6 +64,7 @@ export const Dashboard = () => {
 
     return (
         <div className="task-table-container">
+            <Helmet> <title> Dashboard</title> </Helmet>
             <div className="table-header">
                 <h2 className="table-title">Dashboard</h2>
             </div>

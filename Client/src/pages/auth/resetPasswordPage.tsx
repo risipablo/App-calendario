@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { AuthLayout } from "../../components/auth/common/authLayout";
 import { UseAuth } from "../../hooks/useAuth";
 import type { AuthenticatedProps } from "../../App";
+import { Helmet } from "react-helmet";
 
 export const ResetPasswordPage = ({setIsAuthenticated}:AuthenticatedProps) => {
     const { token } = useParams<{ token: string }>();
@@ -52,6 +53,7 @@ export const ResetPasswordPage = ({setIsAuthenticated}:AuthenticatedProps) => {
     if (resetDone) {
         return (
             <AuthLayout title="¡Contraseña actualizada!">
+                <Helmet><title> Actualizar contraseña </title></Helmet>
                 <motion.div 
                     className="success-container"
                     initial={{ opacity: 0, y: 20 }}

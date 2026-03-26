@@ -9,6 +9,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { PasswordRequirements } from "../../components/auth/common/passwordRequirements";
 import type { AuthenticatedProps } from "../../App";
 import { PasswordInput } from "../../components/auth/common/passwordInput";
+import { Helmet } from "react-helmet";
 
 interface RegisterFromData extends RegisterData{
     confirmPassword: string
@@ -60,6 +61,7 @@ export const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
     return(
         <AuthLayout title="Registrarse">
+            <Helmet><title>Register</title></Helmet>
             <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, scale: 0.8 }}

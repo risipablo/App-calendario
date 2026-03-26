@@ -1,16 +1,18 @@
 import type React from "react"
 import type { ITodo } from "../../../interfaces/type.task"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { X, Calendar, Filter, RotateCcw } from "lucide-react"
 
 type Props = {
     task: ITodo[]
     setFilterTask: React.Dispatch<React.SetStateAction<ITodo[]>>
+    onFilterChange?:(filters:{dateFilter:string; monthFilter:string; yearFilter:string}) => void
 }
 
 export const FilterPerDay = ({
     task,
-    setFilterTask
+    setFilterTask,
+    onFilterChange
 }: Props) => {
 
     const [dateFilter, setDateFilter] = useState<string>('')
@@ -32,7 +34,7 @@ export const FilterPerDay = ({
         return dateStr
     }, [])
 
-    useEffect(() => {
+    const filteredTasks = useMemo(() =>{
         let filtered = [...task]
 
         if(dateFilter){
@@ -58,9 +60,20 @@ export const FilterPerDay = ({
             })
         }
 
-        setFilterTask(filtered)
+        return filtered
+    },[dateFilter, monthFilter, yearFilter, task, nomalDate])
 
-    }, [dateFilter, monthFilter, yearFilter, task, nomalDate, setFilterTask])
+    useEffect(() => {
+        setFilterTask(filteredTasks)
+
+
+        if(onFilterChange){
+            onFilterChange({dateFilter, monthFilter, yearFilter})
+        }
+
+        
+
+    }, [dateFilter, monthFilter, yearFilter, task, nomalDate, setFilterTask,onFilterChange])
 
     const handleApplyDate = () => {
         setDateFilter(pendingDate)

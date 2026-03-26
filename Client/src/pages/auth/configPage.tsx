@@ -4,6 +4,7 @@ import { DoorOpen, Settings, User, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
+import { Helmet } from "react-helmet";
 
 export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
 
@@ -18,6 +19,7 @@ export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
 
   return (
     <div className="task-table-container">
+      <Helmet><title>Configuraciones</title></Helmet>
       <motion.div
         className="settings-header"
         initial={{ opacity: 0, y: 20 }}

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle, User } from "lucide-react";
 import "../../style/userSettings.css"
+import { Helmet } from "react-helmet";
 
 
 export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
@@ -45,6 +46,7 @@ export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
     
     return (
         <div className="task-table-container">
+          <Helmet><title>Cambiar nombre de usuario </title></Helmet>
           <div className="form-wrapper">
             <motion.div
               className="form-header"

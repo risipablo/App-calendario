@@ -3,6 +3,7 @@ import { UseAuth } from "../../hooks/useAuth"
 import { AuthLayout } from "../../components/auth/common/authLayout"
 import { NavLink } from "react-router-dom"
 import { motion } from "framer-motion"
+import { Helmet } from "react-helmet"
 
 export const ForgotPasswordPage = () => {
     const [email,setEmail] = useState('')
@@ -22,6 +23,7 @@ export const ForgotPasswordPage = () => {
 
     return(
         <AuthLayout title="Recuperar Contraseña">
+            <Helmet><title>Recuperar contraseña</title></Helmet>
     {!submitted ? (
                 <motion.form
                     onSubmit={handleSubmit}

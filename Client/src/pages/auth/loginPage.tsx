@@ -9,6 +9,7 @@ import { AuthButton } from '../../components/auth/common/authButton';
 import { UseAuth } from '../../hooks/useAuth';
 import type { AuthenticatedProps } from '../../App';
 import { PasswordInput } from '../../components/auth/common/passwordInput';
+import { Helmet } from 'react-helmet';
 
 
 
@@ -39,6 +40,7 @@ const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
 
   return (
     <AuthLayout title="Iniciar Sesión">
+      <Helmet><title>Login</title></Helmet>
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.8 }}

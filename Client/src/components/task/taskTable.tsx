@@ -11,7 +11,7 @@ import { TaskForm } from "./taskForm";
 import { ClipLoader } from "react-spinners";
 import { PaginationComponent } from "../layout/pagination";
 import { FilterPerDay } from "../layout/filter/filterPerDay";
-import { Helmet } from "react-helmet";
+
 
 
 
@@ -116,9 +116,15 @@ export const TaskTable = ({
         })
     }, [baseTask, showToday]);
 
-    // const noTaskaFilter = useMemo(() => {
-    //     return filterTask.length === 0 && (showToday || filterTask.length > 0 || dateFil)
-    // },[])
+    const [dateFilter, setDateFilter] = useState<string>('')
+    const [monthFilter, setMonthFilter] = useState<string>('')
+    const [yearFilter, setYearFilter] = useState<string>('')
+    
+    const handleFiltersChange = (filters: {dateFilter:string; monthFilter:string; yearFilter:string}) => {
+        setDateFilter(filters.dateFilter)
+        setMonthFilter(filters.monthFilter)
+        setYearFilter(filters.yearFilter)
+    }
 
 
     // Paginate task      
@@ -136,9 +142,6 @@ export const TaskTable = ({
     return (
         <div className="task-table-container">
 
-            <Helmet>
-                Tareas 
-            </Helmet>
 
             <div className="table-header">
                 <h2 className="table-title">  Mis Tareas</h2>
@@ -180,7 +183,7 @@ export const TaskTable = ({
                     {showToday ? 'Ver Todas' : 'Ver Hoy'}
                 </button>
 
-                <FilterPerDay task={task} setFilterTask={setFilterTask} />
+                <FilterPerDay task={task} setFilterTask={setFilterTask} onFilterChange={handleFiltersChange}/>
             </div>
             
             {
@@ -194,6 +197,37 @@ export const TaskTable = ({
             
                         <h3>No hay tareas establecidas</h3>
                         <p>Agrega tu primera tarea</p>
+                    </div>
+                ) : filteredTasks.length === 0 ? (
+                    <div className="empty-state-goals">
+                        <h3>No se encontraron tareas</h3>
+                        <p>
+                            {showToday 
+                                ? "No hay tareas programadas para hoy" 
+                                : dateFilter || monthFilter || yearFilter
+                                    ? "No hay tareas que coincidan con los filtros seleccionados"
+                                    : "No hay tareas establecidas"}
+                        </p>
+                        <p className="empty-state-hint">
+                            {showToday 
+                                ? "Prueba a crear una nueva tarea para hoy" 
+                                : dateFilter || monthFilter || yearFilter
+                                    ? "Intenta con otros filtros o limpia los filtros actuales"
+                                    : "Agrega tu primera tarea usando el formulario"}
+                        </p>
+                        {(dateFilter || monthFilter || yearFilter) && (
+                            <button 
+                                className="btn-toggle-view" 
+                                onClick={() => {
+                                    // Limpiar todos los filtros
+                                    setFilterTask([])
+                                    setShowToday(false)
+                                }}
+                                style={{ marginTop: '16px' }}
+                            >
+                                Limpiar filtros
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <div className="table-wrapper">
