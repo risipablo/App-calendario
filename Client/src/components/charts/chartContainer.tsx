@@ -273,7 +273,7 @@ export const ChartContainer: React.FC = () => {
         );
     };
 
-    // Obtener etiqueta del filtro activo
+    
     const getActiveFilterLabel = () => {
         if (selectedMonth) {
             const months: Record<string, string> = {
@@ -290,7 +290,7 @@ export const ChartContainer: React.FC = () => {
         return 'Todas';
     };
 
-    // Limpiar filtros
+    
     const clearFilters = () => {
         setSelectedMonth('');
         setSelectedYear('');

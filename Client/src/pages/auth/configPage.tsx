@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { LogOutComponent } from "../../components/auth/logout";
-import { DoorOpen, Settings, User, Lock } from "lucide-react";
+import { DoorOpen, Settings, User, Lock, MailQuestionMark } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
@@ -63,6 +63,24 @@ export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
             <div className="link-content">
               <h3>Cambiar Contraseña</h3>
               <p>Actualiza tu contraseña de acceso</p>
+            </div>
+            <span className="link-arrow">→</span>
+          </NavLink>
+        </motion.div>
+
+        <motion.div
+          custom={1}
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <NavLink to="/send-email" className="config-link change-password-link">
+            <div className="link-icon lock-icon">
+              <span> <MailQuestionMark /></span>
+            </div>
+            <div className="link-content">
+              <h3>Sugerencias</h3>
+              <p>Puedes mandar un emnsaje de sugerencia, queja o consulta</p>
             </div>
             <span className="link-arrow">→</span>
           </NavLink>

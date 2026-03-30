@@ -1,7 +1,5 @@
-
-
 import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock } from "lucide-react"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Tooltip } from '@mui/material';
 import "../../style/calender.css"
 import type { CalendarContainerProps, ICalendar } from "../../interfaces/type.calendar"
@@ -15,9 +13,32 @@ export const CalendarContainer = ({
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showDayModal, setShowDayModal] = useState(false)
+  const [selectedMonth, setSelectedMonth] = useState<string>('')
+  const [selectedYear, setSelectedYear] = useState<string>('')
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
   const weekDays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+
+  
+  const filteredNotes = useMemo(() => {
+    return notes.filter(note => {
+      if (!note.date) return false
+
+      const taskDate = note.date.split('T')[0]
+      const parts = taskDate.split('-')
+      if (parts.length < 2) return false
+
+      const [noteYear, noteMonth] = parts
+
+      
+      if (selectedYear && noteYear !== selectedYear) return false
+
+      
+      if (selectedMonth && noteMonth !== selectedMonth) return false
+
+      return true
+    })
+  }, [notes, selectedMonth, selectedYear]) 
 
   const getMonthDays = (date: Date) => {
     const year = date.getFullYear()
@@ -57,11 +78,40 @@ export const CalendarContainer = ({
   }
 
   const handlePrevMonth = () => {
-    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
+    setCurrentDate(prev => {
+      const newDate = new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+      setSelectedMonth(String(newDate.getMonth() + 1).padStart(2, '0'))
+      setSelectedYear(String(newDate.getFullYear()))
+      return newDate
+    })
   }
 
   const handleNextMonth = () => {
-    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))
+    setCurrentDate(prev => {
+      const newDate = new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+      setSelectedMonth(String(newDate.getMonth() + 1).padStart(2, '0'))
+      setSelectedYear(String(newDate.getFullYear()))
+      return newDate
+    })
+  }
+
+  const handleMonthFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const month = e.target.value
+    setSelectedMonth(month)
+    if (month) {
+      const year = selectedYear ? parseInt(selectedYear) : currentDate.getFullYear()
+      setCurrentDate(new Date(year, parseInt(month) - 1, 1))
+    }
+  }
+
+  
+  const handleYearFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const year = e.target.value
+    setSelectedYear(year)
+    if (year) {
+      const month = selectedMonth ? parseInt(selectedMonth) - 1 : currentDate.getMonth()
+      setCurrentDate(new Date(parseInt(year), month, 1))
+    }
   }
 
   const handleDayClick = (dayData: { day: number; isCurrentMonth: boolean; date: Date }) => {
@@ -83,7 +133,7 @@ export const CalendarContainer = ({
 
   const getNotesForDay = (dayDate: Date) => {
     const dateStr = formatDateForCompare(dayDate)
-    return notes.filter((note) => note.date && note.date.split("T")[0] === dateStr)
+    return filteredNotes.filter((note) => note.date && note.date.split("T")[0] === dateStr)
   }
 
   const formatDateDisplay = (date: Date) => {
@@ -125,7 +175,6 @@ export const CalendarContainer = ({
       hour: editData.hour
     })
     setEditingId(null);
-    
   }
 
   const handleCancelEdit = () => {
@@ -139,8 +188,68 @@ export const CalendarContainer = ({
     setEditingId(null);
   };
 
+  
+  const handleClearFilter = () => {
+    const today = new Date()
+    setSelectedMonth('')
+    setSelectedYear('')
+    setCurrentDate(new Date(today.getFullYear(), today.getMonth(), 1))
+  }
+
+  const hasActiveFilter = selectedMonth || selectedYear
+
   return (
     <div className="calendar-container">
+      <div className="month-filter-container" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '20px' }}>
+        <select
+          value={selectedMonth}
+          onChange={handleMonthFilterChange}
+          className="month-select"
+          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+        >
+          <option value="">Todos los meses</option>
+          <option value="01">Enero</option>
+          <option value="02">Febrero</option>
+          <option value="03">Marzo</option>
+          <option value="04">Abril</option>
+          <option value="05">Mayo</option>
+          <option value="06">Junio</option>
+          <option value="07">Julio</option>
+          <option value="08">Agosto</option>
+          <option value="09">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+
+        <select
+          value={selectedYear}
+          onChange={handleYearFilterChange}
+          className="month-select"
+          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+        >
+          <option value="">Año</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+          <option value="2030">2030</option>
+          <option value="2031">2031</option>
+          <option value="2032">2032</option>
+        </select>
+
+        
+        {hasActiveFilter && (
+          <button
+            className="clear-filter-btn"
+            onClick={handleClearFilter}
+            style={{ padding: '8px 12px', cursor: 'pointer' }}
+          >
+            Limpiar filtro
+          </button>
+        )}
+      </div>
+
       <div className="calendar-card">
         <div className="calendar-month-header">
           <h2>{months[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
@@ -174,30 +283,30 @@ export const CalendarContainer = ({
                 onClick={() => handleDayClick(dayData)}
               >
                 <div className="day-number">{dayData.day}</div>
-                  <div className="event-indicators">
-                    {dayNotes.slice(0, 3).map((note) => (
-                      <div
-                        key={note._id}
-                        className="event-row"
-                        title={`${note.title} (${note.category}) (${note.hour})`}
-                      >
-                        <div className={`event-dot priority-${note.priority}`} />
-                        <span className={`calendar-note calendar-note-${note.priority}`}>
-                          {note.title}
-                        </span>
-                      </div>
-                    ))}
-                    {dayNotes.length > 3 && (
-                      <div className="event-more">+{dayNotes.length - 3}</div>
-                    )}
-                  </div>
+                <div className="event-indicators">
+                  {dayNotes.slice(0, 3).map((note) => (
+                    <div
+                      key={note._id}
+                      className="event-row"
+                      title={`${note.title} (${note.category}) (${note.hour})`}
+                    >
+                      <div className={`event-dot priority-${note.priority}`} />
+                      <span className={`calendar-note calendar-note-${note.priority}`}>
+                        {note.title}
+                      </span>
+                    </div>
+                  ))}
+                  {dayNotes.length > 3 && (
+                    <div className="event-more">+{dayNotes.length - 3}</div>
+                  )}
+                </div>
               </div>
             );
           })}
         </div>
       </div>
 
-      
+      {/* Modal de día */}
       {showDayModal && selectedDate && (
         <div className="modal-overlay-calendar" onClick={() => setShowDayModal(false)}>
           <div className="modal-content-calendar" onClick={(e) => e.stopPropagation()}>
@@ -208,8 +317,6 @@ export const CalendarContainer = ({
               </button>
             </div>
 
-
-            {/* Details for note */}
             <div className="modal-body-calendar">
               {getNotesForDay(selectedDate).length === 0 ? (
                 <div className="empty-day-notes">
@@ -265,7 +372,7 @@ export const CalendarContainer = ({
         </div>
       )}
 
-      {/* MODAL DE EDICIÓN */}
+      {/* Modal de edición */}
       {editingId !== null && (
         <div className="modal-overlay-inline" onClick={handleCancelEdit}>
           <div className="modal-content-inline" onClick={(e) => e.stopPropagation()}>
@@ -277,7 +384,6 @@ export const CalendarContainer = ({
             </div>
 
             <div className="modal-body-inline">
-
               <div className="form-group-inline">
                 <label>Fecha</label>
                 <input

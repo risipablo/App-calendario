@@ -84,3 +84,10 @@ export interface PasswordRequirementsProps{
 }
 
 
+
+// interfaces/type.user.ts
+export interface IContact {
+  name: string;
+  message: string;
+  reason: string;  
+}

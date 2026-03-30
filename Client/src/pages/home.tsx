@@ -10,6 +10,7 @@ import { ChangeUserName } from "../components/auth/changeuserName"
 import { ResetPasswordPage } from "../components/auth/resetPassword"
 import { ConfigPage } from "./auth/configPage"
 import { ResumeChart } from "./resumePage"
+import { SuggestionsComponent } from "../components/emails/suggestComponent"
 
 
 
@@ -35,6 +36,7 @@ export const Home = ({isAuthenticated,setIsAuthenticated}:AuthenticatedProps) =>
         <Route path="/change-name" element={isAuthenticated ? <ChangeUserName setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
         <Route path="/change-password" element={isAuthenticated ? <ResetPasswordPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
         <Route path="/settings" element={isAuthenticated ? <ConfigPage setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/" replace/>}/>
+        <Route path="/send-email" element={isAuthenticated ? <SuggestionsComponent /> : <Navigate to="/" replace/>}/>
         <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace/>}/>
     </Routes>
     </>

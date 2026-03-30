@@ -1,38 +1,16 @@
 
 import { useMemo, useCallback } from 'react';
 import { useTasks } from '../../context/taskContex';
-import type { ITodo, ISubtask } from '../../interfaces/type.task';
+import type { ITodo, ISubtask, TaskStats } from '../../interfaces/type.task';
 
 export type PeriodType = 'day' | 'week' | 'month' | 'all';
 
-interface TaskStats {
-    total: number;
-    completed: {
-        tasks: number;
-        subtasks: number;
-        total: number;
-    };
-    pending: {
-        tasks: number;
-        subtasks: number;
-        total: number;
-    };
-    failed: {
-        tasks: number;
-        subtasks: number;
-        total: number;
-    };
-    byPriority: {
-        alta: { completed: number; pending: number; failed: number };
-        media: { completed: number; pending: number; failed: number };
-        baja: { completed: number; pending: number; failed: number };
-    };
-}
+
 
 export const useTaskFilter = () => {
     const { task: allTasks } = useTasks();
 
-    // Filtro por período (día, semana, mes)
+    
     const filterTasksByDate = useCallback((tasks: ITodo[], period: PeriodType): ITodo[] => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -103,7 +81,7 @@ export const useTaskFilter = () => {
 
     // Filtro por mes específico
     const filterByMonth = useCallback((tasks: ITodo[], month: string, year?: string) => {
-        // Si no hay mes, devolver todas las tareas
+        
         if (!month || month === '') return tasks;
         
         const currentYear = year || new Date().getFullYear().toString();
@@ -121,17 +99,17 @@ export const useTaskFilter = () => {
         });
     }, []);
 
-    // Hook principal que recibe los filtros
+    // Principal que recibe los filtros
     const useFilteredData = (selectedMonth?: string, selectedYear?: string, period?: PeriodType) => {
-        // Aplicar filtros según prioridad
+        
         const filteredTasks = useMemo(() => {
             let result = [...allTasks];
             
-            // Prioridad 1: Filtro por mes específico
+            
             if (selectedMonth && selectedMonth !== '') {
                 result = filterByMonth(result, selectedMonth, selectedYear);
             }
-            // Prioridad 2: Filtro por período (día/semana/mes actual)
+            
             else if (period && period !== 'all') {
                 result = filterTasksByDate(result, period);
             }
@@ -147,7 +125,7 @@ export const useTaskFilter = () => {
 
         // Calcular estadísticas
         const stats = useMemo((): TaskStats => {
-            // Tareas completadas
+            
             const completed = {
                 tasks: filteredTasks.filter(t => t.completed).length,
                 subtasks: filteredSubtasks.filter(s => s.completed).length,
