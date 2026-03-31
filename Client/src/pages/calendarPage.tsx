@@ -3,10 +3,10 @@ import { CalendarMaster } from "../components/calendar/calendarMaster"
 
 
 
-export const CalendarPage = () => {
+ const CalendarPage = () => {
 
     return(
-        <div className="container-pages">
+        <div>
         <Helmet>
             <title> Calendario </title>
             
@@ -17,3 +17,5 @@ export const CalendarPage = () => {
         
     )
 }
+
+export default CalendarPage

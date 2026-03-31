@@ -13,7 +13,7 @@ interface ShowState {
   confirm: boolean;
 }
 
-export function ResetPasswordPage({ setIsAuthenticated }: ChangeUserNameProps) {
+ function ResetPasswordPage({ setIsAuthenticated }: ChangeUserNameProps) {
 
   const [formData, setFormData] = useState<ResetPasswordData>({
     currentPassword: '',
@@ -312,3 +312,5 @@ export function ResetPasswordPage({ setIsAuthenticated }: ChangeUserNameProps) {
     </div>
   )
 }
+
+export default ResetPasswordPage

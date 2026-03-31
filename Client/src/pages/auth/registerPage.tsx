@@ -15,7 +15,7 @@ interface RegisterFromData extends RegisterData{
     confirmPassword: string
 }
 
-export const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
+const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
     const[formData, setFormData] = useState<RegisterFromData>({
         email: '',
         name: '',
@@ -136,6 +136,6 @@ export const RegisterPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         />
         </AuthLayout>
     )
-
-
 }
+
+export default RegisterPage

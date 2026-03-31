@@ -8,7 +8,7 @@ import "../../style/userSettings.css"
 import { Helmet } from "react-helmet";
 
 
-export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
+function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
     const [formData, setFormData] = useState<IChangeUserName>({
         email:'',
         newName: ''
@@ -161,3 +161,5 @@ export function ChangeUserName({ setIsAuthenticated }: ChangeUserNameProps){
         </div>
       )
 }
+
+export default ChangeUserName

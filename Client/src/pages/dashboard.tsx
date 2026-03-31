@@ -7,7 +7,7 @@ import { CardLoader } from "../components/layout/cardLoader"
 import { ClipLoader } from "react-spinners"
 import { Helmet } from "react-helmet"
 
-export const Dashboard = () => {
+const Dashboard = () => {
     
     const [showPending, setShowPending] = useState(false)
     const [showCompleted, setShowCompleted] = useState(false)
@@ -397,3 +397,5 @@ export const Dashboard = () => {
         </div>
     )
 }
+
+export default Dashboard

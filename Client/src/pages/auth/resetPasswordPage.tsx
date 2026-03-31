@@ -8,7 +8,7 @@ import { UseAuth } from "../../hooks/useAuth";
 import type { AuthenticatedProps } from "../../App";
 import { Helmet } from "react-helmet";
 
-export const ResetPasswordPage = ({setIsAuthenticated}:AuthenticatedProps) => {
+ const ResetPasswordPage = ({setIsAuthenticated}:AuthenticatedProps) => {
     const { token } = useParams<{ token: string }>();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -175,3 +175,5 @@ export const ResetPasswordPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         </AuthLayout>
     );
 };
+
+export default ResetPasswordPage

@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Helmet } from "react-helmet"
 
-export const ForgotPasswordPage = () => {
+ const ForgotPasswordPage = () => {
     const [email,setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const{forgotPassword,loading,error}= UseAuth()
@@ -98,3 +98,5 @@ export const ForgotPasswordPage = () => {
         </AuthLayout>
     )
 }
+
+export default ForgotPasswordPage

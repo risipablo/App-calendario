@@ -6,7 +6,7 @@ import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
 import { Helmet } from "react-helmet";
 
-export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
+function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
 
   const itemVariants = {
     hidden: { opacity: 0, x: -15 },
@@ -105,3 +105,5 @@ export function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
     </div>
   )
 }
+
+export default ConfigPage

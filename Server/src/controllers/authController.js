@@ -47,13 +47,18 @@ exports.loginUser = async (req,res) => {
         return res.status(400).json({error: "Completed all the field"})
     }
 
+    
+
     try{
         const user = await userModel.findOne({email})
 
-        if(!user || !(await user.comparePassword(password))){
-            return res.status(401).json({error: "Incorrect credentials" })
+        if (!user) {
+            return res.status(401).json({ error: "This email is not registered. Please sign up first." })
         }
-
+        
+        if (!(await user.comparePassword(password))) {
+            return res.status(401).json({ error: "Incorrect password" })
+        }
         // create access token
         const token = jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET,{ expiresIn: '1h' })
 

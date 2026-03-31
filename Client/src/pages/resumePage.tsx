@@ -4,12 +4,14 @@ import { ChartContainer } from "../components/charts/chartContainer"
 
 
 
-export const ResumeChart = () => {
+const ResumeChart = () => {
 
     return(
-        <div className="container-pages">
+        <div>
             <Helmet> <title> Estadisticas </title> </Helmet>
             <ChartContainer/>
         </div>
     )
 }
+
+export default ResumeChart

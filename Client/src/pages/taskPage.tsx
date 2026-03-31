@@ -2,12 +2,14 @@ import { Helmet } from "react-helmet"
 import { TaskContainer } from "../components/task/taskContainer"
 import "../style/task.css"
 
-export const TaskPage = () => {
+const TaskPage = () => {
 
     return(
-        <div className="container-pages">
+        <div>
             <Helmet> <title> Tareas </title> </Helmet>
             <TaskContainer/>
         </div>
     )
 }
+
+export default TaskPage

@@ -2,10 +2,10 @@ import { Helmet } from "react-helmet"
 import { GoalMaster } from "../components/goals/goalMaster"
 
 
-export const GoalPage = () => {
+ const GoalPage = () => {
 
     return(
-        <div className="container-pages">
+        <div>
             <Helmet>
                 <title> Metas </title>
             </Helmet>
@@ -13,3 +13,5 @@ export const GoalPage = () => {
         </div>
     )
 }
+
+export default GoalPage

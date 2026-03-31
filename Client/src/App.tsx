@@ -1,28 +1,24 @@
- import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Navbar } from './components/layout/navbar'
-import { Home } from './pages/home'
 import { TaskProvider } from './context/taskContex'
 import { CalendarProvider } from './context/calendarContext'
 import { UserProvider } from './context/userProvider'
 import { Loader } from './components/layout/loader'
-import { useState, type Dispatch, type SetStateAction, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import axios from 'axios'
 import { config } from './config/index'
 import "../src/style/authStyle.css"
-import LoginPage from './pages/auth/loginPage'
-import { RegisterPage } from './pages/auth/registerPage'
-import { ResetPasswordPage } from './components/auth/resetPassword'
-import { ForgotPasswordPage } from './pages/auth/forgotPasswordPage'
-
-
+import { SuspenseLoader } from './components/layout/loaderSuspense'
 
 const serverFront = config.Api
 
+const Home = lazy(() => import('./pages/home'))
+const LoginPage = lazy(() => import('./pages/auth/loginPage'))
+const RegisterPage = lazy(() => import('./pages/auth/registerPage'))
+const ForgotPasswordPage = lazy(() => import('./pages/auth/forgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('./components/auth/resetPassword'))
 
-export interface LoaderProps {
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  onComplete?: () => void;
-}
+
 
 export interface AuthenticatedProps{
   isAuthenticated: boolean | null  
@@ -96,14 +92,17 @@ function App() {
           
           
         ) : (
-         <Routes>
-            <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />} />
-            <Route path="/register" element={<RegisterPage  setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/reset-password/:token" element={<ResetPasswordPage setIsAuthenticated={setIsAuthenticated} />} />
-            
-            <Route path="*" element={<Navigate to="/login" replace />} />
-         </Routes>
+          <Suspense fallback={<SuspenseLoader fullScreen={true} />}>
+              <Routes >
+                  <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} isAuthenticated={null} />} />
+                  <Route path="/register" element={<RegisterPage  setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/reset-password/:token" element={<ResetPasswordPage setIsAuthenticated={setIsAuthenticated} />} />
+                  
+                  <Route path="*" element={<Navigate to="/login" replace />} />
+              </Routes>
+          </Suspense>
+    
           
 
           
