@@ -38,18 +38,23 @@
 .roman-textarea::placeholder, .roman-input::placeholder { color: var(--gray-400); }
 .roman-error { font-size: 12px; color: #d32f2f; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
 
-.roman-button { width: 100%; padding: 14px 24px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: none; border-radius: 8px; background: linear-gradient(135deg, var(--roman-purple), var(--roman-red)); color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(102, 51, 153, 0.25); }
-.roman-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 51, 153, 0.35); }
-.roman-button:active:not(:disabled) { transform: translateY(0); }
-.roman-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.spinner-icon { animation: spin 1s linear infinite; }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* Fila de botones lado a lado */
+.contact-btn-row { display: flex; gap: 12px; width: 100%; }
 
-.loading-dots { display: inline-flex; gap: 3px; }
-.loading-dot { width: 6px; height: 6px; background: white; border-radius: 50%; animation: pulse 1.4s ease-in-out infinite; }
-.loading-dot:nth-child(2) { animation-delay: 0.2s; }
-.loading-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes pulse { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+.contact-btn { flex: 1; padding: 14px 24px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: none; border-radius: 8px; color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+.contact-btn--submit { background: linear-gradient(135deg, var(--roman-purple), var(--roman-red)); box-shadow: 0 4px 12px rgba(102, 51, 153, 0.25); }
+.contact-btn--submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 51, 153, 0.35); }
+
+.contact-btn--clear { background: linear-gradient(135deg, #555, #333); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+.contact-btn--clear:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); }
+
+.contact-btn:active:not(:disabled) { transform: translateY(0); }
+.contact-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Spinner de carga giratorio */
+.spinner-icon { animation: spin 0.8s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .roman-footer { text-align: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color); }
 .roman-footer p { font-size: 13px; color: var(--text-secondary); margin: 0; }
@@ -69,9 +74,9 @@
   .form-grid { grid-template-columns: 1fr; gap: 18px; }
   .form-left, .form-right { gap: 16px; }
   .form-group-full { grid-column: auto; }
-  .roman-input, .roman-select, .roman-textarea { padding: 11px 12px; font-size: 13px; }
-  .roman-button { padding: 12px 20px; font-size: 12px; gap: 6px; }
-  .roman-button svg { width: 16px; height: 16px; }
+  .roman-input, .roman-select, .roman-textarea { padding: 14px 16px; font-size: 15px; }
+  .contact-btn { padding: 12px 20px; font-size: 12px; gap: 6px; }
+  .contact-btn svg { width: 16px; height: 16px; }
   .roman-footer { margin-top: 28px; padding-top: 20px; }
   .roman-footer p { font-size: 12px; }
 }
@@ -90,10 +95,11 @@
   .form-left, .form-right { gap: 14px; }
   .form-group { gap: 6px; }
   .roman-form label { font-size: 10px; gap: 4px; }
-  .roman-input, .roman-select, .roman-textarea { padding: 10px 11px; font-size: 13px; border-radius: 6px; }
+  .roman-input, .roman-select, .roman-textarea { padding: 13px 14px; font-size: 15px; border-radius: 6px; }
   .roman-textarea { min-height: 100px; }
-  .roman-button { padding: 11px 16px; font-size: 11px; gap: 5px; border-radius: 6px; }
-  .roman-button svg { width: 15px; height: 15px; }
+  .contact-btn-row { flex-direction: column; gap: 8px; }
+  .contact-btn { padding: 11px 16px; font-size: 11px; gap: 5px; border-radius: 6px; }
+  .contact-btn svg { width: 15px; height: 15px; }
   .roman-error { font-size: 11px; }
   .roman-footer { margin-top: 20px; padding-top: 16px; }
   .roman-footer p { font-size: 11px; }
@@ -103,5 +109,5 @@
   .roman-title { font-size: 20px; }
   .roman-form { padding: 14px; }
   .form-grid { gap: 12px; margin-bottom: 16px; }
-  .roman-button { padding: 10px 14px; font-size: 10px; }
+  .contact-btn { padding: 10px 14px; font-size: 10px; }
 }

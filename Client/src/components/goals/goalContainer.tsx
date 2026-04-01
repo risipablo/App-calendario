@@ -1,5 +1,4 @@
 
-
 import { useEffect, useState } from "react";
 import { Save, X, Pencil, Trash2, Calendar, CheckCircle2, Target } from 'lucide-react';
 import {Tooltip } from '@mui/material';
@@ -7,6 +6,7 @@ import type { GoalContainerProps, IGoal } from "../../interfaces/type.goal";
 import { Toaster } from "react-hot-toast";
 import { ModalConfirm } from "../layout/modalConfirm";
 import "../../style/goal.css";
+import "../../style/task.css"
 import { PaginationComponent } from "../layout/pagination";
 import { ClipLoader } from "react-spinners";
 
@@ -165,7 +165,7 @@ export const GoalContainer = ({
     }
 
     return (
-        <>
+        <div >
             <div className="goal-container">
                 <div className="goals-list">
                         {currentItems.map((met) => (
@@ -358,6 +358,6 @@ export const GoalContainer = ({
             }
 
             <Toaster />
-        </>
+        </div>
     );
 };

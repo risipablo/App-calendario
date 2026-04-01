@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle, User } from "lucide-react";
 import "../../style/userSettings.css"
+import "../../style/task.css"
 import { Helmet } from "react-helmet";
 
 

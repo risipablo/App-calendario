@@ -21,3 +21,8 @@ export interface AuthenticatedProps{
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>  
 }
 
+export interface LoaderProps {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  onComplete?: () => void;
+}
+

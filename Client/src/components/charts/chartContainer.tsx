@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useTaskFilter, type PeriodType } from "../filter/useTaskFilter"
 import "../../style/chart.css";
+import "../../style/task.css";
 import type { ISubtask, ITodo } from "../../interfaces/type.task";
 
 ChartJS.register(

@@ -3,7 +3,6 @@ import type { RegisterData } from "../../interfaces/type.user";
 import { UseAuth } from "../../hooks/useAuth";
 import { AuthLayout } from "../../components/auth/common/authLayout";
 import { motion } from "framer-motion";
-
 import { AuthButton } from "../../components/auth/common/authButton";
 import { NavLink, useNavigate } from "react-router-dom";
 import { PasswordRequirements } from "../../components/auth/common/passwordRequirements";

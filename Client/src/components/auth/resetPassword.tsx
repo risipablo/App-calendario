@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Eye, EyeClosed, Lock, CheckCircle, AlertCircle } from "lucide-react"
 import { AnimatePresence } from "framer-motion";
 import "../../style/userSettings.css";
+import "../../style/task.css"
 
 interface ShowState {
   current: boolean;

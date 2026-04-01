@@ -4,6 +4,7 @@ import { DoorOpen, Settings, User, Lock, MailQuestionMark } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
+import "../../style/task.css"
 import { Helmet } from "react-helmet";
 
 function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {

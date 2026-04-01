@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Helmet } from "react-helmet"
 
+
  const ForgotPasswordPage = () => {
     const [email,setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)

@@ -3,7 +3,6 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useNavigate } from 'react-router-dom';
 import type { LoginData } from '../../interfaces/type.user';
-
 import { AuthLayout } from '../../components/auth/common/authLayout';
 import { AuthButton } from '../../components/auth/common/authButton';
 import { UseAuth } from '../../hooks/useAuth';

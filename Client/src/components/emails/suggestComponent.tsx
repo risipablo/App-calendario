@@ -1,11 +1,12 @@
 import { useState, type ChangeEvent, type FormEvent, useRef } from 'react';
-import { Send, User, FileText, MessageSquare, AlertCircle } from 'lucide-react';
+import { Send, User, FileText, MessageSquare, AlertCircle, Trash2, Loader2 } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import type { IContact } from '../../interfaces/type.user';
 import axios from 'axios';
 import { config } from '../../config/index';
 import "../../style/contact.css"
+import "../../style/task.css"
 
 export const SuggestionsComponent = () => {
   const [formData, setFormData] = useState<IContact>({
@@ -64,11 +65,16 @@ export const SuggestionsComponent = () => {
       );
       
       if (response.status === 200) {
-        toast.success('Mensaje enviado correctamente. ¡Gracias!', {
+        toast.success('✉️ ¡Mensaje enviado correctamente! Gracias por escribirme.', {
+          duration: 4000,
           style: {
             background: '#2c3e2f',
             color: '#d4c9a6',
             border: '1px solid #b87c4f',
+            borderRadius: '10px',
+            padding: '14px 18px',
+            fontSize: '14px',
+            fontWeight: '600',
           },
           iconTheme: {
             primary: '#b87c4f',
@@ -94,11 +100,23 @@ export const SuggestionsComponent = () => {
           background: '#4a1a1a',
           color: '#d4c9a6',
           border: '1px solid #b87c4f',
+          borderRadius: '10px',
+          padding: '14px 18px',
+          fontSize: '14px',
         },
       });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const deleteMessage = () => {
+    setFormData({
+      name: '',
+      message: '',
+      reason: 'consulta'
+    });
+    setErrors({});
   };
 
   return (
@@ -110,8 +128,7 @@ export const SuggestionsComponent = () => {
       animate={isInView ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <div className="roman-column left-column"></div>
-      <div className="roman-column right-column"></div>
+      
       
       <div className="roman-content">
         <motion.div 
@@ -121,8 +138,9 @@ export const SuggestionsComponent = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div className="roman-accent-line"></div>
-          <h2 className="roman-title">Contáctame</h2>
-          <p className="roman-subtitle">Comparte tu mensaje</p>
+          <h1>Contáctame</h1>
+          
+        
           <div className="roman-divider">
             <span className="divider-dot">✧</span>
             <span className="divider-line"></span>
@@ -242,32 +260,45 @@ export const SuggestionsComponent = () => {
             </div>
           </div>
 
-          <motion.button 
-            type="submit" 
-            className="roman-button"
+          
+          <motion.div
+            className="contact-btn-row"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            whileHover={{ scale: isLoading ? 1 : 1.02 }}
-            whileTap={{ scale: isLoading ? 1 : 0.98 }}
-            disabled={isLoading}
           >
-            {isLoading ? (
-              <>
-                <span>Cargando</span>
-                <div className="loading-dots">
-                  <div className="loading-dot"></div>
-                  <div className="loading-dot"></div>
-                  <div className="loading-dot"></div>
-                </div>
-              </>
-            ) : (
-              <>
-                <Send size={18} />
-                <span>Enviar</span>
-              </>
-            )}
-          </motion.button>
+            <motion.button 
+              // type="submit" 
+              className="contact-btn contact-btn--submit"
+              whileHover={{ scale: isLoading ? 1 : 1.02 }}
+              whileTap={{ scale: isLoading ? 1 : 0.98 }}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 size={18} className="spinner-icon" />
+                  <span>Enviando...</span>
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  <span>Enviar</span>
+                </>
+              )}
+            </motion.button>
+
+            <motion.button 
+              type="button"
+              onClick={deleteMessage}
+              className="contact-btn contact-btn--clear"
+              whileHover={{ scale: isLoading ? 1 : 1.02 }}
+              whileTap={{ scale: isLoading ? 1 : 0.98 }}
+              disabled={isLoading}
+            >
+              <Trash2 size={18} />
+              <span>Borrar</span>
+            </motion.button>
+          </motion.div>
         </motion.form>
 
         <div className="roman-footer">

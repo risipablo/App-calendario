@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock } from "lucid
 import { useState, useMemo } from "react"
 import { Tooltip } from '@mui/material';
 import "../../style/calender.css"
+import "../../style/task.css"
 import type { CalendarContainerProps, ICalendar } from "../../interfaces/type.calendar"
 
 export const CalendarContainer = ({

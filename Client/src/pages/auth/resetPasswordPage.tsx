@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-// import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthLayout } from "../../components/auth/common/authLayout";
 import { UseAuth } from "../../hooks/useAuth";
 import type { AuthenticatedProps } from "../../App";
 import { Helmet } from "react-helmet";
+import "../../style/task.css"
 
  const ResetPasswordPage = ({setIsAuthenticated}:AuthenticatedProps) => {
     const { token } = useParams<{ token: string }>();
