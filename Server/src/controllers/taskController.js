@@ -77,57 +77,6 @@ exports.deleteTask = async (req,res) => {
     } 
 }
 
-// // delete principal task
-// exports.deletePrincipalTask = async(req,res) => {
-//     const {id} = req.params
-
-    // try{
-    //     const task = await TodoModel.findOneAndDelete({_id:id, userId: req.user.id})
-
-//         if(!task){
-//             return res.status(404).json({error: "Task principal not found"})
-//         }
-
-//         if(!task.subtaskTitles || task.subtaskTitles.length === 0)
-//             return res.json({
-//             message: "Task deleted",
-//             deleted: true
-//         })
-
-//         // convertir las subtask como principal tarea
-//         const taskTitle = task.subtaskTitles[0]
-//         const taskPriority = task.subtaskPriorities?.[0] || 'media'
-//         const taskCompleted = task.subtaskCompleted?.[0] || false
-
-//         task.title = taskTitle
-//         task.priority = taskPriority
-//         task.completed = taskCompleted
-
-//         // Eliminar la primera subtarea de los array
-//         task.subtaskTitles.splice(0, 1);
-//         if (task.subtaskPriorities && task.subtaskPriorities.length > 0) {
-//             task.subtaskPriorities.splice(0, 1);
-//         }
-//         if (task.subtaskCompleted && task.subtaskCompleted.length > 0) {
-//             task.subtaskCompleted.splice(0, 1);
-//         }
-
-//         await task.save()
-
-//         res.json({
-    
-//             updatedTask: task,
-//             deletedSubtask: {
-//                 title: taskTitle,
-//                 priority: taskPriority,
-//                 completed: taskCompleted
-//             }
-//         })
-
-//      } catch (err){
-//         console.error(err)
-//      }
-// }
 
 // delete subtask
 exports.deleteSubTask = async (req,res) => {
@@ -154,6 +103,77 @@ exports.deleteSubTask = async (req,res) => {
         res.json(updateTask)
     } catch (err) {
         res.status(500).json({error: err.message})
+    }
+}
+
+// delete for specific task
+
+exports.deleteTasksByFilter = async (req, res) => {
+    const userId = req.user.id
+    const { filterType, date, month, year } = req.query
+    
+    let filterConditions = { userId }
+    
+    try {
+        switch (filterType) {
+            case 'today':
+                const today = new Date()
+                today.setHours(0, 0, 0, 0)
+                const tomorrow = new Date(today)
+                tomorrow.setDate(tomorrow.getDate() + 1)
+                filterConditions.date = { $gte: today, $lt: tomorrow }
+                break
+                
+            case 'date':
+                if (date) {
+                    const targetDate = new Date(date)
+                    targetDate.setHours(0, 0, 0, 0)
+                    const nextDay = new Date(targetDate)
+                    nextDay.setDate(nextDay.getDate() + 1)
+                    filterConditions.date = { $gte: targetDate, $lt: nextDay }
+                }
+                break
+                
+            case 'month':
+                if (month && year) {
+                    const startDate = new Date(parseInt(year), parseInt(month) - 1, 1)
+                    const endDate = new Date(parseInt(year), parseInt(month), 0)
+                    filterConditions.date = { $gte: startDate, $lt: endDate }
+                }
+                break
+                
+            case 'year':
+                if (year) {
+                    const startDate = new Date(parseInt(year), 0, 1)
+                    const endDate = new Date(parseInt(year) + 1, 0, 1)
+                    filterConditions.date = { $gte: startDate, $lt: endDate }
+                }
+                break
+                
+            default:
+                // Si no hay filtro, no eliminar (seguridad)
+                return res.status(400).json({ error: 'Se requiere un tipo de filtro válido' })
+        }
+        
+        // Contar cuántas tareas se van a eliminar
+        const count = await TodoModel.countDocuments(filterConditions)
+        
+        if (count === 0) {
+            return res.status(404).json({ message: 'No hay tareas para eliminar', deletedCount: 0 })
+        }
+        
+        // Eliminar las tareas
+        const result = await TodoModel.deleteMany(filterConditions)
+        
+        res.json({ 
+            message: `${result.deletedCount} tareas eliminadas`,
+            deletedCount: result.deletedCount,
+            filterApplied: { filterType, date, month, year }
+        })
+        
+    } catch (err) {
+        console.error('Error en deleteTasksByFilter:', err)
+        res.status(500).json({ error: err.message })
     }
 }
 

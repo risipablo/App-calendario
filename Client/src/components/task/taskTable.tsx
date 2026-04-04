@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Tooltip } from '@mui/material';
-import { Calendar, Trash2 } from 'lucide-react';
+import { Calendar, FilterX, Trash2 } from 'lucide-react';
 import type { TaskTableProps } from "../../interfaces/type.task";
 import { TaskRow } from "./taskRow";
 import "../../style/task.css";
@@ -11,6 +11,7 @@ import { TaskForm } from "./taskForm";
 import { ClipLoader } from "react-spinners";
 import { PaginationComponent } from "../layout/pagination";
 import { FilterPerDay } from "../layout/filter/filterPerDay";
+import toast from "react-hot-toast";
 
 
 
@@ -62,6 +63,8 @@ export const TaskTable = ({
         }
 
     }
+
+    
 
     const [showModal, setShowModal] = useState(false);
     const [deleteAction, setDeleteAction] = useState<(() => void) | null>(null);
@@ -126,6 +129,51 @@ export const TaskTable = ({
         setYearFilter(filters.yearFilter)
     }
 
+    const [showDeleteFilteredModal, setShowDeleteFilteredModal] = useState(false)
+
+    const getFilterDescription = () => {
+        if (showToday) return "de hoy"
+        if (dateFilter) return `del día ${dateFilter}`
+        if (monthFilter && yearFilter) {
+            const monthNames: Record<string, string> = {
+                '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
+                '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
+                '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'
+            }
+            return `de ${monthNames[monthFilter]} ${yearFilter}`
+        }
+        if (yearFilter) return `del año ${yearFilter}`
+        return "filtradas"
+    }
+
+    const deleteFilteredTasks = () => {
+        const filteredTask = new Set(filteredTasks.map(t => t._id))
+        const taskDelete = task.filter(t => filteredTask.has(t._id))
+
+        let deletedCount = 0
+        let errorCount = 0
+
+        taskDelete.forEach(async (t) => {
+            try{
+                await onDelete?.(t._id)
+                deletedCount++
+            } catch (error){
+                errorCount++
+                console.error(error)
+            }
+        })
+        setTimeout(() => {
+            if (errorCount === 0) {
+                toast.success(` Se eliminaron ${deletedCount} tareas ${getFilterDescription()}`)
+            } else {
+                toast.error(` Se eliminaron ${deletedCount} tareas, ${errorCount} errores`)
+            }
+        }, 500)
+
+        setShowDeleteFilteredModal(false)
+    }
+
+    const hasActiveFilters = showToday || dateFilter || monthFilter || yearFilter
 
     // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)
@@ -170,8 +218,21 @@ export const TaskTable = ({
                             Eliminar Todas ({showToday ? `${filteredTasks.length}` : `${task.length}`})
                         </button>
                     </Tooltip>
+
+                    {hasActiveFilters && filteredTasks.length > 0 && (
+                        <Tooltip title={`Eliminar solo las tareas ${getFilterDescription()}`} arrow>
+                            <button 
+                                className="delete-all-btn" 
+                                onClick={() => setShowDeleteFilteredModal(true)}
+                            >
+                                <Trash2 size={18} />
+                                <FilterX size={14} />
+                                <span>Eliminar Filtradas ({filteredTasks.length})</span>
+                            </button>
+                        </Tooltip>
+                    )}
+                    
                 </div>
-                                    
             </div>
 
             <div className="toogle-view">
@@ -294,6 +355,18 @@ export const TaskTable = ({
                     title={modalConfig.title}
                     message={modalConfig.message}
                     confirmText={modalConfig.confirmText}
+                    cancelText="Cancelar"
+                />
+            )}
+
+        {showDeleteFilteredModal && (
+                <ModalComponent
+                    isOpen={showDeleteFilteredModal}
+                    onClose={() => setShowDeleteFilteredModal(false)}
+                    onConfirm={deleteFilteredTasks}
+                    title="⚠️ Eliminar tareas filtradas"
+                    message={`¿Estás seguro que deseas eliminar las ${filteredTasks.length} tareas ${getFilterDescription()}? Esta acción no se puede deshacer.`}
+                    confirmText={`Eliminar ${filteredTasks.length} tareas`}
                     cancelText="Cancelar"
                 />
             )}

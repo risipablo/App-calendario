@@ -112,6 +112,36 @@ export const UseTask = () => {
         })
     }, [setTask])
 
+    
+    const deleteFilteredTasks = useCallback(async (filters: {
+            filterType: 'today' | 'date' | 'month' | 'year'
+            date?: string
+            month?: string
+            year?: string
+        }) => {
+            try {
+                const response = await axiosInstance.delete('/api/task/filter', { 
+                    params: filters 
+                })
+                
+                
+                setTask(prev => {
+                    return prev
+                })
+                
+                
+                const { data } = await axiosInstance.get('/api/task')
+                setTask(data)
+                
+                toast.success(response.data.message, TOAST_CONFIG)
+                return response.data
+            } catch (err) {
+                console.error(err)
+                toast.error('Error al eliminar tareas filtradas', TOAST_CONFIG)
+                throw err
+            }
+    }, [setTask,setFilterTask])
+
     const deleteAll = useCallback(() => {
         const token = localStorage.getItem('token')
 
@@ -236,6 +266,6 @@ export const UseTask = () => {
     return {
         task, loading, addTask, addNewTask, deleteTask, deleteAll, deleteSubTask,
         saveTask, editSubTask, completedSubTasks, completedTask, toogleAllTask,
-        incompletedSubTask, filterTask, setFilterTask
+        incompletedSubTask, filterTask, setFilterTask,deleteFilteredTasks
     }
 }
