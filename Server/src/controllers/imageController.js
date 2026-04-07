@@ -10,48 +10,48 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 
 exports.uploadProfileImage = async (req, res) => {
-    console.log('=========================================');
-    console.log('📸 uploadProfileImage llamado');
-    console.log('📋 req.user:', req.user ? {
-        id: req.user._id,
-        email: req.user.email,
-        name: req.user.name
-    } : 'NO HAY req.user');
-    console.log('📋 req.file:', req.file ? {
-        originalname: req.file.originalname,
-        size: req.file.size,
-        mimetype: req.file.mimetype
-    } : 'NO HAY archivo');
-    console.log('=========================================');
+    
+    
+    // console.log('req.user:', req.user ? {
+    //     id: req.user._id,
+    //     email: req.user.email,
+    //     name: req.user.name
+    // } : 'NO HAY req.user');
+    // console.log(' req.file:', req.file ? {
+    //     originalname: req.file.originalname,
+    //     size: req.file.size,
+    //     mimetype: req.file.mimetype
+    // } : 'NO HAY archivo');
+    
+    
     
     try {
         // Verificar que req.user existe
         if (!req.user) {
-            console.error('❌ req.user es undefined/null');
+            
             return res.status(401).json({ error: 'Usuario no autenticado correctamente' });
         }
 
-        // Obtener userId (puede estar en _id o id)
+        
         const userId = req.user._id || req.user.id;
         
         if (!userId) {
-            console.error('❌ No se encontró ID de usuario en req.user');
+        
             return res.status(401).json({ error: 'ID de usuario no encontrado' });
         }
 
-        console.log('🆔 userId:', userId);
+        
 
         const file = req.file;
 
         if (!file) {
-            console.error('❌ No hay archivo');
+        
             return res.status(400).json({ error: 'No se proporcionó ninguna imagen' });
         }
 
-        // Validar tipo de archivo
+        
         const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
         if (!allowedTypes.includes(file.mimetype)) {
-            console.error('❌ Tipo no permitido:', file.mimetype);
             return res.status(400).json({ 
                 error: 'Formato no permitido. Usa JPEG, PNG o WEBP' 
             });
@@ -59,7 +59,6 @@ exports.uploadProfileImage = async (req, res) => {
 
         // Validar tamaño (max 2MB)
         if (file.size > 2 * 1024 * 1024) {
-            console.error('❌ Tamaño excedido:', file.size);
             return res.status(400).json({ error: 'La imagen no debe superar los 2MB' });
         }
 
@@ -84,8 +83,6 @@ exports.uploadProfileImage = async (req, res) => {
         const fileName = `${userId}-${Date.now()}.${fileExt}`;
         const filePath = `${userId}/${fileName}`;
 
-        console.log('📤 Subiendo a Supabase:', filePath);
-
         // Subir a Supabase
         const { data, error } = await supabase.storage
             .from(BUCKET_NAME)
@@ -96,11 +93,8 @@ exports.uploadProfileImage = async (req, res) => {
             });
 
         if (error) {
-            console.error('❌ Error subiendo a Supabase:', error);
             return res.status(500).json({ error: 'Error al subir la imagen: ' + error.message });
         }
-
-        console.log('✅ Archivo subido a Supabase:', data);
 
         // Obtener URL pública
         const { data: publicUrlData } = supabase.storage
@@ -109,19 +103,16 @@ exports.uploadProfileImage = async (req, res) => {
 
         const publicUrl = publicUrlData.publicUrl;
 
-        console.log('🔗 URL pública:', publicUrl);
-
         // Eliminar avatar anterior si existe
         if (user.avatarPublicId) {
-            console.log('🗑️ Eliminando avatar anterior:', user.avatarPublicId);
+            
             try {
                 await supabase.storage
                     .from(BUCKET_NAME)
                     .remove([user.avatarPublicId]);
-                console.log('✅ Avatar anterior eliminado');
             } catch (removeError) {
                 console.error('⚠️ Error eliminando avatar anterior:', removeError);
-                // No detenemos el proceso
+                
             }
         }
 
@@ -130,8 +121,8 @@ exports.uploadProfileImage = async (req, res) => {
         user.avatarPublicId = filePath;
         await user.save();
 
-        console.log('✅ Usuario actualizado correctamente');
-        console.log('=========================================');
+        
+        
 
         res.status(200).json({
             message: 'Imagen subida exitosamente',
@@ -140,17 +131,13 @@ exports.uploadProfileImage = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Error en uploadProfileImage:', error);
-        console.error('Stack:', error.stack);
-        console.log('=========================================');
+
         res.status(500).json({ error: error.message });
     }
 };
 
 
 exports.deleteProfileImage = async (req, res) => {
-    console.log('🗑️ deleteProfileImage llamado');
-    console.log('req.user:', req.user ? req.user._id || req.user.id : 'NO HAY req.user');
     
     try {
         if (!req.user) {

@@ -296,7 +296,7 @@ exports.resetPassword = async (req,res) => {
 exports.userName = async (req,res) => {
     try {
         
-        const user = await userModel.findById(req.user.id).select('name email')
+        const user = await userModel.findById(req.user.id).select('name email avatarUrl')
         
         if(!user){
             return res.status(404).json({error: 'user not found'})

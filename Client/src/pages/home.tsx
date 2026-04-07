@@ -1,9 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import type { AuthenticatedProps } from "../App"
 import { Suspense, lazy } from "react"
-import { SuspenseLoader } from "../components/layout/loaderSuspense"
-import { ChangeImageUser } from "../components/auth/user/userProfile";
-
+import { SuspenseLoader } from "../components/layout/loaderSuspense";
+const ChangeImageUser = lazy(() => import("../components/auth/user/userProfile"))
 const RegisterPage = lazy(() => import('./auth/registerPage'))
 const LoginPage = lazy(() => import('./auth/loginPage'))
 const Dashboard = lazy(() => import('./dashboard'))

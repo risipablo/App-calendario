@@ -97,7 +97,7 @@ export function Navbar() {
 
                             <div className="menu-footer">
                                 <div className="user-info">
-                                    {/* ✅ Mostrar avatar si existe, si no mostrar iniciales */}
+                                    
                                     {user?.avatarUrl ? (
                                         <img 
                                             src={user.avatarUrl} 

@@ -27,10 +27,11 @@
   .file-info { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; }
   .file-info p { font-size: 12px; color: var(--text-secondary); margin: 4px 0; }
   .file-info p:first-child { font-weight: 600; color: var(--text-primary); }
-  
-  .action-buttons { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 24px; }
+
+  .action-buttons { display: flex; gap: 12px; margin: 0 auto 24px; justify-content: center; }
   .btn-upload, .btn-delete { padding: 12px 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-  .btn-upload { background: linear-gradient(135deg, var(--roman-purple), var(--roman-red)); color: white; }
+  .btn-upload {background-color: #8e7cc3;
+    color: white;}
   .btn-upload:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 51, 153, 0.3); }
   .btn-delete { background: #f5f5f5; color: var(--roman-red); border: 1.5px solid var(--roman-red); }
   .btn-delete:hover:not(:disabled) { background: rgba(164, 30, 58, 0.1); }
@@ -57,19 +58,19 @@
   }
   
   @media (max-width: 480px) {
-    .task-table-container { padding: 16px; }
+    .task-table-container {margin: 4.2rem 0; padding: 1rem;}
     .profile-image-card { padding: 18px; border-radius: 10px; }
-    .profile-title { font-size: 18px; margin-bottom: 6px; }
-    .profile-subtitle { font-size: 12px; margin-bottom: 18px; }
-    .avatar-section { margin-bottom: 20px; }
+    .profile-title { font-size: 18px; margin: 18px auto; }
+    .profile-subtitle { font-size: 12px; margin: 18px 0; }
+    .avatar-section { margin-bottom: 1.2rem }
     .avatar-wrapper { width: 140px; height: 140px; }
     .avatar-edit-btn { width: 40px; height: 40px; }
     .file-info { padding: 10px 12px; margin-bottom: 16px; }
     .file-info p { font-size: 11px; }
-    .action-buttons { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .action-buttons { display: flex; gap: 12px; margin-bottom: 1.2rem; }
     .btn-upload, .btn-delete { padding: 10px 12px; font-size: 11px; gap: 5px; border-radius: 6px; }
     .btn-upload svg, .btn-delete svg { width: 15px; height: 15px; }
-    .info-note { padding: 10px 12px; }
+    .info-note { padding: 10px 12px; margin: 1rem auto; }
     .info-note p { font-size: 11px; }
   }
   

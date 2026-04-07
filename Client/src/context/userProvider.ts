@@ -20,7 +20,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({children, isAuthentic
         console.log('Token en fetchUserData:', token) 
         try{
             const response = await axiosInstance.get('/api/auth/name')
-            
+            console.log('Datos del usuario:', response.data.user)
             setUser(response.data.user)
         } catch (err) {
             console.error(err)

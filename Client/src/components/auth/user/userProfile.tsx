@@ -7,8 +7,11 @@ import axios from 'axios';
 import axiosInstance from '../../../utils/axiosIntance';
 import { UseAuth } from '../../../hooks/useAuth';
 import "../../../style/imageUser.css"
+import "../../../style/task.css"
+import { Helmet } from 'react-helmet';
 
-export const ChangeImageUser = () => {
+
+const ChangeImageUser = () => {
     const { user, fetchUserData } = useUser();
     const { loading, setLoading } = UseAuth();
     const [previewUrl, setPreviewUrl] = useState<string | null>(user?.avatarUrl || null);
@@ -103,7 +106,12 @@ export const ChangeImageUser = () => {
 
     return (
         <div className="task-table-container">
-            <div className="profile-image-card">
+            <Helmet> <title> Perfil usuario </title> </Helmet>
+            <motion.div 
+            className="profile-image-card"
+            initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}>
                 <h2 className="profile-title">Foto de Perfil</h2>
                 <p className="profile-subtitle">Sube una imagen para personalizar tu perfil</p>
 
@@ -180,7 +188,9 @@ export const ChangeImageUser = () => {
                     <p>Formatos permitidos: JPG, PNG, WEBP</p>
                     <p>Tamaño máximo: 2MB</p>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };
+
+export default ChangeImageUser

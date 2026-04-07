@@ -17,6 +17,7 @@ export const Loader = ({ setLoading, onComplete }: LoaderProps) => {
 
     return (
         <motion.div
+            className="task-table-container"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

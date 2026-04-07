@@ -31,6 +31,7 @@ export const SuspenseLoader = ({ fullScreen = false }: SuspenseLoaderProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={containerStyle}
+      className="task-table-container"
     >
       <ClipLoader
         color="#b87c4f"
