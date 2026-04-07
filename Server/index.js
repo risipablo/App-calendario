@@ -7,7 +7,7 @@ const goalRouter = require("./src/routes/goalRoute")
 const calenderRouter = require('./src/routes/calenderRoute')
 const authRouter = require('./src/routes/authRoutes')
 const validateRouter = require('./src/routes/validateRoutes')
-
+const imageRouter = require('./src/routes/imageRoute')
 
 require('dotenv').config()
 
@@ -35,6 +35,7 @@ app.use(cors(corsOptions))
 app.use('/api', todoRouter)
 app.use('/api', goalRouter)
 app.use('/api', calenderRouter)
+app.use('/api/images', imageRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/auth', validateRouter)
 

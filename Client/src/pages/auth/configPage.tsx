@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { LogOutComponent } from "../../components/auth/logout";
-import { DoorOpen, Settings, User, Lock, MailQuestionMark } from "lucide-react";
+import { LogOutComponent } from "../../components/auth/user/logout";
+import { DoorOpen, Settings, User, Lock, MailQuestionMark, Image} from "lucide-react";
 import { motion } from "framer-motion";
 import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
 import "../../style/task.css"
 import { Helmet } from "react-helmet";
+
 
 function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
 
@@ -33,6 +34,25 @@ function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
       </motion.div>
 
       <div className="config-links">
+      <motion.div
+          custom={0}
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <NavLink to="/change-image" className="config-link change-name-link">
+            <div className="link-icon user-icon">
+              <span><Image /></span>
+            </div>
+            <div className="link-content">
+              <h3>Cambiar Foto de Perfil</h3>
+              <p>Actualiza tu foto de perfil</p>
+            </div>
+            <span className="link-arrow">→</span>
+          </NavLink>
+        </motion.div>
+
+
         <motion.div
           custom={0}
           variants={itemVariants}

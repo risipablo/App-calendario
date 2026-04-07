@@ -1,16 +1,15 @@
 import { Task } from "@mui/icons-material"
-import { Calendar, ChartLine, EllipsisVertical, Goal, House} from "lucide-react"
+import { Calendar, ChartLine, EllipsisVertical, Goal, House } from "lucide-react"
 import { useState, useEffect } from "react"
-import { NavLink} from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import "../../style/navbar.css"
-import  { useUser } from "../../hooks/useUser"
+import { useUser } from "../../hooks/useUser"
 
 
-export function Navbar(){
+export function Navbar() {
+    const { user } = useUser()
 
-    const {user} = useUser()
     const [isopen, setIsOpen] = useState(false)
-    
 
     const toggleMenu = () => {
         setIsOpen(!isopen)
@@ -26,10 +25,11 @@ export function Navbar(){
         document.body.classList.remove('sidebar-open-mobile')
     }
 
-    // Cerrar sidebar al cambiar tamaño de pantalla a desktop
+
+
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth > 850) {
+            if (window.innerWidth > 950) {
                 setIsOpen(false)
                 document.body.classList.remove('sidebar-open-mobile')
             }
@@ -39,28 +39,20 @@ export function Navbar(){
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
-
-
-    return(
+    return (
         <>
-            
             {isopen && <div className="navbar-overlay" onClick={closeToggle}></div>}
 
             <nav>
                 <div className="container-navbar">
                     <div className="navbar">
-                        
-                        
                         <div onClick={toggleMenu} className={`menu-icon ${isopen ? 'open' : ''}`}>
                             <span></span>
                             <span></span>
                             <span></span>
                         </div>
 
-                        
                         <div className={`menu ${isopen ? 'open' : ''}`}>
-                            
-                        
                             <div className="menu-header">
                                 <div>
                                     <h1>MyCalendar</h1>
@@ -71,7 +63,6 @@ export function Navbar(){
                                 </button>
                             </div>
 
-                            
                             <div className="menu-links">
                                 <NavLink to="/dashboard" onClick={closeToggle} className={({ isActive }) => isActive ? 'active' : ''}>
                                     <House size={20} /> 
@@ -104,15 +95,26 @@ export function Navbar(){
                                 </NavLink>
                             </div>
 
-                            
                             <div className="menu-footer">
                                 <div className="user-info">
-                                    <div className="user-avatar">U</div>
+                                    {/* ✅ Mostrar avatar si existe, si no mostrar iniciales */}
+                                    {user?.avatarUrl ? (
+                                        <img 
+                                            src={user.avatarUrl} 
+                                            alt={user.name}
+                                            className="user-avatar-img"
+                                        />
+                                    ) : (
+                                        <div className="user-avatar">
+                                            {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                        </div>
+                                    )}
                                     <div className="user-details">
                                         <p className="user-name">{user?.name}</p>
                                         <p className="user-email">{user?.email}</p>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>

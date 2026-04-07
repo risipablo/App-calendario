@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from "react";
-import type { ChangeUserNameProps, ResetPasswordData, VerifyEmailData } from "../../interfaces/type.user";
-import { UseAuth } from "../../hooks/useAuth";
+import type { ChangeUserNameProps, ResetPasswordData, VerifyEmailData } from "../../../interfaces/type.user";
+import { UseAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Eye, EyeClosed, Lock, CheckCircle, AlertCircle } from "lucide-react"
 import { AnimatePresence } from "framer-motion";
-import "../../style/userSettings.css";
-import "../../style/task.css"
+import "../../../style/userSettings.css";
+import "../../../style/task.css"
 
 interface ShowState {
   current: boolean;

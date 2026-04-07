@@ -336,3 +336,29 @@ body.sidebar-open-mobile {
         margin-top: 2px;
     }
 }
+
+
+
+.user-avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #b87c4f;
+    flex-shrink: 0;
+}
+
+/* Ajustar tamaño en móvil */
+@media (max-width: 480px) {
+    .user-avatar-img {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Efecto hover para la imagen */
+.user-avatar-img:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+    border-color: #667eea;
+}

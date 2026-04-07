@@ -171,6 +171,7 @@ export const UseAuth = ():UseAuthReturn => {
     return{
         login,
         loading,
+        setLoading,
         error,
         success,
         register,
@@ -181,7 +182,8 @@ export const UseAuth = ():UseAuthReturn => {
         forgotPassword,
         resetPassword,
         setError,
-        setSuccess
+        setSuccess,
+        
     }
 
 }

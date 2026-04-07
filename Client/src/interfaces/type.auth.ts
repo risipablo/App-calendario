@@ -1,4 +1,5 @@
 
+
 import type { ReactNode } from "react"
 import type { ForgotPasswordData, IChangeUserName, LoginData, RegisterData, ResetPasswordData, VerifyEmailData } from "./type.user"
 
@@ -6,10 +7,12 @@ export interface User {
     id: string;
     name: string;
     email: string;
+    avatarUrl?: string 
 }
 
 export interface UseAuthReturn{
     loading:boolean
+    setLoading: (loading: boolean) => void
     error:string
     success: string
     register: (useData : RegisterData) => Promise<void>

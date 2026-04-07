@@ -151,18 +151,17 @@ exports.deleteTasksByFilter = async (req, res) => {
                 break
                 
             default:
-                // Si no hay filtro, no eliminar (seguridad)
+               
                 return res.status(400).json({ error: 'Se requiere un tipo de filtro válido' })
         }
         
-        // Contar cuántas tareas se van a eliminar
+        
         const count = await TodoModel.countDocuments(filterConditions)
         
         if (count === 0) {
             return res.status(404).json({ message: 'No hay tareas para eliminar', deletedCount: 0 })
         }
         
-        // Eliminar las tareas
         const result = await TodoModel.deleteMany(filterConditions)
         
         res.json({ 

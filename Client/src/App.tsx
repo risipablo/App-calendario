@@ -16,7 +16,7 @@ const Home = lazy(() => import('./pages/home'))
 const LoginPage = lazy(() => import('./pages/auth/loginPage'))
 const RegisterPage = lazy(() => import('./pages/auth/registerPage'))
 const ForgotPasswordPage = lazy(() => import('./pages/auth/forgotPasswordPage'))
-const ResetPasswordPage = lazy(() => import('./components/auth/resetPassword'))
+const ResetPasswordPage = lazy(() => import('./components/auth/user/resetPassword'))
 
 
 

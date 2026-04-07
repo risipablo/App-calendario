@@ -297,10 +297,18 @@ exports.userName = async (req,res) => {
     try {
         
         const user = await userModel.findById(req.user.id).select('name email')
+        
         if(!user){
             return res.status(404).json({error: 'user not found'})
+        
         }
-        res.status(200).json({user:{name:user.name, email:user.email}})
+        res.status(200).json({
+            user:{
+                name:user.name, 
+                email:user.email,
+                avatarUrl: user.avatarUrl || null
+            }
+        })
     
     } catch(err){
         res.status(500).json({error: err.message})

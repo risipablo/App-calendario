@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
-import { UseAuth } from "../../hooks/useAuth"
-import type { ChangeUserNameProps } from "../../interfaces/type.user"
+import { UseAuth } from "../../../hooks/useAuth"
+import type { ChangeUserNameProps } from "../../../interfaces/type.user"
 import { LogOut } from "lucide-react"
 import { motion } from "framer-motion"
-import "../../style/userSettings.css"
+import "../../../style/userSettings.css"
 
 export const LogOutComponent = ({ setIsAuthenticated }: ChangeUserNameProps) => {
   const navigate = useNavigate()
