@@ -10,15 +10,15 @@ exports.getGoal = async (req,res) => {
 }
 
 exports.addGoal = async (req,res) => {
-    const {start_date, title, priority} = req.body
+    const {start_date, title, description,priority} = req.body
 
-    if(!start_date || !title || !priority){
+    if(!start_date || !title || !description || !priority){
         return res.status(400).json({ message: "Completar todos los campos"})
     }
 
     try{
         const newGoal = new GoalModel({
-            title,start_date,priority, userId:req.user.id
+            title,start_date,description,priority, userId:req.user.id
         })
         const result = await newGoal.save()
         res.json(result)
@@ -54,7 +54,7 @@ exports.deleteAllGoal = async (req,res) => {
 
 exports.saveGoal = async (req,res) => {
     const {id} = req.params
-    const { title, priority, target_date, start_date} = req.body
+    const { title, description,priority, target_date, start_date} = req.body
 
     if(!title){
         return res.status(400).json({error: "El título es requerido"})
@@ -63,7 +63,7 @@ exports.saveGoal = async (req,res) => {
     try{
         const goalSave = await GoalModel.findOneAndUpdate(
             {_id: id, userId: req.user.id},
-            {target_date,title,priority,start_date},
+            {target_date,description,title,priority,start_date},
             {new:true}
         )
 

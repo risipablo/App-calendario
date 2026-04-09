@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { GoalFormProps } from "../../interfaces/type.goal";
+import "../../style/form.css"
 import { Plus, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -10,7 +11,9 @@ export const GoalForm = ({
     setStartDate,
     setTitle,
     start_date,
-    title
+    title,
+    description,
+    setDescription
 }:GoalFormProps) => {
 
     const [addModal, setAddModal] = useState(false)
@@ -69,6 +72,17 @@ export const GoalForm = ({
                                         placeholder="Ingresa el título de la tarea"
                                         value={title} 
                                         onChange={(e) => setTitle(e.target.value)} 
+                                    />
+                                </div>
+
+                                <div className="task-form-group">
+                                    <label>Descripción</label>
+                                    <input 
+                                        type="text" 
+                                        className="task-input"
+                                        placeholder="Ingresa una descripción"
+                                        value={description} 
+                                        onChange={(e) => setDescription(e.target.value)} 
                                     />
                                 </div>
 

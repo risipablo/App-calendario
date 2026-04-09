@@ -23,6 +23,7 @@ export const GoalContainer = ({
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editData, setEditData] = useState({
         title: '',
+        description:'',
         priority: '',
         startDate: ''
     });
@@ -64,6 +65,7 @@ export const GoalContainer = ({
         setEditingId(goal._id);
         setEditData({
             title: goal.title,
+            description:goal.description,
             priority: goal.priority,
             startDate: goal.start_date
         });
@@ -72,11 +74,13 @@ export const GoalContainer = ({
     const handleSaveGoal = (id: string) => {
         editGoal(id, {
             title: editData.title,
+            description:editData.description,
             priority: editData.priority,
             start_date: editData.startDate
         });
         setEditData({
             title: '',
+            description:'',
             priority: '',
             startDate: ''
         });
@@ -86,6 +90,7 @@ export const GoalContainer = ({
     const handleCancelEdit = () => {
         setEditData({
             title: '',
+            description:'',
             priority: '',
             startDate: ''
         });
@@ -200,6 +205,9 @@ export const GoalContainer = ({
                                                     {met.priority}
                                                 </span>
                                             </div>
+                                            <p className={`goal-title-text ${met.completed ? 'completed' : ''}`}>
+                                                {met.description}
+                                            </p>
                                         </div>
 
                                         {goalIndex === met._id && !met.completed && (
@@ -277,6 +285,21 @@ export const GoalContainer = ({
                                     onChange={(e) => setEditData({
                                         ...editData,
                                         title: e.target.value
+                                    })}
+                                    autoFocus
+                                />
+                            </div>
+
+                            <div className="form-group-inline">
+                                <label>Descripción</label>
+                                <input 
+                                    type="text"
+                                    className="modal-input"
+                                    placeholder="Descripción "
+                                    value={editData.description}
+                                    onChange={(e) => setEditData({
+                                        ...editData,
+                                        description: e.target.value
                                     })}
                                     autoFocus
                                 />

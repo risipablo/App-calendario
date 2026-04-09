@@ -12,11 +12,12 @@ export const GoalMaster = () => {
     const {goal,addGoal,allDeleteGoal,deleteGoal,editGoal,toogleComplete} = useGoals()
 
     const[title,setTitle] = useState<string>("")
+    const[description,setDescription] = useState<string>("")
     const[priority,setPriority] = useState<string>("")
     const[startDate,setStartDate] = useState<string>("")
 
     const handleAddGoal = () => {
-        addGoal(title,priority,startDate)
+        addGoal(title,description,priority,startDate)
         setTitle("")
         setPriority("")
         setStartDate("")
@@ -64,11 +65,13 @@ export const GoalMaster = () => {
                     <GoalForm
                         onAdd={handleAddGoal}
                         title={title}
+                        description={description}
                         start_date={startDate}
                         priority={priority}
                         setPriority={setPriority}
                         setStartDate={setStartDate}
                         setTitle={setTitle}
+                        setDescription={setDescription}
                     />
 
                     <Tooltip title="Eliminar todas las tareas" arrow>

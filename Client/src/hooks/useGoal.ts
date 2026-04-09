@@ -3,7 +3,6 @@ import type { IGoal } from "../interfaces/type.goal"
 import toast from "react-hot-toast"
 import axiosInstance from "../utils/axiosIntance"
 
-// const serverFront = config.Api
 
 export const useGoals = () => {
 
@@ -27,7 +26,7 @@ export const useGoals = () => {
         .catch(error => console.log(error))
     },[])
 
-    const addGoal = async (title:string , priority:string,  start_date?:string) => {
+    const addGoal = async (title:string,description:string, priority:string,  start_date?:string) => {
 
         if(!title.trim()){
             alert('Titulo obligatorio')
@@ -36,6 +35,7 @@ export const useGoals = () => {
         try{
             const response = await axiosInstance.post(`/api/goal`,{
                 title:title.trim(),
+                description:description.trim(),
                 priority:priority || 'media',
                 start_date:start_date || null,
               
@@ -66,7 +66,7 @@ export const useGoals = () => {
         .catch(err => console.error(err))
     } 
 
-    const editGoal = (id:string, editData:{title:string, priority:string, start_date:string}) => {
+    const editGoal = (id:string, editData:{title:string,description:string ,priority:string, start_date:string}) => {
         axiosInstance.patch(`/api/goal/${id}`,editData)
         .then(response => {
             const updateGoal = goal.map(goa => {
