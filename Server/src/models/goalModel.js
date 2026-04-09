@@ -8,7 +8,7 @@ const goalSchema = new mongoose.Schema({
     },
     description:{
         type:String,
-        required:true
+        required:false
     },
     priority: {
         type: String,

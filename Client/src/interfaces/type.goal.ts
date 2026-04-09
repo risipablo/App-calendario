@@ -3,7 +3,7 @@
 export interface IGoal{
     _id:string
     title:string
-    description:string
+    description?:string
     priority:'alta'|'media'|'baja'
     start_date: string 
     completed:boolean
@@ -13,7 +13,7 @@ export interface IGoal{
 // Goal Form
 export interface GoalFormProps{
     title:string
-    description:string
+    description?:string
     priority:string
     start_date:string
     setTitle:(title: string) => void

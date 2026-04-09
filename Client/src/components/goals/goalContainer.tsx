@@ -65,7 +65,7 @@ export const GoalContainer = ({
         setEditingId(goal._id);
         setEditData({
             title: goal.title,
-            description:goal.description,
+            description: goal.description ?? '',
             priority: goal.priority,
             startDate: goal.start_date
         });
@@ -195,20 +195,23 @@ export const GoalContainer = ({
                                             onClick={(e) => e.stopPropagation()}
                                         />
 
-                                        <div className="goal-info-section">
-                                            <h3 className={`goal-title-text ${met.completed ? 'completed' : ''}`}>
-                                                {met.title}
-                                            </h3>
-                                            <div className="priority-container">
-                                                <span className="priority-label">Prioridad:</span>
-                                                <span className={`priority-badge priority-${met.priority}`}>
-                                                    {met.priority}
-                                                </span>
-                                            </div>
-                                            <p className={`goal-title-text ${met.completed ? 'completed' : ''}`}>
-                                                {met.description}
-                                            </p>
+                                    <div className="goal-info-section">
+                                        <h3 className={`goal-title-text ${met.completed ? 'completed' : ''}`}>
+                                            {met.title}
+                                        </h3>
+                                        
+                                        <div className="priority-container">
+                                            <span className="priority-label">Prioridad:</span>
+                                            <span className={`priority-badge priority-${met.priority}`}>
+                                                {met.priority}
+                                            </span>
                                         </div>
+ 
+                                        <p className={`goal-description ${met.completed ? 'completed' : ''}`}>
+                                            {met.description}
+                                        </p>
+                                    </div>
+ 
 
                                         {goalIndex === met._id && !met.completed && (
                                             <div className="inline-actions">
