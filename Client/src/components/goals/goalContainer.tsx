@@ -325,7 +325,7 @@ export const GoalContainer = ({
                             </div>
 
                             <div className="form-group-inline">
-                                <label>Fecha límite</label>
+                                <label>Fecha Completada</label>
                                 <input 
                                     type="date"
                                     className="modal-input"

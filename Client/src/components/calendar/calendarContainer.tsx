@@ -4,6 +4,8 @@ import { Tooltip } from '@mui/material';
 import "../../style/calender.css"
 import "../../style/task.css"
 import type { CalendarContainerProps, ICalendar } from "../../interfaces/type.calendar"
+import { ModalConfirm } from "../layout/modalConfirm";
+import  { Toaster } from "react-hot-toast";
 
 export const CalendarContainer = ({
   notes,
@@ -199,9 +201,38 @@ export const CalendarContainer = ({
 
   const hasActiveFilter = selectedMonth || selectedYear
 
+  const [showModal, setShowModal] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<(() => void) | null>(null);
+  const [modalConfig, setModalConfig] = useState({
+      title: "",
+      message: "",
+      confirmText: ""
+  });
+
+  const openDeleteModal = (
+    action: () => void,
+    title: string,
+    message: string,
+    confirmText: string
+  ) => {
+    setDeleteAction(() => action)
+    setModalConfig({title, message, confirmText})
+    setShowModal(true)
+  }
+
+  const confirmModal = () => {
+    if (deleteAction) {
+        deleteAction();
+        setShowModal(false);
+        setDeleteAction(null);
+    }
+};
+
+
   return (
     <div className="calendar-container">
-      <div className="month-filter-container" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '20px' }}>
+      <div  className="filter-buttons-group" 
+     >
         <select
           value={selectedMonth}
           onChange={handleMonthFilterChange}
@@ -244,7 +275,7 @@ export const CalendarContainer = ({
           <button
             className="clear-filter-btn"
             onClick={handleClearFilter}
-            style={{ padding: '8px 12px', cursor: 'pointer' }}
+            style={{ padding: '8px 12px', cursor: 'pointer'  }}
           >
             Limpiar filtro
           </button>
@@ -357,8 +388,13 @@ export const CalendarContainer = ({
                           </Tooltip>
                           <Tooltip title="Eliminar" arrow>
                             <button
-                              className="action-btn-note delete-btn"
-                              onClick={() => deleteNote(note._id)}
+                              className="action-btn-inline delete-btn" 
+                              onClick={() => openDeleteModal(
+                                () => deleteNote(note._id),
+                                "Confirmar borrado",
+                                "¿Estás seguro que deseas eliminar esta meta?",
+                                "Eliminar"
+                              )}
                             >
                               <Trash2 size={16} />
                             </button>
@@ -470,6 +506,20 @@ export const CalendarContainer = ({
           </div>
         </div>
       )}
+
+      {showModal && ModalConfirm && (
+            <ModalConfirm
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={confirmModal}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                confirmText={modalConfig.confirmText}
+                cancelText="Cancelar"
+            />
+        )}
+
+        <Toaster/>
     </div>
   );
 }

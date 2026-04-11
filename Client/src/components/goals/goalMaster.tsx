@@ -19,6 +19,7 @@ export const GoalMaster = () => {
     const handleAddGoal = () => {
         addGoal(title,description,priority,startDate)
         setTitle("")
+        setDescription("")
         setPriority("")
         setStartDate("")
     }

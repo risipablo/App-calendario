@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import "../../style/form.css"
 import { Plus, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CalendarFromProps } from "../../interfaces/type.calendar";
@@ -57,24 +57,24 @@ export const CalendarForm = ({
 
                             <div className="task-modal-body">
                             <div className="task-form-group">
-    <label>Fecha y hora</label>
+                                <label>Fecha y hora</label>
 
-    <div className="task-date-time-row">
-        <input 
-            type="date"
-            className="task-input"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-        />
+                                <div className="task-date-time-row">
+                                    <input 
+                                        type="date"
+                                        className="task-input"
+                                        value={date}
+                                        onChange={(e) => setDate(e.target.value)}
+                                    />
 
-        <input 
-            type="time"
-            className="task-input"
-            value={hour}
-            onChange={(e) => setHour(e.target.value)}
-        />
-    </div>
-</div>
+                                    <input 
+                                        type="time"
+                                        className="task-input"
+                                        value={hour}
+                                        onChange={(e) => setHour(e.target.value)}
+                                    />
+                                </div>
+                            </div>
 
                                 <div className="task-form-group">
                                     <label>Título</label>

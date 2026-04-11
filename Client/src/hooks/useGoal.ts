@@ -3,6 +3,10 @@ import type { IGoal } from "../interfaces/type.goal"
 import toast from "react-hot-toast"
 import axiosInstance from "../utils/axiosIntance"
 
+const TOAST_CONFIG = {
+    position: 'top-center' as const,
+    duration: 1500
+}
 
 export const useGoals = () => {
 
@@ -42,8 +46,10 @@ export const useGoals = () => {
             })
 
             setGoal(prev => [...prev,response.data])
+            toast.success('Task saved successfully.', TOAST_CONFIG)
             return response.data
         } catch(err){
+            toast.error('Error add goal.', TOAST_CONFIG)
             console.error(err)
         }
     }
@@ -53,17 +59,21 @@ export const useGoals = () => {
         .then(() => {
             const updateGoal = goal.filter((prod) => prod._id !== id)
             setGoal(updateGoal)
+            toast.success('Goal deleted.', TOAST_CONFIG)
         })
         .catch(err => console.log(err))
+        toast.error('Error goal deleted.', TOAST_CONFIG)
     }
 
     const allDeleteGoal = () => {
         axiosInstance.delete(`/api/goal`)
         .then(response => {
             setGoal([])
+            toast.success('All goal deleted.', TOAST_CONFIG)
             console.debug(response.data)
         })
         .catch(err => console.error(err))
+        toast.error("Error delete error", TOAST_CONFIG)
     } 
 
     const editGoal = (id:string, editData:{title:string,description:string ,priority:string, start_date:string}) => {
@@ -75,8 +85,10 @@ export const useGoals = () => {
                 return goa
             })
             setGoal(updateGoal)
+            toast.success('Save goal.', TOAST_CONFIG)
         })
-        .catch(err => console.log(err)) 
+        .catch(err => console.log(err))
+        toast.error("Error update goal")
     }
 
     const toogleComplete = (id:string) => {
