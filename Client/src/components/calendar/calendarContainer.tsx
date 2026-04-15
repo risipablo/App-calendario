@@ -231,7 +231,7 @@ export const CalendarContainer = ({
 
   return (
     <div className="calendar-container">
-      <div  className="filter-buttons-group" 
+      <div className="filter-buttons-group" 
      >
         <select
           value={selectedMonth}

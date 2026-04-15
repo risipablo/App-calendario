@@ -142,11 +142,12 @@
 .menu-links > a:nth-child(2),
 .menu-links > a:nth-child(3),
 .menu-links > a:nth-child(4),
-.menu-links > a:nth-child(5) {
+.menu-links > a:nth-child(5),
+.menu-links > a:nth-child(6) {
     /* Primeros 5 links normales */
 }
 
-.menu-links > a:nth-child(6) {
+.menu-links > a:nth-child(7) {
     margin-top: auto;
     border-top: 1px solid #e5e7eb;
     padding-top: 12px;
@@ -284,7 +285,7 @@ body.sidebar-open-mobile {
 @media (max-width: 480px) {
     .menu {
         width: 100%;
-        max-width: 280px;
+        max-width: 290px;
         max-height: 93vh;
         
     }

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import type { AuthenticatedProps } from "../App"
 import { Suspense, lazy } from "react"
 import { SuspenseLoader } from "../components/layout/loaderSuspense";
+import NotePage from "./notePage";
 const ChangeImageUser = lazy(() => import("../components/auth/user/userProfile"))
 const RegisterPage = lazy(() => import('./auth/registerPage'))
 const LoginPage = lazy(() => import('./auth/loginPage'))
@@ -34,6 +35,7 @@ const SuggestionsComponent = lazy(() => import('./suggestionPage'))
             <Route path="/dashboard" element={isAuthenticated ? <Dashboard/> : <Navigate to='/' replace />}/>
             <Route path="/calendar" element={isAuthenticated ? <CalendarPage/> : <Navigate to='/' replace/>}/>
             <Route path="/task" element={isAuthenticated ? <TaskPage/> : <Navigate to="/" replace/>} />
+            <Route path="/note" element={isAuthenticated ? <NotePage/> : <Navigate to="/" replace/>}/>
             <Route path="/goals" element={isAuthenticated ? <GoalPage/> : <Navigate to="/" replace/>}/>
             <Route path="/resume" element={isAuthenticated ? <ResumeChart/> : <Navigate to="/" replace/>}/>
             <Route path="/change-image" element={isAuthenticated ? <ChangeImageUser /> : <Navigate to="/" replace/>}/>

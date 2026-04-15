@@ -28,7 +28,7 @@ exports.addTask = async (req,res) => {
         const result = await newTask.save()
         res.json(result)
 
-    } catch (errr) {
+    } catch (err) {
         res.status(500).json({error: err.message})
     }
 }
