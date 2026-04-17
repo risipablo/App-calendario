@@ -306,17 +306,40 @@ body.sidebar-open-mobile {
     
 
     .menu a {
-        padding: 14px 18px;
-        gap: 12px;
-        font-size: 14px;
-        margin-bottom: 9px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: .9rem;
+        padding: 12px 24px;
+        color: #4b5563;
+        transition: all 0.2s;
+        border-right: 4px solid transparent;
+        margin-bottom: 0; 
     }
 
-    .menu-links > a:nth-child(6) {
+    .menu a:hover {
+        background-color: #f9fafb;
+        color: #1f2937;
+    }
+
+    .menu a.active {
+        background-color: #eff6ff;
+        color: #2563eb;
+        border-right-color: #2563eb;
+        font-weight: 600;
+    }
+
+
+    .menu-links > a:nth-child(7) {
         margin-top: auto;
         padding-top: 1.5rem;
         padding-bottom: 8px;
     }
+
+    
 
     /* .menu-footer {
         padding: 10px 8px;

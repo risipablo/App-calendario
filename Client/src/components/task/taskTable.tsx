@@ -1,8 +1,8 @@
 
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip } from '@mui/material';
-import { Calendar, FilterX, Trash2 } from 'lucide-react';
+import { FilterX, Trash2 } from 'lucide-react';
 import type { TaskTableProps } from "../../interfaces/type.task";
 import { TaskRow } from "./taskRow";
 import "../../style/task.css";
@@ -45,13 +45,11 @@ export const TaskTable = ({
     },[task.length])
 
 
-    
-
     const [date, setDate] = useState<string>("")
     const [title,setTitle] = useState<string>("")
     const [priority,setPriority] = useState<string>("")
     const [loading ,setLoading] = useState(true)
-    const [showToday, setShowToday] = useState(false);
+
     
 
     const handleAddTask = () => {
@@ -95,38 +93,17 @@ export const TaskTable = ({
 
     const ModalComponent = ModalConfirm || DefaultModalConfirm;
 
-    const baseTask = filterTask.length ? filterTask : task
-
-    const filteredTasks = useMemo(() => {
-        if (!showToday) return baseTask;
-        
-        
-
-        const timeArg = new Date().toLocaleString('en-US', {
-            timeZone: 'America/Buenos_Aires'
-        })
-
-        const todayStr = new Date(timeArg).toISOString().split('T')[0]; 
-
-        return baseTask.filter(tas => {
-            const taskDate = new Date(tas.date)
-            const taskArg = new Date(taskDate.toLocaleString('en-US',{
-                timeZone: 'America/Buenos_Aires'
-            }))
-            const taskDateStr = taskArg.toISOString().split('T')[0]
-
-            return taskDateStr === todayStr
-        })
-    }, [baseTask, showToday]);
-
+    const [showToday, setShowToday] = useState(false);
     const [dateFilter, setDateFilter] = useState<string>('')
     const [monthFilter, setMonthFilter] = useState<string>('')
     const [yearFilter, setYearFilter] = useState<string>('')
     
-    const handleFiltersChange = (filters: {dateFilter:string; monthFilter:string; yearFilter:string}) => {
+    const handleFiltersChange = (filters: {dateFilter:string; monthFilter:string; yearFilter:string, showToday?: boolean}) => {
         setDateFilter(filters.dateFilter)
         setMonthFilter(filters.monthFilter)
         setYearFilter(filters.yearFilter)
+        if (filters.showToday !== undefined) setShowToday(filters.showToday);
+        setCurrentPage(0);
     }
 
     const [showDeleteFilteredModal, setShowDeleteFilteredModal] = useState(false)
@@ -147,13 +124,12 @@ export const TaskTable = ({
     }
 
     const deleteFilteredTasks = () => {
-        const filteredTask = new Set(filteredTasks.map(t => t._id))
-        const taskDelete = task.filter(t => filteredTask.has(t._id))
+        const tasksToDelete = [...filterTask];
 
         let deletedCount = 0
         let errorCount = 0
 
-        taskDelete.forEach(async (t) => {
+        tasksToDelete.forEach(async (t) => {
             try{
                 await onDelete?.(t._id)
                 deletedCount++
@@ -180,9 +156,9 @@ export const TaskTable = ({
       const itemsPerPage = 3;
       
       
-      const pageCount = Math.ceil(filteredTasks.length / itemsPerPage);
+      const pageCount = Math.ceil(filterTask.length / itemsPerPage);
       const offset = currentPage * itemsPerPage;
-      const currentItems = filteredTasks.slice(offset, offset + itemsPerPage);
+      const currentItems = filterTask.slice(offset, offset + itemsPerPage);
 
       
       
@@ -215,11 +191,11 @@ export const TaskTable = ({
                         )}>
                             <Trash2 size={18} />
                             
-                            Eliminar Todas ({showToday ? `${filteredTasks.length}` : `${task.length}`})
+                            Eliminar Todas ({showToday ? `${filterTask.length}` : `${task.length}`})
                         </button>
                     </Tooltip>
 
-                    {hasActiveFilters && filteredTasks.length > 0 && (
+                    {hasActiveFilters && filterTask.length > 0 && (
                         <Tooltip title={`Eliminar solo las tareas ${getFilterDescription()}`} arrow>
                             <button 
                                 className="delete-all-btn" 
@@ -227,7 +203,7 @@ export const TaskTable = ({
                             >
                                 <Trash2 size={18} />
                                 <FilterX size={14} />
-                                <span>Eliminar Filtradas ({filteredTasks.length})</span>
+                                <span>Eliminar Filtradas ({filterTask.length})</span>
                             </button>
                         </Tooltip>
                     )}
@@ -236,14 +212,7 @@ export const TaskTable = ({
             </div>
 
             <div className="toogle-view">
-                <button     
-                    className="btn-toggle-view"
-                    onClick={() => setShowToday(!showToday)}
-                >
-                    <Calendar size={18} />
-                    {showToday ? 'Ver Todas' : 'Ver Hoy'}
-                </button>
-
+  
                 <FilterPerDay task={task} setFilterTask={setFilterTask} onFilterChange={handleFiltersChange}/>
             </div>
             
@@ -259,7 +228,7 @@ export const TaskTable = ({
                         <h3>No hay tareas establecidas</h3>
                         <p>Agrega tu primera tarea</p>
                     </div>
-                ) : filteredTasks.length === 0 ? (
+                ) : filterTask.length === 0 ? (
                     <div className="empty-state-goals">
                         <h3>No se encontraron tareas</h3>
                         <p>
@@ -365,8 +334,8 @@ export const TaskTable = ({
                     onClose={() => setShowDeleteFilteredModal(false)}
                     onConfirm={deleteFilteredTasks}
                     title="⚠️ Eliminar tareas filtradas"
-                    message={`¿Estás seguro que deseas eliminar las ${filteredTasks.length} tareas ${getFilterDescription()}? Esta acción no se puede deshacer.`}
-                    confirmText={`Eliminar ${filteredTasks.length} tareas`}
+                    message={`¿Estás seguro que deseas eliminar las ${filterTask.length} tareas ${getFilterDescription()}? Esta acción no se puede deshacer.`}
+                    confirmText={`Eliminar ${filterTask.length} tareas`}
                     cancelText="Cancelar"
                 />
             )}

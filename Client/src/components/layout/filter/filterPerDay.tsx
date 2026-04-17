@@ -2,6 +2,7 @@ import type React from "react"
 import type { ITodo } from "../../../interfaces/type.task"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { X, Calendar, Filter, RotateCcw } from "lucide-react"
+import "../../../style/filter-button.css"
 
 
 
@@ -17,6 +18,7 @@ export const FilterPerDay = ({
     onFilterChange
 }: Props) => {
 
+    const [showToday, setShowToday] = useState(false);
     const [dateFilter, setDateFilter] = useState<string>('')
     const [monthFilter, setMonthFilter] = useState<string>('')
     const [yearFilter, setYearFilter] = useState<string>('') 
@@ -24,46 +26,57 @@ export const FilterPerDay = ({
     const [addModal, setAddModal] = useState(false)
     const [filterModal, setFilterModal] = useState(false)
 
-    const nomalDate = useCallback((dateStr: string): string => {
+    const normalDate = useCallback((dateInput: string | Date): string => {
+        if (!dateInput) return '';
+    
+        // Transformar el date a string
+        const dateStr = typeof dateInput === 'object' ? dateInput.toISOString() : dateInput;
+        
+        // Extre la fecha de caracteres e ignora el horario
         if (dateStr.includes("T")) {
-            return dateStr.split("T")[0] ?? dateStr
+            return dateStr.split("T")[0];
         }
-
+    
+        // Se devuelve el formato fecha
         if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-            return dateStr
+            return dateStr;
         }
-
-        return dateStr
-    }, [])
+    
+        return dateStr;
+    }, []);
 
     const filteredTasks = useMemo(() =>{
         let filtered = [...task]
 
+
+        if (showToday) {
+            const todayStr = normalDate(new Date());
+            return filtered.filter(t => normalDate(t.date) === todayStr);
+        }
+
         if(dateFilter){
             filtered = filtered.filter(t => 
-                nomalDate(t.date) === dateFilter
+                normalDate(t.date) === dateFilter
             )
         }
 
-        if(monthFilter){
+        if (monthFilter || yearFilter) {
             filtered = filtered.filter(t => {
-                const nomalizedDate = nomalDate(t.date)
-                const [year, month] = nomalizedDate.split('-')
-                if (yearFilter && year !== yearFilter) return false
-                return month === monthFilter
+                const normalized = normalDate(t.date); 
+                const [year, month] = normalized.split('-');
+                
+                const matchMonth = monthFilter ? month === monthFilter : true;
+                const matchYear = yearFilter ? year === yearFilter : true;
+                
+                return matchMonth && matchYear;
             })
         }
 
-        if(yearFilter && !monthFilter){
-            filtered = filtered.filter(t => {
-                const yearDate = nomalDate(t.date)
-                const [year] = yearDate.split('-')
-                return year === yearFilter
-            })
-        }
 
         return filtered
-    },[dateFilter, monthFilter, yearFilter, task, nomalDate])
+    },[task, showToday, dateFilter, monthFilter, yearFilter, task, normalDate])
+
+    
 
     useEffect(() => {
         setFilterTask(filteredTasks)
@@ -75,10 +88,11 @@ export const FilterPerDay = ({
 
         
 
-    }, [dateFilter, monthFilter, yearFilter, task, nomalDate, setFilterTask,onFilterChange])
+    }, [filteredTasks, monthFilter, yearFilter, task, normalDate, setFilterTask,onFilterChange])
 
     const handleApplyDate = () => {
         setDateFilter(pendingDate)
+        setShowToday(false)
         setAddModal(false)
     }
 
@@ -87,19 +101,38 @@ export const FilterPerDay = ({
     }
 
     const resetAllFilters = () => {
-        setDateFilter('')  
+        setDateFilter('')
         setMonthFilter("")
-        setYearFilter("")  
+        setYearFilter("")
         setPendingDate("")
+        setShowToday(false)
         setAddModal(false)
         setFilterModal(false)
     }
 
-    const hasActiveFilters = dateFilter || monthFilter || yearFilter
+    const hasActiveFilters = dateFilter || monthFilter || yearFilter || showToday
 
     return (
         <>
             <div className="filter-buttons-group">
+
+            <button     
+                    className={`btn-toggle-view ${showToday ? 'active' : ''}`}
+                    onClick={() => {
+                        setShowToday(!showToday);
+                        
+                        if (!showToday) {
+                            setDateFilter('');
+                            setMonthFilter('');
+                            setYearFilter('');
+                        }
+                    }}
+                    
+                >
+                    <Calendar size={18} />
+                    {showToday ? 'Ver Todas' : 'Ver Hoy'}
+                </button>
+
                 <button 
                     onClick={() => setAddModal(true)} 
                     className={`btn-toggle-view ${dateFilter ? 'active' : ''}`}

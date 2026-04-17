@@ -92,38 +92,13 @@
 }
 
 .toogle-view {
-    margin: 1rem auto;
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
 }
 
-.btn-toggle-view {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background-color: white;
-    color: #8e7cc3;
-    border: 2px solid #8e7cc3;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-}
 
-.btn-toggle-view:hover {
-    background-color: #8e7cc3;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(142, 124, 195, 0.3);
-}
-
-.btn-toggle-view:active {
-    transform: translateY(0);
-}
 
 /* ========================================
    ACCORDION

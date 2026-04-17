@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNotes } from "../../hooks/useNote";
 import { NoteForm } from "./noteForm";
 import { NoteContainer } from "./noteContainer";
 import { ModalConfirm } from "../layout/modalConfirm";
 import { Tooltip } from "@mui/material";
 import { Trash2 } from "lucide-react";
+import type { INote } from "../../interfaces/type.notes";
+
 
 
 export const NoteMaster = () => {
@@ -14,9 +16,10 @@ export const NoteMaster = () => {
     const [date,SetDate] = useState<string>('')
     const [title,setTitle] = useState<string>('')
     const [category,setCategory] = useState<string>('')
+    const [filteredNotes, setFilteredNotes] = useState<INote[]>([]);
 
     const handleAddNote = () => {
-        addNote(new Date(date),title,category)
+        addNote(new Date(date),title,category || 'otro')
         SetDate("")
         setTitle("")
         setCategory("")
@@ -49,12 +52,16 @@ export const NoteMaster = () => {
         }
     };
 
+    useEffect(() => {
+        setFilteredNotes(note)
+    },[note])
+
     return(
         <div className="task-table-container">
             
             <div className="table-header">
                 <h2 className="table-title">
-                     Mis Objetivos
+                     Notas Rapidas
                 </h2>
 
                 <div className="header-actions">
@@ -67,6 +74,8 @@ export const NoteMaster = () => {
                         setTitle={setTitle}
                         setCategory={setCategory}
                     />
+
+
 
                     <Tooltip title="Eliminar todas las notas" arrow>
                         <button className="delete-all-btn" onClick={() => openDeleteModal(
@@ -85,6 +94,8 @@ export const NoteMaster = () => {
 
             <NoteContainer
                 note={note}
+                displayNote={filteredNotes}
+                setFilterNote={setFilteredNotes}
                 addNote={addNote}
                 ondAddNote={handleAddNote}
                 deleteNote={deleteNote}

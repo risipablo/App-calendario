@@ -1,0 +1,131 @@
+/* Versión ultra compacta */
+:root {
+  --roman-purple: #663399;
+  --roman-gold: #D4AF37;
+  --roman-red: #A41E3A;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666;
+  --border-color: #e0e0e0;
+  --gray-50: #F8F9FA;
+}
+
+.filter-buttons-group { 
+  display: flex; 
+  gap: 12px; 
+  flex-wrap: wrap; 
+  margin-bottom: 20px; 
+}
+
+.btn-toggle-view { 
+  padding: 8px ; 
+  font-size: .7rem; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.3px; 
+  border: 1.5px solid var(--border-color); 
+  background: white; 
+  color: var(--text-secondary); 
+  border-radius: 6px; 
+  cursor: pointer; 
+  transition: all 0.2s ease; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 5px; 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+  white-space: nowrap;
+}
+
+.btn-toggle-view:hover { 
+  border-color: var(--roman-purple); 
+  background: var(--gray-50); 
+  color: var(--roman-purple); 
+}
+
+.btn-toggle-view.active { 
+  background: var(--roman-purple); 
+  color: white; 
+  border-color: var(--roman-purple); 
+  box-shadow: 0 2px 8px rgba(102, 51, 153, 0.2); 
+}
+
+.btn-toggle-view.btn-reset { 
+  border-color: var(--roman-red); 
+  color: var(--roman-red); 
+}
+
+.btn-toggle-view.btn-reset:hover { 
+  background: rgba(164, 30, 58, 0.1); 
+  border-color: var(--roman-red); 
+}
+
+.btn-toggle-view svg { 
+  flex-shrink: 0; 
+  width: 13px;
+  height: 13px;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .filter-buttons-group { 
+      gap: 8px; 
+      margin-bottom: 16px; 
+  }
+  
+  .btn-toggle-view { 
+      padding: 5px 8px; 
+      font-size: 10px; 
+      gap: 4px; 
+  }
+  
+  .btn-toggle-view svg { 
+      width: 11px; 
+      height: 11px; 
+  }
+}
+
+/* Móvil */
+@media (max-width: 480px) {
+  .filter-buttons-group { 
+      gap: 6px; 
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: 
+          "today today"
+          "date filter";
+  }
+  
+  .filter-buttons-group .btn-toggle-view:first-child {
+      grid-area: today;
+      width: 100%;
+  }
+  
+  .filter-buttons-group .btn-toggle-view:nth-child(2) {
+      grid-area: date;
+      width: 100%;
+  }
+  
+  .filter-buttons-group .btn-toggle-view:nth-child(3) {
+      grid-area: filter;
+      width: 100%;
+  }
+  
+  .filter-buttons-group .btn-toggle-view:last-child {
+      grid-column: span 2;
+      width: 100%;
+  }
+  
+  .btn-toggle-view { 
+      padding: 6px 8px; 
+      font-size: 9px; 
+      gap: 3px;
+      white-space: nowrap;
+  }
+  
+  .btn-toggle-view svg { 
+      width: 10px; 
+      height: 10px; 
+  }
+}
+

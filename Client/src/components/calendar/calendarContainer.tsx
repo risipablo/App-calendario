@@ -1,8 +1,9 @@
-import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock } from "lucide-react"
+import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock, RotateCcw } from "lucide-react"
 import { useState, useMemo } from "react"
 import { Tooltip } from '@mui/material';
 import "../../style/calender.css"
 import "../../style/task.css"
+import "../../style/filter-button.css"
 import type { CalendarContainerProps, ICalendar } from "../../interfaces/type.calendar"
 import { ModalConfirm } from "../layout/modalConfirm";
 import  { Toaster } from "react-hot-toast";
@@ -231,13 +232,12 @@ export const CalendarContainer = ({
 
   return (
     <div className="calendar-container">
-      <div className="filter-buttons-group" 
-     >
+      <div className="filter-buttons-group">
+  
         <select
           value={selectedMonth}
           onChange={handleMonthFilterChange}
-          className="month-select"
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+          className={`btn-toggle-view ${selectedMonth ? 'active' : ''}`}
         >
           <option value="">Todos los meses</option>
           <option value="01">Enero</option>
@@ -254,11 +254,11 @@ export const CalendarContainer = ({
           <option value="12">Diciembre</option>
         </select>
 
+        
         <select
           value={selectedYear}
           onChange={handleYearFilterChange}
-          className="month-select"
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+          className={`btn-toggle-view ${selectedYear ? 'active' : ''}`}
         >
           <option value="">Año</option>
           <option value="2026">2026</option>
@@ -273,10 +273,10 @@ export const CalendarContainer = ({
         
         {hasActiveFilter && (
           <button
-            className="clear-filter-btn"
+            className="btn-toggle-view btn-reset"
             onClick={handleClearFilter}
-            style={{ padding: '8px 12px', cursor: 'pointer'  }}
           >
+            <RotateCcw size={18} />
             Limpiar filtro
           </button>
         )}

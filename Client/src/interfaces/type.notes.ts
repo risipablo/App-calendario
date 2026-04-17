@@ -20,6 +20,8 @@ export interface NoteFormProps{
 
 export interface NoteContainerProps{
     note:INote[]
+    displayNote: INote[] 
+    setFilterNote: React.Dispatch<React.SetStateAction<INote[]>>;
     addNote:(date:Date, title:string,category:string) => void
     deleteNote:(id:string) => void
     allDeleteNote:(id:string) => void

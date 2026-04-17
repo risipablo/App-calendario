@@ -9,12 +9,15 @@ import { Tooltip } from "@mui/material";
 import "../../style/note.css";
 import "../../style/task.css"
 import "../../style/goal.css"
+import { FIlterNote } from "../layout/filter/filterNoteFast";
 
 export const NoteContainer = ({
     note,
     deleteNote,
     editNote,
-    toogleComplete
+    toogleComplete,
+    displayNote,
+    setFilterNote
 }:NoteContainerProps) => {
 
     const [goalIndex, setGoalIndex] = useState<string | null>(null);
@@ -93,6 +96,9 @@ export const NoteContainer = ({
     const [loading,setLoading] = useState(true)
     const [skeleton, setSkeleton] = useState(true)
 
+
+    const itemsToDisplay = displayNote && displayNote.length >= 0 ? displayNote : note
+
     useEffect(() => {
         // eslint-disable-next-line react-hooks/immutability
         setCurrentPage(0)
@@ -103,14 +109,16 @@ export const NoteContainer = ({
         }, 1000);
 
         return () => clearTimeout(timer)
-    },[note.length])
+    },[itemsToDisplay.length])
 
     const [currentPage, setCurrentPage] = useState<number>(0)
     const itemsPerPage = 5
 
-    const pageCount = Math.ceil(note.length / itemsPerPage)
+    const pageCount = Math.ceil(itemsToDisplay.length / itemsPerPage)
     const offSet = currentPage * itemsPerPage
-    const currentItems = note.slice(offSet, offSet + itemsPerPage)
+    const currentItems = itemsToDisplay.slice(offSet, offSet + itemsPerPage)
+
+    
 
     if (skeleton) {
         return (
@@ -147,9 +155,11 @@ export const NoteContainer = ({
         ) 
     }
 
+
     return (
         <div>
             <div className="goal-container">
+                <FIlterNote note={note} setNoteFilter={setFilterNote}/>
                 <div className="goals-list">
                     {currentItems.map((met) => (
                         <div 
