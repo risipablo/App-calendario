@@ -1,6 +1,6 @@
 
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tooltip } from '@mui/material';
 import { FilterX, Trash2 } from 'lucide-react';
 import type { TaskTableProps } from "../../interfaces/type.task";
@@ -35,10 +35,8 @@ export const TaskTable = ({
 }: TaskTableProps) => {
     
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/immutability
         setCurrentPage(0)
         const timer = setTimeout(() => {
-            // eslint-disable-next-line react-hooks/immutability
             setLoading(false)
         }, 100);
         return () => clearTimeout(timer)
@@ -61,8 +59,6 @@ export const TaskTable = ({
         }
 
     }
-
-    
 
     const [showModal, setShowModal] = useState(false);
     const [deleteAction, setDeleteAction] = useState<(() => void) | null>(null);
@@ -98,13 +94,13 @@ export const TaskTable = ({
     const [monthFilter, setMonthFilter] = useState<string>('')
     const [yearFilter, setYearFilter] = useState<string>('')
     
-    const handleFiltersChange = (filters: {dateFilter:string; monthFilter:string; yearFilter:string, showToday?: boolean}) => {
+    const handleFiltersChange = useCallback((filters: {dateFilter:string; monthFilter:string; yearFilter:string, showToday?: boolean}) => {
         setDateFilter(filters.dateFilter)
         setMonthFilter(filters.monthFilter)
         setYearFilter(filters.yearFilter)
         if (filters.showToday !== undefined) setShowToday(filters.showToday);
         setCurrentPage(0);
-    }
+    }, [])
 
     const [showDeleteFilteredModal, setShowDeleteFilteredModal] = useState(false)
 
@@ -306,7 +302,7 @@ export const TaskTable = ({
                     <PaginationComponent
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
-                    totalItems={task.length}
+                    totalItems={filterTask.length}
                     itemsPerPage={itemsPerPage}
                     offset={offset}
                     pageCount={pageCount}

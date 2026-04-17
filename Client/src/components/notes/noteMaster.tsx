@@ -6,6 +6,7 @@ import { ModalConfirm } from "../layout/modalConfirm";
 import { Tooltip } from "@mui/material";
 import { Trash2 } from "lucide-react";
 import type { INote } from "../../interfaces/type.notes";
+import "../../style/task.css"
 
 
 

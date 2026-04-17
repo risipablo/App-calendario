@@ -170,8 +170,8 @@ export const GoalContainer = ({
     }
 
     return (
-        <div >
-            <div className="goal-container">
+        <div className={`task-row `}>
+            
                 <div className="goals-list">
                         {currentItems.map((met) => (
                             <div 
@@ -262,8 +262,8 @@ export const GoalContainer = ({
                                 </div>
                             </div>
                         ))}
-                    </div>
-            </div>
+                </div>
+            
 
             {editingId !== null && (
                 <div className="modal-overlay-inline" onClick={handleCancelEdit}>
