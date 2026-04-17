@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const rateLimit = require('express-rate-limit')
 const { sendPasswordEmail } = require('../service/emailService')
+const { passport } = require('../config/passport');
 require('dotenv').config()
 
 exports.registerUser = async(req,res) => {
@@ -48,7 +49,6 @@ exports.loginUser = async (req,res) => {
     }
 
     
-
     try{
         const user = await userModel.findOne({email})
 
@@ -314,3 +314,28 @@ exports.userName = async (req,res) => {
         res.status(500).json({error: err.message})
     }
 }
+
+// inicios de sesion con google
+exports.googleLogin = passport.authenticate('google',{
+    scope:['profile','email'],
+    session:false
+})
+
+exports.googleCallback = (req, res, next) => {
+    passport.authenticate('google', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            // Redirigir al frontend con error
+            return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+        }
+
+        // Generar token JWT igual que en login normal
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }  // Token más largo para Google login
+        );
+
+        // Devuelta al front
+        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
+    })(req, res, next);
+};

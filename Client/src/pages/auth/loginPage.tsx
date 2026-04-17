@@ -9,6 +9,7 @@ import { UseAuth } from '../../hooks/useAuth';
 import type { AuthenticatedProps } from '../../App';
 import { PasswordInput } from '../../components/auth/common/passwordInput';
 import { Helmet } from 'react-helmet';
+import { GoogleLoginButton } from '../../components/auth/user/googleLogin';
 
 
 
@@ -86,6 +87,11 @@ const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         <NavLink to="/register">
           <p>¿No tienes cuenta? Regístrate</p>
         </NavLink>
+        <div className="divider">
+            <span>o</span>
+        </div>
+
+        <GoogleLoginButton/>
         <NavLink to="/forgot-password">
           <p>¿Olvidaste tu contraseña?</p>
         </NavLink>

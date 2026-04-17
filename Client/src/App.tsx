@@ -9,6 +9,7 @@ import axios from 'axios'
 import { config } from './config/index'
 import "../src/style/authStyle.css"
 import { SuspenseLoader } from './components/layout/loaderSuspense'
+import { CallbackPage } from './pages/auth/callbackPage';
 
 const serverFront = config.Api
 
@@ -98,7 +99,8 @@ function App() {
                   <Route path="/register" element={<RegisterPage  setIsAuthenticated={setIsAuthenticated} isAuthenticated={null}/>} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   <Route path="/reset-password/:token" element={<ResetPasswordPage setIsAuthenticated={setIsAuthenticated} />} />
-                  
+                  <Route path="/auth/callback" element={<CallbackPage/>}/>
+
                   <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
           </Suspense>

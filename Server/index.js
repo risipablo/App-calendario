@@ -1,4 +1,5 @@
 const express = require('express')
+const passport = require('passport')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const DB = require('./src/config/database')
@@ -10,6 +11,7 @@ const authRouter = require('./src/routes/authRoutes')
 const validateRouter = require('./src/routes/validateRoutes')
 const imageRouter = require('./src/routes/imageRoute')
 
+require('./src/config/passport')
 require('dotenv').config()
 
 const app = express()
@@ -22,6 +24,7 @@ if (!process.env.RESEND_API_KEY || !process.env.EMAIL_USER) {
 
 app.use(express.json())
 app.use(bodyParser.json())
+app.use(passport.initialize())
 
 const corsOptions = {
     origin: ['http://localhost:5173','https://app-calendario.onrender.com','https://app-calendario-rust.vercel.app'],
