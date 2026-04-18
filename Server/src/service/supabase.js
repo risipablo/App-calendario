@@ -1,12 +1,15 @@
-const { createClient } = require("@supabase/supabase-js");
+
+const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
-if (!supabaseUrl || !supabaseKey) {
-    console.error('❌ Faltan variables de entorno de Supabase');
-}
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY; 
 
-const supabase = createClient(supabaseUrl,supabaseKey)
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false
+  }
+});
 
-module.exports = supabase
-
+module.exports = supabase;

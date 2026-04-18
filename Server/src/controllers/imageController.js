@@ -1,65 +1,31 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const userModel = require('../models/userModel');
+const supabase = require('../service/supabase')
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
 const BUCKET_NAME = process.env.SUPABASE_BUCKET || 'avatars';
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+
+const bucket = supabase.storage.from('avatars'); 
 
 exports.uploadProfileImage = async (req, res) => {
-    
-    
-    // console.log('req.user:', req.user ? {
-    //     id: req.user._id,
-    //     email: req.user.email,
-    //     name: req.user.name
-    // } : 'NO HAY req.user');
-    // console.log(' req.file:', req.file ? {
-    //     originalname: req.file.originalname,
-    //     size: req.file.size,
-    //     mimetype: req.file.mimetype
-    // } : 'NO HAY archivo');
-    
-    
-    
     try {
         // Verificar que req.user existe
         if (!req.user) {
-            
             return res.status(401).json({ error: 'Usuario no autenticado correctamente' });
         }
 
-        
         const userId = req.user._id || req.user.id;
         
         if (!userId) {
-        
             return res.status(401).json({ error: 'ID de usuario no encontrado' });
         }
-
-        
 
         const file = req.file;
 
         if (!file) {
-        
             return res.status(400).json({ error: 'No se proporcionó ninguna imagen' });
-        }
-
-        
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-        if (!allowedTypes.includes(file.mimetype)) {
-            return res.status(400).json({ 
-                error: 'Formato no permitido. Usa JPEG, PNG o WEBP' 
-            });
-        }
-
-        // Validar tamaño (max 2MB)
-        if (file.size > 2 * 1024 * 1024) {
-            return res.status(400).json({ error: 'La imagen no debe superar los 2MB' });
         }
 
         // Buscar usuario en BD
@@ -71,30 +37,31 @@ exports.uploadProfileImage = async (req, res) => {
             return res.status(404).json({ error: 'Usuario no encontrado en la base de datos' });
         }
 
-        console.log('✅ Usuario encontrado:', {
-            id: user._id,
-            email: user.email,
-            name: user.name,
-            hasAvatar: !!user.avatarUrl
-        });
-
         // Generar nombre único para la imagen
         const fileExt = file.originalname.split('.').pop();
         const fileName = `${userId}-${Date.now()}.${fileExt}`;
         const filePath = `${userId}/${fileName}`;
 
         // Subir a Supabase
-        const { data, error } = await supabase.storage
+        console.log('🚀 Intentando subir a Supabase al bucket:', BUCKET_NAME);
+
+        const { data, error: storageError } = await supabase.storage
             .from(BUCKET_NAME)
             .upload(filePath, file.buffer, {
                 contentType: file.mimetype,
-                cacheControl: '3600',
                 upsert: true
             });
-
-        if (error) {
-            return res.status(500).json({ error: 'Error al subir la imagen: ' + error.message });
+        
+        if (storageError) {
+            console.error('❌ ERROR CRÍTICO SUPABASE STORAGE:', storageError);
+            return res.status(500).json({ 
+                error: 'Error en Supabase Storage', 
+                details: storageError.message,
+                bucket: BUCKET_NAME
+            });
         }
+
+        console.log('✅ Imagen subida exitosamente a Supabase');
 
         // Obtener URL pública
         const { data: publicUrlData } = supabase.storage
@@ -105,24 +72,28 @@ exports.uploadProfileImage = async (req, res) => {
 
         // Eliminar avatar anterior si existe
         if (user.avatarPublicId) {
-            
             try {
                 await supabase.storage
                     .from(BUCKET_NAME)
                     .remove([user.avatarPublicId]);
+                console.log('✅ Avatar anterior eliminado');
             } catch (removeError) {
                 console.error('⚠️ Error eliminando avatar anterior:', removeError);
-                
+                // Continuar aunque falle la eliminación
             }
         }
 
         // Actualizar usuario en BD
         user.avatarUrl = publicUrl;
         user.avatarPublicId = filePath;
+
+        if (user.role) {
+            user.role = user.role.trim(); 
+        }
+        
         await user.save();
 
-        
-        
+        console.log('✅ Usuario actualizado en BD');
 
         res.status(200).json({
             message: 'Imagen subida exitosamente',
@@ -131,11 +102,13 @@ exports.uploadProfileImage = async (req, res) => {
         });
 
     } catch (error) {
-
-        res.status(500).json({ error: error.message });
+        console.error('❌ Error general en uploadProfileImage:', error);
+        res.status(500).json({ 
+            error: 'Error interno del servidor', 
+            details: error.message 
+        });
     }
 };
-
 
 exports.deleteProfileImage = async (req, res) => {
     
@@ -179,7 +152,6 @@ exports.deleteProfileImage = async (req, res) => {
     }
 };
 
-
 exports.getProfileImage = async (req, res) => {
     try {
         if (!req.user) {
@@ -196,6 +168,28 @@ exports.getProfileImage = async (req, res) => {
 
     } catch (error) {
         console.error('Error en getProfileImage:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Ruta temporal para probar conexión
+exports.testSupabaseConnection = async (req, res) => {
+    try {
+        const { data: buckets, error } = await supabase.storage.listBuckets();
+        
+        if (error) {
+            return res.status(500).json({ 
+                error: 'Error conectando a Supabase', 
+                details: error.message 
+            });
+        }
+        
+        res.json({ 
+            message: 'Conexión exitosa', 
+            buckets: buckets.map(b => b.name),
+            bucketExists: buckets.some(b => b.name === BUCKET_NAME)
+        });
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
