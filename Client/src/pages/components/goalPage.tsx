@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet"
-import { GoalMaster } from "../components/goals/goalMaster"
+import { GoalMaster } from "../../components/goals/goalMaster";
+
 
 
  const GoalPage = () => {

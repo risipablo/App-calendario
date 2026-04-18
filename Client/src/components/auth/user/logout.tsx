@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { UseAuth } from "../../../hooks/useAuth"
 import type { ChangeUserNameProps } from "../../../interfaces/type.user"
-import { LogOut } from "lucide-react"
+// import { LogOut } from "lucide-react"
 import { motion } from "framer-motion"
 import "../../../style/userSettings.css"
 
@@ -29,7 +29,7 @@ export const LogOutComponent = ({ setIsAuthenticated }: ChangeUserNameProps) => 
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
     >
-      <LogOut size={18} />
+      {/* <LogOut size={18} /> */}
       <span>Cerrar Sesión</span>
     </motion.button>
   )

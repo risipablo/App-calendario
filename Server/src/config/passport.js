@@ -4,6 +4,8 @@ const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const User = require('../models/userModel')
+const crypto = require('crypto');
+const userModel = require('../models/userModel');
 
 
 passport.use('google', new GoogleStrategy(
@@ -12,7 +14,9 @@ passport.use('google', new GoogleStrategy(
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => { 
+        console.log('📸 Perfil de Google recibido:', profile.emails[0]?.value);
+        
         try {
             const email = profile.emails[0].value;
             const name = profile.displayName;
@@ -22,24 +26,35 @@ passport.use('google', new GoogleStrategy(
             let user = await userModel.findOne({ email });
 
             if (!user) {
-               
+            
                 user = new userModel({
                     email,
                     name,
                     avatarUrl,
-                    password: crypto.randomBytes(20).toString('hex'), 
-                    isGoogleUser: true 
+                    password: crypto.randomBytes(20).toString('hex'), // Contraseña aleatoria
+                    isGoogleUser: true,
+                    password:undefined
                 });
                 await user.save();
+                console.log('✅ Nuevo usuario creado desde Google:', email);
+            } else {
+                console.log('✅ Usuario existente:', email);
+                // Actualizar avatar si no tiene
+                if (!user.avatarUrl && avatarUrl) {
+                    user.avatarUrl = avatarUrl;
+                    await user.save();
+                }
             }
 
+            
             return done(null, user);
+            
         } catch (error) {
+            console.error('❌ Error en estrategia de Google:', error);
             return done(error, null);
         }
     }
 ));
-
 // estrategia local para email y contraseña
 passport.use('local', new LocalStrategy(
     {

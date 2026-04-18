@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet"
 
-import { NoteMaster } from "../components/notes/noteMaster";
+import { NoteMaster } from "../../components/notes/noteMaster";
 
 
  const NotePage = () => {

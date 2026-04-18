@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet"
-import { TaskContainer } from "../components/task/taskContainer"
-import "../style/task.css"
+
+import "../../style/task.css"
+import { TaskContainer } from "../../components/task/taskContainer";
 
 const TaskPage = () => {
 

@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet"
-import { ChartContainer } from "../components/charts/chartContainer"
+import { ChartContainer } from "../../components/charts/chartContainer";
+
 
 
 

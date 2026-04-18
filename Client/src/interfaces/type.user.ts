@@ -34,6 +34,7 @@ export interface ChangeUserNameProps {
     email:string
   }
   
+  
   export interface AuthResponse {
     message?: string;
     token?: string;
@@ -42,6 +43,7 @@ export interface ChangeUserNameProps {
       email?: string;
       name: string;
     };
+  
   }
   
   export interface ApiError {

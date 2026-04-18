@@ -18,10 +18,12 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required: true,
+        required: false,
+        default: undefined,
         minlength: [9, 'La contraseña debe tener al menos 8 caracteres'],
         validate:{
             validator: function(value){
+                if(!value) return true
                 return /[A-Z]/.test(value)
             },
             message: 'La contraseña debe contener al menos una letra mayúscula'
@@ -60,6 +62,11 @@ const userSchema = new mongoose.Schema({
 
 // Generate password for the user
 userSchema.pre('save', async function(next){
+
+    if (this.isGoogleUser) {
+        return next();
+    }
+    
     if (!this.isModified('password')) return next()
 
     try{

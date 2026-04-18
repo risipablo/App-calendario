@@ -84,17 +84,22 @@ const LoginPage = ({setIsAuthenticated}:AuthenticatedProps) => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
+
         <NavLink to="/register">
           <p>¿No tienes cuenta? Regístrate</p>
         </NavLink>
-        <div className="divider">
+
+        <NavLink to="/forgot-password">
+          <p>¿Olvidaste tu contraseña?</p>
+        </NavLink>
+
+        
+      <div className="divider">
             <span>o</span>
         </div>
 
         <GoogleLoginButton/>
-        <NavLink to="/forgot-password">
-          <p>¿Olvidaste tu contraseña?</p>
-        </NavLink>
+        
       </motion.div>
     </AuthLayout>
   );

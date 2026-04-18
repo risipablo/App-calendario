@@ -1,7 +1,8 @@
 import { Helmet } from "react-helmet"
-import { CalendarMaster } from "../components/calendar/calendarMaster"
 
-import "../style/task.css"
+
+import "../../style/task.css"
+import { CalendarMaster } from "../../components/calendar/calendarMaster";
 
  const CalendarPage = () => {
 

@@ -1,14 +1,15 @@
 import { NavLink } from "react-router-dom";
 import { LogOutComponent } from "../../components/auth/user/logout";
-import { DoorOpen, Settings, User, Lock, MailQuestionMark, Image} from "lucide-react";
+import { DoorOpen, Settings, User, Lock, MailQuestionMark, Image, Trash2} from "lucide-react";
 import { motion } from "framer-motion";
-import type { ChangeUserNameProps } from "../../interfaces/type.user";
 import "../../style/userSettings.css";
 import "../../style/task.css"
 import { Helmet } from "react-helmet";
+import { DeleteAccountButton } from "../../components/auth/user/deleteAccount";
+import type { AuthenticatedProps } from "../../App";
 
 
-function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
+function ConfigPage({ setIsAuthenticated, isAuthenticated }: AuthenticatedProps) {
 
   const itemVariants = {
     hidden: { opacity: 0, x: -15 },
@@ -114,14 +115,28 @@ function ConfigPage({ setIsAuthenticated }: ChangeUserNameProps) {
           animate="visible"
         >
           <div className="config-link logout-link">
+
             <div className="link-icon logout-icon">
               <span><DoorOpen /></span>
             </div>
             <div className="link-content">
               <LogOutComponent setIsAuthenticated={setIsAuthenticated} />
             </div>
+
           </div>
         </motion.div>
+
+        <div className="delete-account">
+            <div className="link-icon logout-icon">
+                  <span><Trash2 /></span>
+                </div>
+            <div className="link-content">
+              <DeleteAccountButton setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
+            </div>
+         </div> 
+        
+        
+        
       </div>
     </div>
   )

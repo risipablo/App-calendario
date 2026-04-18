@@ -6,6 +6,11 @@ const { sendPasswordEmail } = require('../service/emailService')
 const { passport } = require('../config/passport');
 require('dotenv').config()
 
+const TodoModel = require('../models/taskModel')
+const CalendarModel = require('../models/calenderModel')
+const GoalModel = require('../models/goalModel')
+const NoteModel = require('../models/noteModel')
+
 exports.registerUser = async(req,res) => {
     const {email, password, name} = req.body
 
@@ -31,6 +36,47 @@ exports.registerUser = async(req,res) => {
         console.log("Error en registro:", err)  
         res.status(500).json({error: 'Error', details: err.message}) 
     }
+}
+
+// Eliminar cuenta
+exports.userDeleteCount = async (req,res) => {
+       
+       const userId = req.user.id;
+
+       try{
+            const user = await userModel.findById(userId)
+            
+            if(!user){
+                return res.status(401).json({error:" Usuario no encontrada "})
+            }
+
+            // this one for delete data to the user
+            await Promise.all([
+                TodoModel.deleteMany({ userId: userId }),    
+                NoteModel.deleteMany({ userId: userId }),    
+                GoalModel?.deleteMany({ userId: userId }),   
+                CalendarModel?.deleteMany({ userId: userId })  
+                
+            ])
+            const deletedUser = await userModel.findOneAndDelete(userId)
+
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+            });
+    
+            res.status(200).json({
+                message: 'Cuenta eliminada exitosamente',
+                deletedUser: {
+                    id: deletedUser._id,
+                    email: deletedUser.email,
+                    name: deletedUser.name
+                }
+            });
+       } catch(err){
+        res.status(500).json({error:err.message})
+       }
 }
 
 // 5 try of login
@@ -315,6 +361,8 @@ exports.userName = async (req,res) => {
     }
 }
 
+
+
 // inicios de sesion con google
 exports.googleLogin = passport.authenticate('google',{
     scope:['profile','email'],
@@ -322,20 +370,23 @@ exports.googleLogin = passport.authenticate('google',{
 })
 
 exports.googleCallback = (req, res, next) => {
+    console.log('📥 Callback de Google recibido');
+    
     passport.authenticate('google', { session: false }, (err, user, info) => {
+        console.log('🔍 Resultado:', { err: err?.message, user: user?.email });
+        
         if (err || !user) {
-            // Redirigir al frontend con error
+            console.log('❌ Error:', err?.message || info?.message);
             return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
         }
 
-        // Generar token JWT igual que en login normal
         const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: '7d' }  // Token más largo para Google login
+            { expiresIn: '7d' }
         );
 
-        // Devuelta al front
+        console.log('✅ Login exitoso, redirigiendo');
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
     })(req, res, next);
 };

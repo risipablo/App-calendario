@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet"
-import { SuggestionsComponent } from "../components/emails/suggestComponent"
+import { SuggestionsComponent } from "../../components/emails/suggestComponent";
+
 
 const SuggestionsComponentPage = () => {
 

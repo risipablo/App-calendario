@@ -1,12 +1,13 @@
 import { CheckCircle2, Clock, ListTodo, ChevronDown, ChevronUp, Calendar, CalendarDays, Star } from "lucide-react"
-import { useTasks } from "../context/taskContex"
-import { useCalendars } from "../context/calendarContext"
+import { useTasks } from "../../context/taskContex"
+import { useCalendars } from "../../context/calendarContext"
 import { useState, useEffect } from "react"
-import "../style/dashboard.css"
-import "../style/task.css"
-import { CardLoader } from "../components/layout/cardLoader"
+import "../../style/dashboard.css"
+import "../../style/task.css"
+
 import { ClipLoader } from "react-spinners"
 import { Helmet } from "react-helmet"
+import { CardLoader } from "../../components/layout/cardLoader";
 
 const Dashboard = () => {
     

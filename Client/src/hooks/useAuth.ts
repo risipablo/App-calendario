@@ -8,6 +8,7 @@ import { useUser } from "./useUser";
 
 
 
+
 export const UseAuth = ():UseAuthReturn => {
     
     const{fetchUserData, setUser} = useUser()
@@ -148,6 +149,25 @@ export const UseAuth = ():UseAuthReturn => {
         }
     };
 
+    const deleteAccount = async():Promise<void> => {
+        setLoading(true)
+        setError('')
+
+        try{
+            const data = await authService.DeleteAccount()
+            setSuccess(data.message || 'Usuario eliminado correctamente')
+
+            localStorage.removeItem('token')
+            navigate('/login')
+        }catch (err){
+            setError((err as Error).message)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    
+    }
+    
 
     const logout = async() :Promise<void> => {
         setLoading(true)
@@ -183,6 +203,7 @@ export const UseAuth = ():UseAuthReturn => {
         resetPassword,
         setError,
         setSuccess,
+        deleteAccount
         
     }
 

@@ -23,6 +23,7 @@ export interface UseAuthReturn{
     forgotPassword:(credentials:ForgotPasswordData) => Promise<void>
     resetPassword: (credentials: { token: string; newPassword: string }) => Promise<void>;
     logout: () => Promise<void>;
+    deleteAccount: () => Promise<void>;
     setError: (error: string) => void;
     setSuccess: (success: string) => void;
 }

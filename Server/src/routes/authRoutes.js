@@ -14,12 +14,13 @@ router.post('/verify-email', protect,authController.verifyEmail)
 router.patch('/change-password', protect, authController.changePassword)
 router.patch('/change-user', protect, authController.changeUserName)
 router.get('/name', protect, authController.userName)
-
+router.delete('/delete-user', protect,authController.userDeleteCount)
 router.post('/send-email',EmailComment)
 
 // -- Google
 router.get('/google', authController.googleLogin)
 router.get('/google/callback', authController.googleCallback)
+
 
 // -- uso de passport jwt
 router.get('/profile', authGuard, (req, res) => {
