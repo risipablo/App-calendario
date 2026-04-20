@@ -225,7 +225,14 @@ export const ChartContainer: React.FC = () => {
         }
     };
 
-    // Renderizar listas de tareas
+    const formatDate = (dateString: string) => {
+        // return dateString.split('T')[0]; 
+        const [year, month, day] = dateString.split('T')[0].split('-');
+        return `${day}/${month}/${year}`;
+    };
+
+    
+    // Render de las tareas
     const renderTaskList = (
         tasksList: ITodo[],
         subtasksList: Array<ISubtask & { parentTask: string; parentId?: string }>
@@ -242,10 +249,14 @@ export const ChartContainer: React.FC = () => {
                         <ul>
                             {tasksList.map(task => (
                                 <li key={task._id} className="task-item">
-                                    <span className="task-title">{task.title}</span>
+                                    <span className="task-title">{task.title}
+                                    <small>{formatDate(task.date)}</small>
+                                    </span>
+                                    
                                     <span className={`priority priority-${task.priority?.toLowerCase() || 'media'}`}>
                                         {task.priority || 'Media'}
                                     </span>
+                                    
                                 </li>
                             ))}
                         </ul>
@@ -254,17 +265,21 @@ export const ChartContainer: React.FC = () => {
                 
                 {subtasksList.length > 0 && (
                     <div className="task-group">
-                        <h4>Subtareas:</h4>
                         <ul>
                             {subtasksList.map((subtask, idx) => (
-                                <li key={`${subtask.parentId}-${idx}`} className="task-item">
+                                <li key={idx} className="task-item">
                                     <span className="task-title">
-                                        {subtask.title} 
-                                        <small> (de: {subtask.parentTask})</small>
+                                        {subtask.title}
+                                        <small>
+                                        {subtask.date ? formatDate(new Date(subtask.date).toISOString()) : 'Sin fecha'}
+                                        </small>
                                     </span>
                                     <span className={`priority priority-${subtask.priority?.toLowerCase() || 'media'}`}>
                                         {subtask.priority || 'Media'}
+                                        
                                     </span>
+
+
                                 </li>
                             ))}
                         </ul>
@@ -285,7 +300,6 @@ export const ChartContainer: React.FC = () => {
             const year = selectedYear || new Date().getFullYear();
             return `${months[selectedMonth]} ${year}`;
         }
-        if (selectedPeriod === 'day') return 'Hoy';
         if (selectedPeriod === 'week') return 'Esta Semana';
         if (selectedPeriod === 'month') return 'Este Mes';
         return 'Todas';
@@ -307,9 +321,6 @@ export const ChartContainer: React.FC = () => {
                     <div className="control-group">
                         <label>Período:</label>
                         <div className="period-selector">
-                            <button className={selectedPeriod === 'day' ? 'active' : ''} onClick={() => setSelectedPeriod('day')}>
-                                Hoy
-                            </button>
                             <button className={selectedPeriod === 'week' ? 'active' : ''} onClick={() => setSelectedPeriod('week')}>
                                 Semana
                             </button>

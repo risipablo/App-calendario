@@ -5,10 +5,13 @@ import type { PeriodType } from "../components/filter/useTaskFilter";
 
 export interface ISubtask {
     id: number;
+    date?:Date;
     title?: string;
     priority: string;
     completed: boolean;
     incompletedSubtask?: boolean;
+    parentTask?: string; 
+    parentId?: string; 
 }
 
 export interface ITodo {

@@ -6,7 +6,6 @@ import type { ITodo, ISubtask, TaskStats } from '../../interfaces/type.task';
 export type PeriodType = 'day' | 'week' | 'month' | 'all';
 
 
-
 export const useTaskFilter = () => {
     const { task: allTasks } = useTasks();
 
@@ -65,6 +64,7 @@ export const useTaskFilter = () => {
                 for (let i = 0; i < task.subtaskTitles.length; i++) {
                     subtasks.push({
                         title: task.subtaskTitles[i],
+                        date: new Date(task.date),
                         priority: task.subtaskPriorities?.[i] || 'media',
                         completed: task.subtaskCompleted?.[i] || false,
                         incompletedSubtask: task.incompletedSubtask?.[i],
@@ -125,29 +125,26 @@ export const useTaskFilter = () => {
 
         // Calcular estadísticas
         const stats = useMemo((): TaskStats => {
-            
-            const completed = {
-                tasks: filteredTasks.filter(t => t.completed).length,
-                subtasks: filteredSubtasks.filter(s => s.completed).length,
-                total: 0
-            };
-            completed.total = completed.tasks + completed.subtasks;
+
+            const completedTask = filteredTasks.filter(t => t.completed === true).length
+            const completedSubTasks = filteredSubtasks.filter(t => t.completed === true).length
 
             // Tareas pendientes
-            const pending = {
-                tasks: filteredTasks.filter(t => !t.completed && !t.incompletedSubtask).length,
-                subtasks: filteredSubtasks.filter(s => !s.completed && !s.incompletedSubtask).length,
-                total: 0
-            };
-            pending.total = pending.tasks + pending.subtasks;
+            const pendingTask = filteredTasks.filter(t => t.completed === false).length
+            const pendingSubTasks = filteredSubtasks.filter(t => t.completed === false && t.incompletedSubtask !== true).length
+            
 
             // Tareas fallidas/no realizadas
             const failed = {
-                tasks: filteredTasks.filter(t => t.incompletedSubtask).length,
+                tasks: 0,
                 subtasks: filteredSubtasks.filter(s => s.incompletedSubtask).length,
                 total: 0
             };
             failed.total = failed.tasks + failed.subtasks;
+
+            const total = filteredTasks.length + filteredSubtasks.length
+            const completedTotal = completedTask + completedSubTasks
+            const pendingTotal = pendingTask + pendingSubTasks
 
             // Estadísticas por prioridad
             const byPriority = {
@@ -177,9 +174,9 @@ export const useTaskFilter = () => {
             });
 
             return {
-                total: filteredTasks.length + filteredSubtasks.length,
-                completed,
-                pending,
+                total,
+                completed:{tasks: completedTask, subtasks:completedSubTasks, total:completedTotal},
+                pending:{tasks: pendingTask, subtasks: pendingSubTasks, total: pendingTotal },
                 failed,
                 byPriority
             };
@@ -189,16 +186,17 @@ export const useTaskFilter = () => {
             tasks: filteredTasks,
             subtasks: filteredSubtasks,
             stats,
-            completedTasks: filteredTasks.filter(t => t.completed),
-            completedSubtasks: filteredSubtasks.filter(s => s.completed),
-            pendingTasks: filteredTasks.filter(t => !t.completed && !t.incompletedSubtask),
-            pendingSubtasks: filteredSubtasks.filter(s => !s.completed && !s.incompletedSubtask),
-            failedTasks: filteredTasks.filter(t => t.incompletedSubtask),
-            failedSubtasks: filteredSubtasks.filter(s => s.incompletedSubtask),
+            completedTasks: filteredTasks.filter(t => t.completed === true),
+            completedSubtasks: filteredSubtasks.filter(s => s.completed === true),
+            pendingTasks: filteredTasks.filter(t => t.completed === false), 
+            pendingSubtasks: filteredSubtasks.filter(s => s.completed === false && s.incompletedSubtask !== true),
+            failedTasks: [], 
+            failedSubtasks: filteredSubtasks.filter(s => s.incompletedSubtask === true),
         };
     };
 
     return {
+        
         filterTasksByDate,
         extractSubtasks,
         filterByMonth,
