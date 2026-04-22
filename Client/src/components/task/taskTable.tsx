@@ -35,7 +35,7 @@ export const TaskTable = ({
 }: TaskTableProps) => {
     
     useEffect(() => {
-        setCurrentPage(0)
+        
         const timer = setTimeout(() => {
             setLoading(false)
         }, 100);
@@ -99,7 +99,7 @@ export const TaskTable = ({
         setMonthFilter(filters.monthFilter)
         setYearFilter(filters.yearFilter)
         if (filters.showToday !== undefined) setShowToday(filters.showToday);
-        setCurrentPage(0);
+        // setCurrentPage(0);
     }, [])
 
     const [showDeleteFilteredModal, setShowDeleteFilteredModal] = useState(false)

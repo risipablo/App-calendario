@@ -100,6 +100,7 @@ export const NoteContainer = ({
     const itemsToDisplay = displayNote && displayNote.length >= 0 ? displayNote : note
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSkeleton(true)
         setLoading(true)
         const timer = setTimeout(() => {
@@ -110,13 +111,10 @@ export const NoteContainer = ({
         return () => clearTimeout(timer)
     }, [note.length])
 
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/immutability
-        setCurrentPage(0)
-    }, [itemsToDisplay.length])
+    
 
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const itemsPerPage = 5
+    const itemsPerPage = 4
 
     const pageCount = Math.ceil(itemsToDisplay.length / itemsPerPage)
     const offSet = currentPage * itemsPerPage

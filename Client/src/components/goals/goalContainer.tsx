@@ -101,11 +101,12 @@ export const GoalContainer = ({
     const [loading,setLoading] = useState(true)
     // Skeleton
     const [skeleton, setSkeleton] = useState(true)
+    
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/immutability
-        setCurrentPage(0)
+        
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSkeleton(true)
         const timer = setTimeout(() => {
             setLoading(false)

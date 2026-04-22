@@ -36,9 +36,9 @@ passport.use('google', new GoogleStrategy(
                     password:undefined
                 });
                 await user.save();
-                console.log('✅ Nuevo usuario creado desde Google:', email);
+                // console.log('✅ Nuevo usuario creado desde Google:', email);
             } else {
-                console.log('✅ Usuario existente:', email);
+                // console.log('✅ Usuario existente:', email);
                 // Actualizar avatar si no tiene
                 if (!user.avatarUrl && avatarUrl) {
                     user.avatarUrl = avatarUrl;
