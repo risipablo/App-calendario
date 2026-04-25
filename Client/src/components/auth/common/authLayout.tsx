@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import type { AuthLayoutProps } from "../../../interfaces/type.user";
+import "../../../style/authStyle.css"
+import "../../../style/userSettings.css"
 
 export const AuthLayout = ({
     children,

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import type { AuthButtonProps } from "../../../interfaces/type.user"
-
-
+import "../../../style/authStyle.css"
+import "../../../style/userSettings.css"
 
 export const AuthButton = ({
 loading,

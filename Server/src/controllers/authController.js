@@ -364,13 +364,16 @@ exports.userName = async (req,res) => {
 
 
 // inicios de sesion con google
-exports.googleLogin = passport.authenticate('google',{
-    scope:['profile','email'],
-    session:false
-})
+exports.googleLogin = (req, res, next) => {
+    console.log('🌐 GOOGLE CALLBACK URL CONFIGURADA:', process.env.GOOGLE_CALLBACK_URL);
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+        session: false
+    })(req, res, next);
+};
 
 exports.googleCallback = (req, res, next) => {
-    
+    console.log('📥 Callback de Google recibido');
     
     passport.authenticate('google', { session: false }, (err, user, info) => {
         console.log('🔍 Resultado:', { err: err?.message, user: user?.email });

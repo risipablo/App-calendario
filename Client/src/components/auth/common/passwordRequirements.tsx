@@ -2,6 +2,8 @@ import { Collapse } from "@mui/material";
 import type { PasswordRequirementsProps } from "../../../interfaces/type.user"
 import { ChevronDown } from "lucide-react";
 import { TransitionGroup } from 'react-transition-group';
+import "../../../style/authStyle.css"
+import "../../../style/userSettings.css"
 
 
 export const PasswordRequirements = ({

@@ -1,5 +1,6 @@
 import { useState } from "react"
-
+import "../../../style/authStyle.css"
+import "../../../style/userSettings.css"
 import { Eye, EyeClosed } from "lucide-react"
 import type { PasswordInputProps } from "../../../interfaces/type.user"
 
