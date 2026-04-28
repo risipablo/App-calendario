@@ -13,8 +13,10 @@ import { ClipLoader } from 'react-spinners';
         const error = params.get('error');
 
         if (error) {
+            localStorage.removeItem('token')
             navigate('/login', { state: { error: 'Error al iniciar sesión con Google' } });
         } else if (token) {
+            localStorage.removeItem('token')
             localStorage.setItem('token', token);
             navigate('/dashboard');
         } else {
