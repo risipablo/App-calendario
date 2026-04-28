@@ -5,6 +5,7 @@ const serverFront = config.Api
 export const GoogleLoginButton = () => {
     const handleGoogleLogin = () => {
         
+        console.log('🚀 Redirigiendo a:', `${serverFront}/api/auth/google`);
         window.location.href = `${serverFront}/api/auth/google`;
     };
 
