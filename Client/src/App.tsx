@@ -8,10 +8,11 @@ import axios from 'axios'
 import { config } from './config/index'
 import "../src/style/authStyle.css"
 import { SuspenseLoader } from './components/layout/loaderSuspense'
-import { CallbackPage } from './pages/auth/callbackPage';
+
 
 const serverFront = config.Api
 
+const CallbackPage = lazy(() => import('./pages/auth/callbackPage'))
 const Home = lazy(() => import('./pages/home'))
 const LoginPage = lazy(() => import('./pages/auth/loginPage'))
 const RegisterPage = lazy(() => import('./pages/auth/registerPage'))
