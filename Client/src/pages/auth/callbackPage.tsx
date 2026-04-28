@@ -6,16 +6,22 @@ import { ClipLoader } from 'react-spinners';
  const CallbackPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const token = params.get('token');
         const error = params.get('error');
-
+    
+        console.log('CallbackPage - Token recibido:', token ? 'Sí' : 'No');
+    
         if (error) {
+            localStorage.removeItem('token');
             navigate('/login', { state: { error: 'Error al iniciar sesión con Google' } });
         } else if (token) {
+            
+            
+            localStorage.removeItem('token');
             localStorage.setItem('token', token);
+            console.log('✅ Token guardado, redirigiendo a dashboard');
             navigate('/dashboard');
         } else {
             navigate('/login');

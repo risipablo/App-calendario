@@ -5,8 +5,6 @@ const serverFront = config.Api
 export const GoogleLoginButton = () => {
     const handleGoogleLogin = () => {
         
-        localStorage.removeItem('token');
-        sessionStorage.clear();
         // console.log('Redirigiendo a:', `${serverFront}/api/auth/google`);
         window.location.href = `${serverFront}/api/auth/google`;
     };
