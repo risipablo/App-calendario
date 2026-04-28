@@ -377,7 +377,12 @@ exports.googleLogin = (req, res, next) => {
 };
 
 exports.googleCallback = (req, res, next) => {
-
+    
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+    });
     
     passport.authenticate('google', { session: false }, (err, user, info) => {
         console.log('🔍 Resultado:', { err: err?.message, user: user?.email });
