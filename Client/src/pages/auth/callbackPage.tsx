@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 
-export const CallbackPage = () => {
+ const CallbackPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -35,3 +35,5 @@ export const CallbackPage = () => {
         </div>
     );
 };
+
+export default CallbackPage
