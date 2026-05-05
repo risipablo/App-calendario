@@ -4,11 +4,13 @@ const mongoose = require("mongoose")
 const goalSchema = new mongoose.Schema({
     title:{
         type:String,
-        required:true
+        required:true,
+        maxlength: 90
     },
     description:{
         type:String,
-        required:false
+        required:false,
+        maxlength: 150
     },
     priority: {
         type: String,
@@ -23,7 +25,7 @@ const goalSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    complete_note:{
+    complete_note: {
         type:Date,
         default:null
     },

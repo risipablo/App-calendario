@@ -16,6 +16,19 @@ export const NoteForm = ({
 
     const [addModal, setAddModal] = useState(false)
 
+    const handleClean = () => {
+        setTitle('')
+        setCategory('')
+        setDate('')
+        
+    }
+
+    const handleClose = () => {
+        setAddModal(false)
+        handleClean()
+    }
+
+
     return(
         <>
             <button className="btn-add-task" onClick={() => setAddModal(true)}>
@@ -64,13 +77,25 @@ export const NoteForm = ({
 
                           <div className="task-form-group">
                               <label>Nota</label>
-                              <input 
-                                  type="text" 
+                              <textarea 
+                                //   type="text" 
                                   className="task-input"
                                   placeholder="Ingresa la nota"
                                   value={title} 
-                                  onChange={(e) => setTitle(e.target.value)} 
+                                  onChange={(e) => {
+                                    if (e.target.value.length <= 120){
+                                        setTitle(e.target.value)
+                                    }
+                                  }}
+                                  maxLength={120}
+                                  rows={3}
+                                  style={{ resize: 'vertical' }}
                               />
+                              {title.length >= 0 && (
+                                    <small style={{ color: title.length === 180 ? 'red' : 'orange' }}>
+                                        {title.length}/120 caracteres
+                                    </small>
+                                )}
                           </div>
 
 
@@ -107,7 +132,7 @@ export const NoteForm = ({
 
                               <button 
                                   className="task-btn task-btn-secondary"
-                                  onClick={() => setAddModal(false)}
+                                  onClick={handleClose}
                               >
                                   <X size={18} />
                                   Cancelar

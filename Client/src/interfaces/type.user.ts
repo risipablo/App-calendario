@@ -43,7 +43,6 @@ export interface ChangeUserNameProps {
       email?: string;
       name: string;
     };
-  
   }
   
   export interface ApiError {
@@ -58,7 +57,7 @@ export interface ChangeUserNameProps {
 }
 
 
-// Interface for register user
+
 
 export interface AuthLayoutProps{
     children: React.ReactNode

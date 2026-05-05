@@ -20,6 +20,19 @@ export const CalendarForm = ({
 
     const [addModal, setAddModal] = useState(false)
 
+    const handleClean = () => {
+        setTitle('')
+        setHour('')
+        setDate('')
+        setPriority('')
+        setCategory('')
+    }
+
+    const handleClose = () => {
+        setAddModal(false)
+        handleClean()
+    }
+
     return(
         <>
             <button className="btn-add-task" onClick={() => setAddModal(true)}>
@@ -136,7 +149,7 @@ export const CalendarForm = ({
 
                                     <button 
                                         className="task-btn task-btn-secondary"
-                                        onClick={() => setAddModal(false)}
+                                        onClick={handleClose}
                                     >
                                         <X size={18} />
                                         Cancelar

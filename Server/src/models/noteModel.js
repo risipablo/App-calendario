@@ -7,7 +7,8 @@ const noteSchema = new mongoose.Schema({
     },
     title:{
         type:String,
-        required:false
+        required:false,
+        maxlength: 120
     },
     category:{
         type:String,

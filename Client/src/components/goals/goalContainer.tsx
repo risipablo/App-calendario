@@ -246,10 +246,10 @@ export const GoalContainer = ({
                                             <Calendar size={14} />
                                             <span>Creada: {formateDate(met.start_date)}</span>
                                         </div>
-                                        {met.completed && met.completed_at && (
-                                            <div className="goal-date-info completed-date-info">
+                                        {met.completed === true && met.completed_note && (
+                                            <div className="goal-date-info">
                                                 <CheckCircle2 size={14} />
-                                                <span>Completada: {formateDate(met.completed_at)}</span>
+                                                <span>Completada el: {formateDate(met.completed_note)}</span>
                                             </div>
                                         )}
                                     </div>

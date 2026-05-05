@@ -3,11 +3,12 @@
 export interface IGoal{
     _id:string
     title:string
-    description?:string
+    description:string
     priority:'alta'|'media'|'baja'
     start_date: string 
     completed:boolean
-    completed_at?: string | null
+    completed_note?: string | null
+    userId?: string
 }
 
 // Goal Form

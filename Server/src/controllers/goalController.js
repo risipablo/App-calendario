@@ -87,9 +87,24 @@ exports.completedGoal = async (req,res) => {
             return res.status(404).json({error: "goal not found"})
         }
 
+        const wasCompleted = goal.completed
         goal.completed = !goal.completed
+
+        if( goal.completed && !wasCompleted){
+            goal.complete_note = new Date()
+            
+        }
+
+        if(!goal.completed && wasCompleted){
+            goal.complete_note = null
+            
+        }
+
         await goal.save()
-        res.json(goal)
+
+        const updatedGoal = await GoalModel.findById(id);
+
+        res.json(updatedGoal)
     
     }catch (err) {
         console.error(err.message)

@@ -16,6 +16,18 @@ export const TaskForm = ({
 }: TaskFormProps) => {
 
     const [addModal, setAddModal] = useState(false);
+
+    const handleClean = () => {
+        setTitle('')
+        setDate('')
+        setPriority('')
+        
+    }
+
+    const handleClose = () => {
+        setAddModal(false)
+        handleClean()
+    }
   
     return (
         <>
@@ -71,6 +83,7 @@ export const TaskForm = ({
                                         placeholder="Ingresa el título de la tarea"
                                         value={title} 
                                         onChange={(e) => setTitle(e.target.value)} 
+                                        
                                     />
                                 </div>
 
@@ -103,7 +116,7 @@ export const TaskForm = ({
 
                                     <button 
                                         className="task-btn task-btn-secondary"
-                                        onClick={() => setAddModal(false)}
+                                        onClick={handleClose}
                                     >
                                         <X size={18} />
                                         Cancelar

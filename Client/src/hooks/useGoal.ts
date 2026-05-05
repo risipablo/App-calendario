@@ -13,7 +13,7 @@ export const useGoals = () => {
     const [goal, setGoal] = useState<IGoal[]>([])
     const [loading, setLoading] = useState(true)
     
-    // ✅ loadGoals con useCallback
+    
     const loadGoals = useCallback(async () => {
         const token = localStorage.getItem('token')
         
@@ -37,7 +37,7 @@ export const useGoals = () => {
         loadGoals()
     }, [loadGoals])
 
-    // ✅ addGoal con useCallback
+    
     const addGoal = useCallback(async (title: string, description: string, priority: string, start_date?: string) => {
         if (!title.trim()) {
             toast.error('El título es obligatorio', TOAST_CONFIG)
@@ -61,7 +61,7 @@ export const useGoals = () => {
         }
     }, [])
 
-    // ✅ deleteGoal con useCallback
+    
     const deleteGoal = useCallback((id: string) => {
         axiosInstance.delete(`/api/goal/${id}`)
             .then(() => {
@@ -74,7 +74,7 @@ export const useGoals = () => {
             })
     }, [])
 
-    // ✅ allDeleteGoal con useCallback
+    
     const allDeleteGoal = useCallback(() => {
         axiosInstance.delete('/api/goal')
             .then(response => {
@@ -88,7 +88,7 @@ export const useGoals = () => {
             })
     }, [])
 
-    // ✅ editGoal (ya estaba bien, solo ajusto dependencia)
+   
     const editGoal = useCallback((id: string, editData: { title: string, description: string, priority: string, start_date: string }) => {
         axiosInstance.patch(`/api/goal/${id}`, editData)
             .then(response => {
@@ -99,16 +99,17 @@ export const useGoals = () => {
                 console.error(err)
                 toast.error('Error al guardar la meta', TOAST_CONFIG)
             })
-    }, [])  // ← setGoal es estable, no necesita dependencias
+    }, [])  
 
-    // ✅ toogleComplete con useCallback
+    
+    
     const toogleComplete = useCallback((id: string) => {
         axiosInstance.patch(`/api/goal/${id}/completedGoal`)
             .then(response => {
                 setGoal(prev => prev.map(goa => goa._id === id ? response.data : goa))
 
                 const goalData = response.data
-                const message = goalData.completed ? 'Meta completada ✓' : 'Meta marcada como pendiente'
+                const message = goalData.completed ? 'Meta completada ' : 'Meta marcada como pendiente'
                 
                 toast.success(message, { position: 'top-center', duration: 1000 })
             })

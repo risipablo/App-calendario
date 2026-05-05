@@ -17,6 +17,18 @@ export const GoalForm = ({
 }:GoalFormProps) => {
 
     const [addModal, setAddModal] = useState(false)
+    const descriptionValue = description ?? ""
+
+    const handleClean = () => {
+        setTitle('')
+        setDescription('')
+        setPriority('')
+    }
+
+    const handleClose = () => {
+        setAddModal(false)
+        handleClean()
+    }
 
     return(
         <>
@@ -71,19 +83,42 @@ export const GoalForm = ({
                                         className="task-input"
                                         placeholder="Ingresa el título de la tarea"
                                         value={title} 
-                                        onChange={(e) => setTitle(e.target.value)} 
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 90){
+                                                setTitle(e.target.value)
+                                            }
+                                          }}
+                                          maxLength={90}
+                                          style={{ resize: 'vertical' }}
                                     />
+                                      {title.length >= 0 && (
+                                        <small style={{ color: title.length === 90 ? 'red' : 'orange' }}>
+                                            {title.length}/90 caracteres
+                                        </small>
+                                        )}  
                                 </div>
 
                                 <div className="task-form-group">
                                     <label>Descripción</label>
-                                    <input 
-                                        type="text" 
+                                    <textarea 
+                                        
                                         className="task-input"
                                         placeholder="Ingresa una descripción"
-                                        value={description} 
-                                        onChange={(e) => setDescription(e.target.value)} 
+                                        value={descriptionValue} 
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 150){
+                                                setDescription(e.target.value)
+                                            }
+                                          }}
+                                          maxLength={150}
+                                          rows={3}
+                                          style={{ resize: 'vertical' }}
                                     />
+                                        {descriptionValue.length >= 0 && (
+                                            <small style={{ color: descriptionValue.length === 150 ? 'red' : 'orange' }}>
+                                                {descriptionValue.length}/150 caracteres
+                                            </small>
+                                        )}  
                                 </div>
 
                                 <div className="task-form-group">
@@ -115,7 +150,7 @@ export const GoalForm = ({
 
                                     <button 
                                         className="task-btn task-btn-secondary"
-                                        onClick={() => setAddModal(false)}
+                                        onClick={handleClose}
                                     >
                                         <X size={18} />
                                         Cancelar

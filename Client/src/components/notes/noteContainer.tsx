@@ -270,7 +270,7 @@ export const NoteContainer = ({
 
 
                     <div className="form-group-inline">
-                            <label>Descripción</label>
+                            <label>Fecha</label>
                             <input 
                                 type="date"
                                 className="modal-input"
@@ -302,19 +302,24 @@ export const NoteContainer = ({
 
 
                         <div className="form-group-inline">
-                            <label>Categoria</label>
-                            <select 
-                                className="modal-select"
-                                value={editData.category}
-                                onChange={(e) => setEditData({
+                        <label>Categoria</label>
+                              <select 
+                                  className="task-select"
+                                  value={editData.category} 
+                                  onChange={(e) => setEditData({
                                     ...editData,
                                     category: e.target.value
-                                })}
-                            >
-                                <option value="alta">Alta</option>
-                                <option value="media">Media</option>
-                                <option value="baja">Baja</option>
-                            </select>
+                                  })}
+                              >
+                                  <option value="">Selecciona una categoria</option>
+                                  <option value="trabajo">Trabajo</option>
+                                  <option value="personal">Personal</option>
+                                  <option value="estudio">Estudio</option>
+                                  <option value="deporte">Deporte</option>
+                                  <option value="idea">Idea</option>
+                                  <option value="salud">Salud</option>
+                                  <option value="otro">Otro</option>
+                              </select>
                         </div>
 
    

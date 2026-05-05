@@ -1,33 +1,44 @@
-
+// pages/auth/callbackPage.tsx
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
+import type { AuthenticatedProps } from '../../App';
 
- const CallbackPage = () => {
+const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
     const navigate = useNavigate();
     const location = useLocation();
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const token = params.get('token');
         const error = params.get('error');
-    
-        console.log('CallbackPage - Token recibido:', token ? 'Sí' : 'No');
-    
+
+        
+
         if (error) {
+        
             localStorage.removeItem('token');
+            setIsAuthenticated(false);
             navigate('/login', { state: { error: 'Error al iniciar sesión con Google' } });
-        } else if (token) {
-            
-            
-            localStorage.removeItem('token');
+            return;
+        }
+
+        if (token) {
+        
             localStorage.setItem('token', token);
-            console.log('✅ Token guardado, redirigiendo a dashboard');
+        
+            setIsAuthenticated(true);
+            console.log('✅ setIsAuthenticated(true)');
+            
+        
             navigate('/dashboard');
         } else {
+        
             navigate('/login');
         }
-    }, [location, navigate]);
+    }, [location.search, navigate, setIsAuthenticated]);
 
+    
     return (
         <div style={{ 
             display: 'flex', 
@@ -36,10 +47,10 @@ import { ClipLoader } from 'react-spinners';
             justifyContent: 'center', 
             minHeight: '100vh' 
         }}>
-            <ClipLoader color="#667eea" size={60} />
-            <p style={{ marginTop: '20px', color: '#667eea' }}>Iniciando sesión...</p>
+            <ClipLoader color="#b87c4f" size={60} />
+            <p style={{ marginTop: '20px', color: '#d4c9a6' }}>Procesando inicio de sesión...</p>
         </div>
     );
 };
 
-export default CallbackPage
+export default CallbackPage;
