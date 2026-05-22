@@ -1,5 +1,7 @@
+// Fast note endpoint
+
 const NoteModel = require("../models/noteModel");
-const TodoModel = require("../models/taskModel");
+
 
 exports.getNote = async(req,res) => {
     try{
@@ -98,5 +100,32 @@ exports.completedNote = async(req,res) => {
         res.json(note)
     } catch(err){
         console.error(err.message)
+    }
+}
+
+
+// Delete filter note
+exports.deleteNoteFilter = async (req,res) => {
+    
+    const userId = req.user.id
+    const {filterType} = req.query
+    
+    try{
+
+        if (!filterType){
+            return res.status(400).json({error: 'Se requiere filterType'})
+        }
+        const result = await NoteModel.deleteMany({
+            userId,
+            category:filterType
+        })
+
+        res.json({ 
+            message: `${result.deletedCount} notas eliminadas`,
+            deletedCount: result.deletedCount 
+        });
+    } catch (err){
+        console.error(' Error:', err);
+        res.status(500).json({ error: err.message });
     }
 }

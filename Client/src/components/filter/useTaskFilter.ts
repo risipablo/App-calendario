@@ -1,4 +1,6 @@
 
+// Component for stats task (chartComponent)
+
 import { useMemo, useCallback } from 'react';
 import { useTasks } from '../../context/taskContex';
 import type { ITodo, ISubtask, TaskStats } from '../../interfaces/type.task';
@@ -78,6 +80,7 @@ export const useTaskFilter = () => {
 
         return subtasks;
     }, []);
+
 
     // Filtro por mes específico
     const filterByMonth = useCallback((tasks: ITodo[], month: string, year?: string) => {

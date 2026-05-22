@@ -4,16 +4,19 @@ import { NoteForm } from "./noteForm";
 import { NoteContainer } from "./noteContainer";
 import { ModalConfirm } from "../layout/modalConfirm";
 import { Tooltip } from "@mui/material";
-import { Trash2 } from "lucide-react";
-import type { INote } from "../../interfaces/type.notes";
+import { FilterX, Trash2 } from "lucide-react";
+import type { INote, NoteCategory } from "../../interfaces/type.notes";
 import "../../style/task.css"
 import "../../style/goal.css"
+
+import axiosInstance from "../../utils/axiosIntance";
+import { FilterNote } from "../layout/filter/filterNoteFast";
 
 
 
 export const NoteMaster = () => {
 
-    const {note,addNote,editNote,deleteNote,allDeleteNote,toogleComplete} = useNotes()
+    const {note,setNote,addNote,editNote,deleteNote,allDeleteNote,toogleComplete, deleteFilteredNote} = useNotes()
 
     const [date,SetDate] = useState<string>('')
     const [title,setTitle] = useState<string>('')
@@ -54,6 +57,22 @@ export const NoteMaster = () => {
         }
     };
 
+    const [activeFilter, setFilterActive] = useState<string>('')
+    const [showModalFilter,setShowModalFilter] = useState(false)
+
+    const handleDeleteFiltered = async () => {
+        if (!activeFilter) return
+        
+        await deleteFilteredNote({ filterType: activeFilter as NoteCategory })
+        setShowModalFilter(false)
+        setFilterActive('') 
+        
+        const response = await axiosInstance.get('/api/note')
+        setFilteredNotes(response.data)
+        setNote(response.data)
+    }
+
+
     useEffect(() => {
         setFilteredNotes(note)
     },[note])
@@ -65,6 +84,7 @@ export const NoteMaster = () => {
                 <h2 className="table-title">
                      Notas Rapidas
                 </h2>
+                
 
                 <div className="header-actions">
                     <NoteForm
@@ -76,8 +96,8 @@ export const NoteMaster = () => {
                         setTitle={setTitle}
                         setCategory={setCategory}
                     />
-
-
+                    
+                    
 
                     <Tooltip title="Eliminar todas las notas" arrow>
                         <button className="delete-all-btn" onClick={() => openDeleteModal(
@@ -91,12 +111,29 @@ export const NoteMaster = () => {
                         </button>
                     </Tooltip>
 
+                    {activeFilter && filteredNotes.length > 0 && (
+                        <Tooltip title={`Eliminar solo las notas de: ${activeFilter} `} arrow>
+                            <button 
+                                className="delete-all-btn" 
+                                onClick={() => setShowModalFilter(true)}
+                            >
+                                <Trash2 size={18} />
+                                <FilterX size={14} />
+                                <span>Eliminar Filtradas ({filteredNotes.length})</span>
+                            </button>
+                        </Tooltip>
+                    )}
+
                 </div>
             </div>
 
+            
+
+            
+            <FilterNote note={note} setNoteFilter={setFilteredNotes} setFilterActive={setFilterActive}/>
             <NoteContainer
                 note={note}
-                displayNote={filteredNotes}
+                filteredNotes={filteredNotes}
                 setFilterNote={setFilteredNotes}
                 addNote={addNote}
                 ondAddNote={handleAddNote}
@@ -104,9 +141,11 @@ export const NoteMaster = () => {
                 editNote={editNote}
                 allDeleteNote={allDeleteNote}
                 toogleComplete={toogleComplete}
+                activeFilter={activeFilter}
+                onDeleteFiltered={() => setShowModalFilter(true)}
             />
 
-            
+  
 
                 {showModal && (
                     <ModalConfirm   
@@ -118,6 +157,20 @@ export const NoteMaster = () => {
                     confirmText={modalConfig.confirmText}
                     cancelText="Cancelar" />
                 )} 
+
+                  
+                {/* Modal para eliminar filtradas */}
+                {showModalFilter &&  (
+                    <ModalConfirm
+                        isOpen={showModalFilter}
+                        onClose={() => setShowModalFilter(false)}
+                        onConfirm={handleDeleteFiltered}
+                        title="⚠️ Eliminar notas filtradas"
+                        message={`¿Estás seguro que deseas eliminar todas las notas de categoría "${activeFilter}" (${filteredNotes.length} notas)?`}
+                        confirmText={`Eliminar ${filteredNotes.length} notas`}
+                        cancelText="Cancelar"
+                    />
+                )}
 
             </div>
         )

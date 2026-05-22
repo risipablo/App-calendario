@@ -2,22 +2,20 @@ import { useEffect, useState } from "react";
 import type { INote, NoteContainerProps } from "../../interfaces/type.notes";
 import { Calendar, CheckCircle2, Pencil, PencilLine, Save, Trash2, X } from "lucide-react";
 import { ClipLoader } from "react-spinners";
-import { Toaster } from "react-hot-toast";
+import {  Toaster } from "react-hot-toast";
 import { PaginationComponent } from "../layout/pagination";
 import { ModalConfirm } from "../layout/modalConfirm";
 import { Tooltip } from "@mui/material";
 import "../../style/task.css"
-import "../../style/goal.css"
-import { FilterNote } from "../layout/filter/filterNoteFast";
-// import { FIlterNote } from "../layout/filter/filterNoteFast";
+
+
 
 export const NoteContainer = ({
     note,
     deleteNote,
     editNote,
     toogleComplete,
-    displayNote,
-    setFilterNote
+    filteredNotes,
 }:NoteContainerProps) => {
 
     const [goalIndex, setGoalIndex] = useState<string | null>(null);
@@ -27,6 +25,7 @@ export const NoteContainer = ({
         title:'',
         category: '',
     });
+    // const [, setFilterActive] = useState<string>('')
 
     const [showModal, setShowModal] = useState(false);
     const [deleteAction, setDeleteAction] = useState<(() => void) | null>(null);
@@ -93,11 +92,12 @@ export const NoteContainer = ({
         setEditingId(null);
     };
 
+  
     const [loading,setLoading] = useState(true)
     const [skeleton, setSkeleton] = useState(true)
 
 
-    const itemsToDisplay = displayNote && displayNote.length >= 0 ? displayNote : note
+    const itemsToDisplay = filteredNotes && filteredNotes.length >= 0 ? filteredNotes : note
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -156,12 +156,27 @@ export const NoteContainer = ({
             </div>
         ) 
     }
-
+  
+    if (itemsToDisplay.length === 0) {
+        // Obtener la categoría activa (puedes recibirla como prop)
+        const activeCategory = (filteredNotes !== note && filteredNotes.length === 0) 
+            ? 'esta categoría' 
+            : 'los filtros seleccionados';
+        
+        return (
+            <div className="empty-state-goals">
+                <PencilLine size={64} />
+                <h3>No se encontraron notas rápidas</h3>
+                <p>No hay notas en {activeCategory}.</p>
+                <p className="empty-state-hint">Prueba con otra categoría o limpia los filtros.</p>
+            </div>
+        );
+    }
 
     return (
         <div className={`task-row `}>
 
-        <FilterNote note={note} setNoteFilter={setFilterNote}/>
+        
         <div className="goals-list">
                 {currentItems.map((met) => (
                     <div 
@@ -356,6 +371,8 @@ export const NoteContainer = ({
                 cancelText="Cancelar"
             />
         )}
+
+
 
         {
             pageCount > 1 && (

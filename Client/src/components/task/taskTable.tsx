@@ -99,7 +99,7 @@ export const TaskTable = ({
         setMonthFilter(filters.monthFilter)
         setYearFilter(filters.yearFilter)
         if (filters.showToday !== undefined) setShowToday(filters.showToday);
-        // setCurrentPage(0);
+        setCurrentPage(0);
     }, [])
 
     const [showDeleteFilteredModal, setShowDeleteFilteredModal] = useState(false)
@@ -241,19 +241,7 @@ export const TaskTable = ({
                                     ? "Intenta con otros filtros o limpia los filtros actuales"
                                     : "Agrega tu primera tarea usando el formulario"}
                         </p>
-                        {(dateFilter || monthFilter || yearFilter) && (
-                            <button 
-                                className="btn-toggle-view" 
-                                onClick={() => {
-                                    // Limpiar todos los filtros
-                                    setFilterTask([])
-                                    setShowToday(false)
-                                }}
-                                style={{ marginTop: '16px' }}
-                            >
-                                Limpiar filtros
-                            </button>
-                        )}
+
                     </div>
                 ) : (
                     <div className="table-wrapper">

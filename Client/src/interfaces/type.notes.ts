@@ -1,10 +1,12 @@
 // Note interface
 
+export type NoteCategory = 'trabajo' | 'personal' | 'estudio' | 'deporte' | 'idea' | 'salud' | 'otro'
+
 export interface INote{
     _id:string
     date:string
     title:string;
-    category?:'trabajo'|'personal'|'estudio'|'deporte'|'idea'|'salud'|'otro'
+    category?: NoteCategory
     completed?:boolean
 }
 
@@ -20,12 +22,15 @@ export interface NoteFormProps{
 
 export interface NoteContainerProps{
     note:INote[]
-    displayNote: INote[] 
+    filteredNotes:INote[]
     setFilterNote: React.Dispatch<React.SetStateAction<INote[]>>;
     addNote:(date:Date, title:string,category:string) => void
     deleteNote:(id:string) => void
-    allDeleteNote:(id:string) => void
+    allDeleteNote: () => void
+    activeFilter?: string
+    onDeleteFiltered?:() => void
     editNote:(id:string,editData: {date:Date, title:string,category:string})=> void
     toogleComplete: (id: string) => void;
     ondAddNote?: () => void   
+
 }

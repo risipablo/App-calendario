@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import toast from 'react-hot-toast';
 import axiosInstance from '../utils/axiosIntance';
-import type { INote } from '../interfaces/type.notes';
+import type { INote, NoteCategory } from '../interfaces/type.notes';
 
 const TOAST_CONFIG = {
     position: 'top-center' as const,
@@ -12,6 +12,7 @@ const TOAST_CONFIG = {
 export const useNotes = () => {
     const [note, setNote] = useState<INote[]>([]);
     const [loading, setLoading] = useState(true);
+    const [filterNote] = useState<INote[]>([])
 
     
     useEffect(() => {
@@ -37,6 +38,7 @@ export const useNotes = () => {
 
 
     const addNote = useCallback(async (date: Date, title: string, category?: string) => {
+      
         if (!title.trim() || !date) {
             toast.error('Completa todos los campos requeridos', TOAST_CONFIG);
             return;
@@ -85,6 +87,30 @@ export const useNotes = () => {
             });
     }, []);
 
+    const deleteFilteredNote = useCallback(async (filters: {
+        filterType: NoteCategory
+    }) => {
+        try{
+            const response = await axiosInstance.delete('/api/note/filter',{
+                params:filters
+            })
+
+            setNote(prev => {
+                return prev
+            })
+
+            const {data} = await axiosInstance.get('/api/note')
+            setNote(data)
+
+            toast.success(response.data.message, TOAST_CONFIG)
+            return response.data
+        } catch (err) {
+            console.error(err)
+            toast.error('Error al eliminar tareas filtradas', TOAST_CONFIG)
+            throw err
+        }
+    },[])
+
     
     const editNote = useCallback((id: string, editData: { date: Date; title: string; category: string }) => {
         axiosInstance.patch(`/api/note/${id}`, editData)
@@ -117,11 +143,14 @@ export const useNotes = () => {
 
     return {
         note,
+        setNote,
         loading,
         addNote,
         deleteNote,
         allDeleteNote,
+        deleteFilteredNote,
         editNote,
-        toogleComplete
+        toogleComplete,
+        filterNote
     };
 };

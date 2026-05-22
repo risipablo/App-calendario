@@ -22,6 +22,10 @@ export const FilterPerDay = ({
     const [dateFilter, setDateFilter] = useState<string>('')
     const [monthFilter, setMonthFilter] = useState<string>('')
     const [yearFilter, setYearFilter] = useState<string>('') 
+    
+    const [tempMonth, setTempMonth] = useState<string>('')
+    const [tempYear, setTempYear] = useState<string>('')
+    
     const [pendingDate, setPendingDate] = useState<string>('')
     const [addModal, setAddModal] = useState(false)
     const [filterModal, setFilterModal] = useState(false)
@@ -88,15 +92,23 @@ export const FilterPerDay = ({
 
         
 
-    }, [filteredTasks, monthFilter, yearFilter, task, normalDate, setFilterTask,onFilterChange])
+    }, [filteredTasks, task, normalDate, setFilterTask,onFilterChange])
 
-    const handleApplyDate = () => {
-        setDateFilter(pendingDate)
-        setShowToday(false)
-        setAddModal(false)
+    const handleOpenFilterModal = () => {
+        setTempMonth(monthFilter)
+        setTempYear(yearFilter)
+        setFilterModal(true)
     }
 
+    // const handleApplyDate = () => {
+    //     setDateFilter(pendingDate)
+    //     setShowToday(false)
+    //     setAddModal(false)
+    // }
+
     const handleApplyFilters = () => {
+        setMonthFilter(tempMonth)
+        setYearFilter(tempYear)
         setFilterModal(false)
     }
 
@@ -105,6 +117,8 @@ export const FilterPerDay = ({
         setMonthFilter("")
         setYearFilter("")
         setPendingDate("")
+        setTempMonth('')
+        setTempYear('')
         setShowToday(false)
         setAddModal(false)
         setFilterModal(false)
@@ -143,7 +157,7 @@ export const FilterPerDay = ({
                 </button>
                 
                 <button 
-                    onClick={() => setFilterModal(true)}  
+                    onClick={handleOpenFilterModal}  
                     className={`btn-toggle-view ${monthFilter || yearFilter ? 'active' : ''}`}
                 >
                     <Filter size={18} />
@@ -189,12 +203,12 @@ export const FilterPerDay = ({
                             <div className="task-modal-actions">
                                 <button 
                                     className="task-btn task-btn-primary"
-                                    onClick={handleApplyDate}
+                                    onClick={handleApplyFilters}
                                     disabled={!pendingDate}
                                 >
                                     Aplicar filtro
                                 </button>
-                                {dateFilter && (
+                                {(tempMonth || tempYear) && (
                                     <button className="task-btn task-btn-secondary" onClick={() => {
                                         setDateFilter('')
                                         setPendingDate('')
@@ -224,8 +238,8 @@ export const FilterPerDay = ({
                             <div className="task-form-group">
                                 <label>Seleccionar mes</label>
                                 <select 
-                                    value={monthFilter}
-                                    onChange={(e) => setMonthFilter(e.target.value)}
+                                    value={tempMonth}
+                                    onChange={(e) => setTempMonth(e.target.value)}
                                     className="task-select"
                                 >
                                     <option value="">Todos los meses</option>
@@ -247,8 +261,8 @@ export const FilterPerDay = ({
                             <div className="task-form-group">
                                 <label>Seleccionar año</label>
                                 <select 
-                                    value={yearFilter}
-                                    onChange={(e) => setYearFilter(e.target.value)}
+                                    value={tempYear}
+                                    onChange={(e) => setTempYear(e.target.value)}
                                     className="task-select"
                                 >
                                     <option value="">Todos los años</option>

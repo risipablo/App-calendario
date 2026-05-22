@@ -55,7 +55,7 @@ export const NoteForm = ({
                       onClick={(e) => e.stopPropagation()}
                   >
                       <div className="task-modal-header">
-                          <h3>Nueva Tarea</h3>
+                          <h3>Nueva Nota Rapida</h3>
                           <button 
                               className="task-modal-close" 
                               onClick={() => setAddModal(false)}

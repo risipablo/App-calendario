@@ -6,26 +6,30 @@ import { RotateCcw } from "lucide-react";
 type Props = {
     note: INote[]
     setNoteFilter: React.Dispatch<React.SetStateAction<INote[]>>
+    setFilterActive: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const FilterNote = ({ note, setNoteFilter }: Props) => {
+export const FilterNote = ({ note, setNoteFilter,setFilterActive }: Props) => {
     const [categoryFilter, setCategoryFilter] = useState<string>('')
 
     useEffect(() => {
         if (!categoryFilter) {
             setNoteFilter([...note])
+            setFilterActive('')
             return
         }
 
         const filtered = note.filter(n => n.category === categoryFilter)
         setNoteFilter(filtered)
-    }, [categoryFilter, note, setNoteFilter])
+        setFilterActive(categoryFilter)
+    }, [categoryFilter, note, setNoteFilter,setFilterActive])
 
     
 
     const handleReset = () => {
         setCategoryFilter('')
         setNoteFilter([...note])
+        setFilterActive('')
     }
 
     const hasActiveFilters = categoryFilter.trim().length > 0

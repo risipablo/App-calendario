@@ -13,7 +13,7 @@ const Dashboard = () => {
     
     const [showPending, setShowPending] = useState(false)
     const [showCompleted, setShowCompleted] = useState(false)
-    const [showFailed, setShowFailed] = useState(false)
+    // const [showFailed, setShowFailed] = useState(false)
 
     const [showNotesToday, setShowToday] = useState(false)
     const [showNotesWeek, setShowWeek] = useState(false)
@@ -30,7 +30,6 @@ const Dashboard = () => {
         getTotalTaskCompleted,
         getTotalTaskIncompleted,
         getTotalTasksDay,
-        getFailTask,
     } = useTasks()
 
 
@@ -41,7 +40,7 @@ const Dashboard = () => {
     const pendingSub = getPendingSubtasks()
     const completedMain = getCompletedTask()
     const completedSub = getCompletedSubtasks()
-    const failTask = getFailTask()
+    // const failTask = getFailTask()
 
     const { getNotesDay, getNotesOfWeek, getNotesImportant } = useCalendars()
 
@@ -362,7 +361,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="tasks-section failed-section">
+                    {/* <div className="tasks-section failed-section">
                         <button 
                             className="collapse-button" 
                             onClick={() => setShowFailed(!showFailed)}
@@ -393,7 +392,7 @@ const Dashboard = () => {
                                 )}
                             </div>
                         )}
-                    </div>
+                    </div> */}
                 </>
             )}
         </div>
