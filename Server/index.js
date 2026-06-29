@@ -10,6 +10,10 @@ const noteRouter = require('./src/routes/noteRoutes')
 const authRouter = require('./src/routes/authRoutes')
 const validateRouter = require('./src/routes/validateRoutes')
 const imageRouter = require('./src/routes/imageRoute')
+const healthRouter = require('./src/routes/healthRoute')
+
+const {KeepSupabase} = require('./src/script/keepSupabase');
+
 
 require('./src/config/passport')
 require('dotenv').config()
@@ -34,8 +38,11 @@ const corsOptions = {
 };
 
 
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors(corsOptions))
 
+app.use('/api', healthRouter)
 app.use('/api', todoRouter)
 app.use('/api', goalRouter)
 app.use('/api', calenderRouter)
@@ -44,10 +51,53 @@ app.use('/api/images', imageRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/auth', validateRouter)
 
+
 DB()
 
+app.get('/api/health', (req,res) => {
+    res.json({
+        succes:true,
+        message: 'Servidor funcionando correctamente',
+        timestamp: new Date().toISOString()
+    })
+})
+
+app.use((req, res) => {
+    res.status(404).json({ 
+        success: false, 
+        error: 'Ruta no encontrada' 
+    });
+});
+
+
 const port = process.env.PORT || 3001
-app.listen(port, () => {
+
+const server = app.listen(port, () => {
     console.log(`Servidor corriendo en el puerto ${port}`)
     console.log(`📧 Emails se enviarán a: ${process.env.EMAIL_USER}`);
+
+    console.log('Iniciando mantenimiento de Supabase...')
+
+    KeepSupabase()
+    
+    const INTERVAL_MS = 12 * 60 * 60 * 1000;
+    setInterval(KeepSupabase, INTERVAL_MS);
+
+    console.log(`Mantenimiento de Supabase programado cada 12 horas`);
 })
+
+process.on('SIGTERM', () => {
+    console.log(' Recibido SIGTERM, cerrando servidor...');
+    server.close(() => {
+        console.log('Servidor cerrado');
+        process.exit(0);
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log(' Recibido SIGINT, cerrando servidor...');
+    server.close(() => {
+        console.log('Servidor cerrado');
+        process.exit(0);
+    });
+});

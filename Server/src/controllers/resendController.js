@@ -7,15 +7,14 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const YOUR_RESEND_EMAIL = 'serveraplicacion@gmail.com'; 
 
 exports.EmailComment = async (req, res) => {
-    console.log('📨 Petición recibida en /send-email');
-    console.log('📦 Body:', req.body);
+    
     
     try {
         const { name, message, reason } = req.body;
 
         
         if (!name || !message) {
-            console.log('❌ Faltan campos requeridos');
+            console.log(' Faltan campos requeridos');
             return res.status(400).json({ 
                 error: 'Los campos nombre y mensaje son requeridos' 
             });
@@ -27,30 +26,30 @@ exports.EmailComment = async (req, res) => {
         
         switch (reason) {
             case 'sugerencia':
-                subject = '💡 Sugerencia';
+                subject = ' Sugerencia';
                 emoji = '💡';
                 break;
             case 'consulta':
-                subject = '📝 Consulta';
+                subject = ' Consulta';
                 emoji = '📝';
                 break;
             case 'queja':
-                subject = '⚠️ Queja / Reclamo';
+                subject = 'Queja / Reclamo';
                 emoji = '⚠️';
                 break;
             case 'trabajo':
-                subject = '💼 Propuesta Laboral';
+                subject = ' Propuesta Laboral';
                 emoji = '💼';
                 break;
             default:
-                subject = '📬 Mensaje';
+                subject = ' Mensaje';
                 emoji = '📬';
         }
 
-        console.log('📧 Enviando email con Resend...');
-        console.log('📧 Asunto:', subject);
-        console.log('📧 Remitente:', 'onboarding@resend.dev');
-        console.log('📧 Destinatario:', YOUR_RESEND_EMAIL); 
+        // console.log('📧 Enviando email con Resend...');
+        // console.log('📧 Asunto:', subject);
+        // console.log('📧 Remitente:', 'onboarding@resend.dev');
+        // console.log('📧 Destinatario:', YOUR_RESEND_EMAIL); 
 
         const { data, error } = await resend.emails.send({
             from: 'onboarding@resend.dev', 
