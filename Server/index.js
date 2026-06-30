@@ -65,8 +65,8 @@ app.use(preventHPP);
 app.use(detectAttack);
 app.use(checkOrigin);
 
-app.use('/api', generalLimiter)
-app.use('/api/auth',apiLimiter)
+// app.use('/api', generalLimiter)
+// app.use('/api/auth',apiLimiter)
 
 app.use('/api', healthRouter)
 app.use('/api', todoRouter)
