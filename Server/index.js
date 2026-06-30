@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const cors = require('cors')
+const cookieParse = require('cookie-parser')
 const bodyParser = require('body-parser')
 const DB = require('./src/config/database')
 const todoRouter = require("./src/routes/taskRoute")
@@ -14,9 +15,21 @@ const healthRouter = require('./src/routes/healthRoute')
 
 const {KeepSupabase} = require('./src/script/keepSupabase');
 
-
 require('./src/config/passport')
 require('dotenv').config()
+
+const {
+    securityHeaders,
+    generalLimiter,
+    apiLimiter,
+    sanitizeInput,
+    preventXSS,
+    preventHPP,
+    enableCompression,
+    detectAttack,
+    checkOrigin
+} = require('./src/middleware/security')
+
 
 const app = express()
 
@@ -38,9 +51,22 @@ const corsOptions = {
 };
 
 
+DB()
+
+app.use(enableCompression)
+app.use(securityHeaders)
+app.use(cors(corsOptions))
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cors(corsOptions))
+app.use(cookieParse())
+app.use(sanitizeInput);
+app.use(preventXSS);
+app.use(preventHPP);
+app.use(detectAttack);
+app.use(checkOrigin);
+
+app.use('/api', generalLimiter)
+app.use('/api/auth',apiLimiter)
 
 app.use('/api', healthRouter)
 app.use('/api', todoRouter)
@@ -52,7 +78,6 @@ app.use('/api/auth', authRouter)
 app.use('/api/auth', validateRouter)
 
 
-DB()
 
 app.get('/api/health', (req,res) => {
     res.json({
