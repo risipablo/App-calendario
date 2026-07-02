@@ -189,6 +189,7 @@ const checkOrigin = (req, res, next) => {
         'http://localhost:5173',
         'http://localhost:5174',
         'https://app-calendario.onrender.com',
+        'https://app-calendario-rust.vercel.app',
     ];
     
     const origin = req.headers.origin;
