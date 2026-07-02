@@ -46,7 +46,16 @@ app.use(passport.initialize())
 const corsOptions = {
     origin: ['http://localhost:5173','https://app-calendario.onrender.com','https://app-calendario-rust.vercel.app'],
     optionsSuccessStatus: 200,
-    methods: 'GET,POST,DELETE,PUT,PATCH',
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'Cookie',
+        'X-Requested-With',
+        'Accept',
+        'Origin'
+    ],
+    exposedHeaders: ['Set-Cookie'],
+    maxAge: 86400,
     credentials: true,
 };
 
@@ -65,8 +74,8 @@ app.use(preventHPP);
 app.use(detectAttack);
 app.use(checkOrigin);
 
-// app.use('/api', generalLimiter)
-// app.use('/api/auth',apiLimiter)
+app.use('/api', generalLimiter)
+app.use('/api/auth',apiLimiter)
 
 app.use('/api', healthRouter)
 app.use('/api', todoRouter)

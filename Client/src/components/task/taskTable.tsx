@@ -99,7 +99,6 @@ export const TaskTable = ({
         setMonthFilter(filters.monthFilter)
         setYearFilter(filters.yearFilter)
         if (filters.showToday !== undefined) setShowToday(filters.showToday);
-        setCurrentPage(0);
     }, [])
 
     const [showDeleteFilteredModal, setShowDeleteFilteredModal] = useState(false)
@@ -147,14 +146,16 @@ export const TaskTable = ({
 
     const hasActiveFilters = showToday || dateFilter || monthFilter || yearFilter
 
+    const itemsToDisplay = filterTask && filterTask.length >= 0 ? filterTask : task
+
     // Paginate task      
       const [currentPage, setCurrentPage] = useState<number>(0)
       const itemsPerPage = 3;
       
       
-      const pageCount = Math.ceil(filterTask.length / itemsPerPage);
+      const pageCount = Math.ceil(itemsToDisplay.length / itemsPerPage);
       const offset = currentPage * itemsPerPage;
-      const currentItems = filterTask.slice(offset, offset + itemsPerPage);
+      const currentItems = itemsToDisplay.slice(offset, offset + itemsPerPage);
 
       
       
@@ -191,7 +192,7 @@ export const TaskTable = ({
                         </button>
                     </Tooltip>
 
-                    {hasActiveFilters && filterTask.length > 0 && (
+                    {hasActiveFilters && itemsToDisplay.length > 0 && (
                         <Tooltip title={`Eliminar solo las tareas ${getFilterDescription()}`} arrow>
                             <button 
                                 className="delete-all-btn" 

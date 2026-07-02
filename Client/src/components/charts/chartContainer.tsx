@@ -15,7 +15,7 @@ import {
 import { Bar, Pie, Doughnut, Line } from 'react-chartjs-2';
 import { 
     CheckCircle2, 
-    Clock, 
+    // Clock, 
     XCircle, 
     ListTodo,
     Inbox
@@ -60,8 +60,8 @@ export const ChartContainer: React.FC = () => {
         stats,
         completedTasks,
         completedSubtasks,
-        pendingTasks,
-        pendingSubtasks,
+        // pendingTasks,
+        // pendingSubtasks,
         failedTasks,
         failedSubtasks,
     } = useFilteredData(
@@ -404,14 +404,14 @@ export const ChartContainer: React.FC = () => {
                     </div>
                 </div>
                 
-                <div className="stat-card pending">
+                {/* <div className="stat-card pending">
                     <div className="stat-icon"><Clock size={20} /></div>
                     <div className="stat-content">
                         <h3>Pendientes</h3>
                         <p className="stat-number">{stats.pending.total}</p>
                         <small>{percentages.pending}%</small>
                     </div>
-                </div>
+                </div> */}
                 
                 <div className="stat-card failed">
                     <div className="stat-icon"><XCircle size={20} /></div>
@@ -484,7 +484,7 @@ export const ChartContainer: React.FC = () => {
                         {renderTaskList(completedTasks, completedSubtasks)}
                     </div>
                 )}
-
+{/* 
                 {showPending && (
                     <div className="tasks-column pending">
                         <h3>
@@ -493,7 +493,7 @@ export const ChartContainer: React.FC = () => {
                         </h3>
                         {renderTaskList(pendingTasks, pendingSubtasks)}
                     </div>
-                )}
+                )} */}
 
                 {showFailed && (
                     <div className="tasks-column failed">

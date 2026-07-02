@@ -99,6 +99,7 @@ export const CalendarMaster = () => {
             </div>
 
             <CalendarContainer 
+                key={notes.length} 
                 notes={notes}
                 addNote={handleAddNote}
                 deleteNote={deleteNote}

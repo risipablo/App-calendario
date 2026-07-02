@@ -74,7 +74,7 @@ export const TaskProvider:React.FC<TaskProviderProps> = ({children, isAuthentica
 
     // Sub tareas pendientes 
     const getPendingSubtasks = useCallback((): Array<ISubtask & {parentTask:string}> => {
-        return getAllSubtasksDay().filter(sub => !sub.completed)
+        return getAllSubtasksDay().filter(sub => sub.completed && !getFailTask)
     },[getAllSubtasksDay])
 
     // Tarea Principal

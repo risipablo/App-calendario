@@ -124,9 +124,12 @@ export interface TaskStats {
     byPriority: {
         alta: { completed: number; pending: number; failed: number };
         media: { completed: number; pending: number; failed: number };
-        // baja: { completed: number; pending: number; failed: number };
+        baja: { completed: number; pending: number; failed: number };
     };
 }
+
+
+// Filter per charts
 
 export interface DateFilters{
     type: 'period' | 'specific' | 'monthYear';

@@ -60,6 +60,8 @@ exports.deleteCalender = async (req,res) => {
         if(!notes){
             return res.status(401).json({error:"Nota no encontrada"})
         }
+
+        res.status(200).json({message: "Nota eliminada", id}) // Sin esto no se podia eliminar la nota correctamenta, maestro
         
     } catch (err) {
         res.status(500).json({error: err.message})
@@ -79,8 +81,11 @@ exports.saveCalender = async (req,res) => {
             {_id: id, userId: req.user.id},
             {
             title,priority,category, date , hour
-        })
-        res.json(saveNote)
+        },   { new: true, runValidators: true })
+        if(!saveNote){
+            return res.status(404).json({error:"Nota no encontrada"})
+        }
+        res.status(200).json(saveNote)
     } catch(err){
         res.status(500).json({error:err.message})
     }

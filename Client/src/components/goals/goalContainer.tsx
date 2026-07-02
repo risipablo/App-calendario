@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Save, X, Pencil, Trash2, Calendar, CheckCircle2, Target } from 'lucide-react';
+import { Save, X, Pencil, Trash2, Calendar, CheckCircle2, Target, PencilLine } from 'lucide-react';
 import {Tooltip } from '@mui/material';
 import type { GoalContainerProps, IGoal } from "../../interfaces/type.goal";
 import { Toaster } from "react-hot-toast";
@@ -16,7 +16,7 @@ export const GoalContainer = ({
     deleteGoal,
     editGoal,
     toogleComplete,
-    
+    filteredGoal
 }: GoalContainerProps) => {
 
     const [goalIndex, setGoalIndex] = useState<string | null>(null);
@@ -102,11 +102,21 @@ export const GoalContainer = ({
     // Skeleton
     const [skeleton, setSkeleton] = useState(true)
     
+    
+
+
+    // Paginate 
+    const itemsToDisplay = filteredGoal && filteredGoal.length >= 0 ? filteredGoal : goal
+    const [currentPage, setCurrentPage] = useState<number>(0)
+    const itemsPerPage = 4
+
+    const pageCount = Math.ceil(itemsToDisplay.length / itemsPerPage)
+    const offSet = currentPage * itemsPerPage
+    const currentItems = itemsToDisplay.slice(offSet, offSet + itemsPerPage)
 
     useEffect(() => {
-        
-
         // eslint-disable-next-line react-hooks/set-state-in-effect
+        setLoading(true)
         setSkeleton(true)
         const timer = setTimeout(() => {
             setLoading(false)
@@ -114,17 +124,7 @@ export const GoalContainer = ({
         }, 1000);
 
         return () => clearTimeout(timer)
-    },[goal.length])
-
-
-    // Paginate 
-    const [currentPage, setCurrentPage] = useState<number>(0)
-    const itemsPerPage = 3
-
-    const pageCount = Math.ceil(goal.length / itemsPerPage)
-    const offSet = currentPage * itemsPerPage
-    const currentItems = goal.slice(offSet, offSet + itemsPerPage)
-
+    },[goal.length, filteredGoal])
 
 
     
@@ -168,6 +168,22 @@ export const GoalContainer = ({
                 <p>Agrega tu primer objetivo</p>
             </div>
         ) 
+    }
+
+    if (itemsToDisplay.length === 0) {
+        
+        const activeCategory = (filteredGoal !== goal && filteredGoal.length === 0) 
+            ? 'esta categoría' 
+            : 'los filtros seleccionados';
+        
+        return (
+            <div className="empty-state-goals">
+                <PencilLine size={64} />
+                <h3>No se encontraron metas</h3>
+                <p>No hay metas en {activeCategory}.</p>
+                <p className="empty-state-hint">Prueba con otra categoría o limpia los filtros.</p>
+            </div>
+        );
     }
 
     return (
@@ -246,10 +262,10 @@ export const GoalContainer = ({
                                             <Calendar size={14} />
                                             <span>Creada: {formateDate(met.start_date)}</span>
                                         </div>
-                                        {met.completed === true && met.completed_note && (
+                                        {met.completed === true && met.complete_note && (
                                             <div className="goal-date-info">
                                                 <CheckCircle2 size={14} />
-                                                <span>Completada el: {formateDate(met.completed_note)}</span>
+                                                <span>Completada el: {formateDate(met.complete_note)}</span>
                                             </div>
                                         )}
                                     </div>

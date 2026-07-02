@@ -63,6 +63,32 @@ exports.deleteAllNote = async(req,res) => {
     }
 }
 
+// Delete filter note
+exports.deleteNoteFilter = async (req,res) => {
+    
+    const userId = req.user.id
+    const {filterType} = req.query
+    
+    try{
+
+        if (!filterType){
+            return res.status(400).json({error: 'Se requiere filterType'})
+        }
+        const result = await NoteModel.deleteMany({
+            userId,
+            category:filterType
+        })
+
+        res.json({ 
+            message: `${result.deletedCount} notas eliminadas`,
+            deletedCount: result.deletedCount 
+        });
+    } catch (err){
+        console.error(' Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+}
+
 exports.saveTask = async(req,res) => {
     const {id} = req.params
     const {date, title,category} = req.body
@@ -104,28 +130,3 @@ exports.completedNote = async(req,res) => {
 }
 
 
-// Delete filter note
-exports.deleteNoteFilter = async (req,res) => {
-    
-    const userId = req.user.id
-    const {filterType} = req.query
-    
-    try{
-
-        if (!filterType){
-            return res.status(400).json({error: 'Se requiere filterType'})
-        }
-        const result = await NoteModel.deleteMany({
-            userId,
-            category:filterType
-        })
-
-        res.json({ 
-            message: `${result.deletedCount} notas eliminadas`,
-            deletedCount: result.deletedCount 
-        });
-    } catch (err){
-        console.error(' Error:', err);
-        res.status(500).json({ error: err.message });
-    }
-}

@@ -1,3 +1,5 @@
+// filter per notefast component
+
 import type { INote } from "../../../interfaces/type.notes";
 import { useEffect, useState } from "react";
 import "../../../style/filter-button.css"

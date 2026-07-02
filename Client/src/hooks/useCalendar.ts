@@ -71,7 +71,7 @@ export const useCalendar = () => {
             })
     }, [])
 
-    // ✅ deleteAllNotes con useCallback
+    
     const deleteAllNotes = useCallback(() => {
         axiosInstance.delete(`/api/calendar`)
             .then(response => {
@@ -85,7 +85,7 @@ export const useCalendar = () => {
             })
     }, [])
 
-    // ✅ editEvents con useCallback
+    
     const editEvents = useCallback((id: string, editData: {
         title: string, 
         priority: string, 

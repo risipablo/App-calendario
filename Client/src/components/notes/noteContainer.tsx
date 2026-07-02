@@ -158,7 +158,7 @@ export const NoteContainer = ({
     }
   
     if (itemsToDisplay.length === 0) {
-        // Obtener la categoría activa (puedes recibirla como prop)
+        // Obtener la categoría activa 
         const activeCategory = (filteredNotes !== note && filteredNotes.length === 0) 
             ? 'esta categoría' 
             : 'los filtros seleccionados';

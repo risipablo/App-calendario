@@ -1,34 +1,29 @@
-// Filter perday for task component
-
-import type React from "react"
-import type { ITodo } from "../../../interfaces/type.task"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { X, Calendar, Filter, RotateCcw } from "lucide-react"
+import type React from "react";
+import type { IGoal } from "../../../interfaces/type.goal";
 import "../../../style/filter-button.css"
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Filter, RotateCcw, X } from "lucide-react";
 
 type Props = {
-    task: ITodo[]
-    setFilterTask: React.Dispatch<React.SetStateAction<ITodo[]>>
-    onFilterChange?:(filters:{dateFilter:string; monthFilter:string; yearFilter:string}) => void
+    goal: IGoal[]
+    setGoalFilter: React.Dispatch<React.SetStateAction<IGoal[]>>
+    setFilterActive: React.Dispatch<React.SetStateAction<string>>
+    onFilterChange?:(filters:{ monthFilter:string; yearFilter:string}) => void
 }
 
-export const FilterPerDay = ({
-    task,
-    setFilterTask,
-    onFilterChange
-}: Props) => {
-
-    const [showToday, setShowToday] = useState(false);
-    const [dateFilter, setDateFilter] = useState<string>('')
-    const [monthFilter, setMonthFilter] = useState<string>('')
-    const [yearFilter, setYearFilter] = useState<string>('') 
+export const FilterGoal = ({goal,setFilterActive,setGoalFilter,onFilterChange}:Props) => {
     
+    const [priorityFilter,setPriorityFilter] = useState<string>('')
+    const [monthFilter, setMonthFilter] = useState<string>('')
+    const [yearFilter, setYearFilter] = useState<string>('')
+
     const [tempMonth, setTempMonth] = useState<string>('')
     const [tempYear, setTempYear] = useState<string>('')
-    
-    const [pendingDate, setPendingDate] = useState<string>('')
-    const [addModal, setAddModal] = useState(false)
+    const [completeFilter,setCompleteFilter] = useState<string>('')
+
+
     const [filterModal, setFilterModal] = useState(false)
+
 
     const normalDate = useCallback((dateInput: string | Date): string => {
         if (!dateInput) return '';
@@ -47,28 +42,23 @@ export const FilterPerDay = ({
         }
     
         return dateStr;
-    }, []);
+        }, []);
 
-    const filteredTasks = useMemo(() =>{
-        let filtered = [...task]
+    
+    const filteredGoals = useMemo(() => {
+        let filtered = [...goal]
 
-
-        if (showToday) {
-            const todayStr = normalDate(new Date());
-            return filtered.filter(t => normalDate(t.date) === todayStr);
+        if(priorityFilter){
+            filtered = filtered.filter(g => normalDate(g.priority) === priorityFilter)
         }
 
-        if(dateFilter){
-            filtered = filtered.filter(t => 
-                normalDate(t.date) === dateFilter
-            )
-        }
+        
 
-        if (monthFilter || yearFilter) {
+        if(monthFilter || yearFilter){
             filtered = filtered.filter(t => {
-                const normalized = normalDate(t.date); 
-                const [year, month] = normalized.split('-');
-                
+                const normalized = normalDate(t.start_date)
+                const [year,month] = normalized.split('-')
+
                 const matchMonth = monthFilter ? month === monthFilter : true;
                 const matchYear = yearFilter ? year === yearFilter : true;
                 
@@ -76,86 +66,70 @@ export const FilterPerDay = ({
             })
         }
 
-
-        return filtered
-    },[task, showToday, dateFilter, monthFilter, yearFilter, normalDate])
-
-    
-
-    useEffect(() => {
-        setFilterTask(filteredTasks)
-
-
-        if(onFilterChange){
-            onFilterChange({dateFilter, monthFilter, yearFilter})
+        if(completeFilter){
+            filtered = filtered.filter(g =>{
+                if (completeFilter === 'completadas') return g.completed === true
+                if (completeFilter === 'pendientes') return g.completed === false
+                return true 
+            })
         }
 
-        
-    }, [filteredTasks, task, normalDate, setFilterTask,onFilterChange])
+
+        return filtered
+    },[goal, monthFilter, yearFilter, normalDate,priorityFilter,completeFilter,setFilterActive])
+
+
+    useEffect(() => {
+
+        setGoalFilter(filteredGoals)
+
+        if(onFilterChange){
+            onFilterChange({monthFilter, yearFilter})
+        }
+
+
+    },[setGoalFilter,setFilterActive,onFilterChange,filteredGoals])
+
 
     const handleOpenFilterModal = () => {
         setTempMonth(monthFilter)
         setTempYear(yearFilter)
         setFilterModal(true)
     }
-
-    // const handleApplyDate = () => {
-    //     setDateFilter(pendingDate)
-    //     setShowToday(false)
-    //     setAddModal(false)
-    // }
-
     const handleApplyFilters = () => {
         setMonthFilter(tempMonth)
         setYearFilter(tempYear)
         setFilterModal(false)
     }
 
-    const resetAllFilters = () => {
-        setDateFilter('')
+    const handleReset = () => {
+        setPriorityFilter('')
         setMonthFilter("")
         setYearFilter("")
-        setPendingDate("")
         setTempMonth('')
         setTempYear('')
-        setShowToday(false)
-        setAddModal(false)
-        setFilterModal(false)
+        setCompleteFilter('')
+        setGoalFilter([...goal])
+        setFilterActive('')
     }
 
-    const hasActiveFilters = dateFilter || monthFilter || yearFilter || showToday
+    const hasActiveFilters = priorityFilter || monthFilter || yearFilter || completeFilter
 
-    return (
-        <>
-            <div className="filter-buttons-group">
+    return(
+        <div className="filter-buttons-group">
+            <select
+                className={`btn-toggle-view ${priorityFilter ? 'active' : ''}`}
+                value={priorityFilter} 
+                onChange={(e) => setPriorityFilter(e.target.value)} 
+            >
+                <option value="">Selecciona una prioridad</option>
+                <option value="alta">Alta</option>
+                <option value="media">Media</option>
+                <option value="baja">Baja</option>
+            </select>
 
-            <button     
-                    className={`btn-toggle-view ${showToday ? 'active' : ''}`}
-                    onClick={() => {
-                        setShowToday(!showToday);
-                        
-                        if (!showToday) {
-                            setDateFilter('');
-                            setMonthFilter('');
-                            setYearFilter('');
-                        }
-                    }}
-                    
-                >
-                    <Calendar size={18} />
-                    {showToday ? 'Ver Todas' : 'Ver Hoy'}
-                </button>
 
-                <button 
-                    onClick={() => setAddModal(true)} 
-                    className={`btn-toggle-view ${dateFilter ? 'active' : ''}`}
-                >
-                    <Calendar size={18} />
-                    Filtrar por fecha
-                   
-                </button>
-                
-                <button 
+            <button 
                     onClick={handleOpenFilterModal}  
                     className={`btn-toggle-view ${monthFilter || yearFilter ? 'active' : ''}`}
                 >
@@ -163,66 +137,30 @@ export const FilterPerDay = ({
                     {monthFilter || yearFilter ? 
                         `Filtros: ${monthFilter ? `Mes ${monthFilter}` : ''}${yearFilter ? ` ${yearFilter}` : ''}` 
                         : 'Filtros mes/año'}
+            </button>
+
+
+            <select 
+                className={`btn-toggle-view ${completeFilter ? 'active' : ''}`}
+                value={completeFilter} 
+                onChange={(e) => setCompleteFilter(e.target.value)}
+            >
+                <option value="todos">Todos</option>
+                <option value="completadas">Logrado</option> 
+                <option value="pendientes">Pendientes</option>
+            </select>
+
+
+            {hasActiveFilters && (
+                <button 
+                    onClick={handleReset}  
+                    className="btn-toggle-view btn-reset"
+                >
+                    <RotateCcw size={18} />
+                    Limpiar filtros
                 </button>
-
-                {hasActiveFilters && (
-                    <button 
-                        onClick={resetAllFilters}  
-                        className="btn-toggle-view btn-reset"
-                    >
-                        <RotateCcw size={18} />
-                        Limpiar filtros
-                    </button>
-                )}
-            </div>
-
-            
-            {addModal && (
-                <div className="task-modal-overlay" onClick={() => setAddModal(false)}>
-                    <div className="task-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="task-modal-header">
-                            <h3>Filtrar por fecha específica</h3>
-                            <button className="task-modal-close" onClick={() => setAddModal(false)}>
-                                <X size={22} />
-                            </button>
-                        </div>
-                        
-                        <div className="task-modal-body">
-                            <div className="task-form-group">
-                                <label>Seleccionar fecha</label>
-                                <input
-                                    type="date"
-                                    className="task-input" 
-                                    value={pendingDate}
-                                    onChange={(e) => setPendingDate(e.target.value)}
-                                    placeholder="YYYY-MM-DD"
-                                />
-                            </div>
-
-                            <div className="task-modal-actions">
-                                <button 
-                                    className="task-btn task-btn-primary"
-                                    onClick={handleApplyFilters}
-                                    disabled={!pendingDate}
-                                >
-                                    Aplicar filtro
-                                </button>
-                                {(tempMonth || tempYear) && (
-                                    <button className="task-btn task-btn-secondary" onClick={() => {
-                                        setDateFilter('')
-                                        setPendingDate('')
-                                        setAddModal(false)
-                                    }}>
-                                        Limpiar
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
             )}
 
-            {/* Modal para filtros de mes y año */}
             {filterModal && (
                 <div className="task-modal-overlay" onClick={() => setFilterModal(false)}>
                     <div className="task-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -295,6 +233,7 @@ export const FilterPerDay = ({
                     </div>
                 </div>
             )}
-        </>
+            
+        </div>
     )
 }

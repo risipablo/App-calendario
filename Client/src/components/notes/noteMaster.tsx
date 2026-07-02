@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useNotes } from "../../hooks/useNote";
 import { NoteForm } from "./noteForm";
 import { NoteContainer } from "./noteContainer";
@@ -73,9 +73,9 @@ export const NoteMaster = () => {
     }
 
 
-    useEffect(() => {
-        setFilteredNotes(note)
-    },[note])
+    // useEffect(() => {
+    //     setFilteredNotes(note)
+    // },[note])
 
     return(
         <div className="task-table-container">

@@ -59,7 +59,7 @@ export const CalendarForm = ({
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="task-modal-header">
-                                <h3>Nueva Tarea</h3>
+                                <h3>Nueva Nota</h3>
                                 <button 
                                     className="task-modal-close" 
                                     onClick={() => setAddModal(false)}
@@ -94,10 +94,21 @@ export const CalendarForm = ({
                                     <input 
                                         type="text" 
                                         className="task-input"
-                                        placeholder="Ingresa el título de la tarea"
+                                        placeholder="Ingresa el título de la nota"
                                         value={title} 
-                                        onChange={(e) => setTitle(e.target.value)} 
+                                        onChange={(e) => {
+                                            if(e.target.value.length <= 50){
+                                                setTitle(e.target.value)
+                                            }
+                                        }}
+                                        maxLength={90}
+                                        style={{ resize: 'vertical' }}
                                     />
+                                       {title.length >= 0 && (
+                                        <small style={{ color: title.length === 50 ? 'red' : 'orange' }}>
+                                            {title.length}/90 caracteres
+                                        </small>
+                                        )}  
                                 </div>
 
                                 <div className="task-form-group">

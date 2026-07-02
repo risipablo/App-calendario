@@ -12,7 +12,7 @@ const TOAST_CONFIG = {
 export const useNotes = () => {
     const [note, setNote] = useState<INote[]>([]);
     const [loading, setLoading] = useState(true);
-    const [filterNote] = useState<INote[]>([])
+    const [filterNote,setFilterNote] = useState<INote[]>([])
 
     
     useEffect(() => {
@@ -115,20 +115,22 @@ export const useNotes = () => {
     const editNote = useCallback((id: string, editData: { date: Date; title: string; category: string }) => {
         axiosInstance.patch(`/api/note/${id}`, editData)
             .then(response => {
-                setNote(prev => prev.map(goa => goa._id === id ? response.data : goa));
+                setNote(prev => prev.map(n => n._id === id ? response.data : n))
+                setFilterNote(prev => prev.map(n => n._id === id ? response.data : n))
                 toast.success('Nota guardada.', TOAST_CONFIG);
             })
             .catch(err => {
                 console.log(err);
                 toast.error('Error al guardar la nota', TOAST_CONFIG);
             });
-    }, []);
+    }, [setFilterNote]);
 
     
     const toogleComplete = useCallback((id: string) => {
         axiosInstance.patch(`/api/note/${id}/completed`)
             .then(response => {
                 setNote(prev => prev.map(goa => goa._id === id ? response.data : goa));
+                setFilterNote(prev => prev.map(n => n._id === id ? response.data : n));
 
                 const noteItem = response.data;
                 const message = noteItem.completed ? 'Nota completada ✓' : 'Nota marcada como pendiente';
@@ -139,7 +141,7 @@ export const useNotes = () => {
                 console.error(err);
                 toast.error('Error al actualizar nota', TOAST_CONFIG);
             });
-    }, []);
+    }, [setFilterNote]);
 
     return {
         note,

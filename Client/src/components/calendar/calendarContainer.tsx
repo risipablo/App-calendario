@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock, RotateCcw } from "lucide-react"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Tooltip } from '@mui/material';
 import "../../style/calender.css"
 import "../../style/task.css"
@@ -22,6 +22,11 @@ export const CalendarContainer = ({
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
   const weekDays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+
+
+  useEffect(() => {
+    
+},[currentDate,selectedDate,selectedDate,selectedYear,showDayModal])
 
   
   const filteredNotes = useMemo(() => {

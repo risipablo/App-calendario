@@ -56,7 +56,7 @@ export const GoalForm = ({
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="task-modal-header">
-                                <h3>Nueva Tarea</h3>
+                                <h3>Nueva Meta</h3>
                                 <button 
                                     className="task-modal-close" 
                                     onClick={() => setAddModal(false)}
@@ -81,7 +81,7 @@ export const GoalForm = ({
                                     <input 
                                         type="text" 
                                         className="task-input"
-                                        placeholder="Ingresa el título de la tarea"
+                                        placeholder="Ingresa el título de la meta"
                                         value={title} 
                                         onChange={(e) => {
                                             if (e.target.value.length <= 90){

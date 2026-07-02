@@ -5,6 +5,8 @@ import { GoalContainer } from "./goalContainer"
 import {  Trash2 } from "lucide-react"
 import { Tooltip } from "@mui/material"
 import { ModalConfirm } from "../layout/modalConfirm"
+import { FilterGoal } from "../layout/filter/filterGoal";
+import type { IGoal } from "../../interfaces/type.goal";
 
 
 export const GoalMaster = () => {
@@ -51,7 +53,12 @@ export const GoalMaster = () => {
         }
     };
 
+    // filter
+    const [filteredGoal, setFilteredGoal] = useState<IGoal[]>([])
+    const [activeFilter, setFilterActive] = useState<string>('')
+    
 
+ 
     
 
     return(
@@ -90,8 +97,12 @@ export const GoalMaster = () => {
                 </div>
             </div>
 
+            <FilterGoal goal={goal} setGoalFilter={setFilteredGoal} setFilterActive={setFilterActive}/>
             <GoalContainer            
                 goal={goal}
+                filteredGoal={filteredGoal}
+                setFilterGoal={setFilteredGoal}
+                activeFilter={activeFilter}
                 addGoal={addGoal}
                 deleteGoal={deleteGoal}
                 editGoal={editGoal}
