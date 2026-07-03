@@ -78,7 +78,7 @@ export const FilterPerDay = ({
 
 
         return filtered
-    },[task, showToday, dateFilter, monthFilter, yearFilter, normalDate])
+    },[task, showToday, dateFilter, monthFilter, yearFilter, normalDate, tempMonth,tempYear])
 
     
 
@@ -99,11 +99,11 @@ export const FilterPerDay = ({
         setFilterModal(true)
     }
 
-    // const handleApplyDate = () => {
-    //     setDateFilter(pendingDate)
-    //     setShowToday(false)
-    //     setAddModal(false)
-    // }
+    const handleApplyDate = () => {
+        setDateFilter(pendingDate)
+        setShowToday(false)
+        setAddModal(false)
+    }
 
     const handleApplyFilters = () => {
         setMonthFilter(tempMonth)
@@ -202,7 +202,7 @@ export const FilterPerDay = ({
                             <div className="task-modal-actions">
                                 <button 
                                     className="task-btn task-btn-primary"
-                                    onClick={handleApplyFilters}
+                                    onClick={handleApplyDate}
                                     disabled={!pendingDate}
                                 >
                                     Aplicar filtro

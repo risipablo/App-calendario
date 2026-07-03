@@ -95,6 +95,7 @@ export const TaskTable = ({
     const [yearFilter, setYearFilter] = useState<string>('')
     
     const handleFiltersChange = useCallback((filters: {dateFilter:string; monthFilter:string; yearFilter:string, showToday?: boolean}) => {
+        
         setDateFilter(filters.dateFilter)
         setMonthFilter(filters.monthFilter)
         setYearFilter(filters.yearFilter)
@@ -144,7 +145,7 @@ export const TaskTable = ({
         setShowDeleteFilteredModal(false)
     }
 
-    const hasActiveFilters = showToday || dateFilter || monthFilter || yearFilter
+    const hasActiveFilters = showToday || dateFilter || monthFilter || yearFilter 
 
     const itemsToDisplay = filterTask && filterTask.length >= 0 ? filterTask : task
 
@@ -165,7 +166,7 @@ export const TaskTable = ({
 
 
             <div className="table-header">
-                <h2 className="table-title">  Mis Tareas</h2>
+                <h2 className="table-title">Mis Tareas</h2>
 
      
                 <div className="header-actions">

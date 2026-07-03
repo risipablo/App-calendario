@@ -102,7 +102,7 @@ function ConfigPage({ setIsAuthenticated, isAuthenticated }: AuthenticatedProps)
             </div>
             <div className="link-content">
               <h3>Sugerencias</h3>
-              <p>Puedes mandar un emnsaje de sugerencia, queja o consulta</p>
+              <p>Puedes mandar un mensaje de sugerencia, queja o consulta</p>
             </div>
             <span className="link-arrow">→</span>
           </NavLink>
