@@ -78,7 +78,7 @@ export const FilterPerDay = ({
 
 
         return filtered
-    },[task, showToday, dateFilter, monthFilter, yearFilter, normalDate, tempMonth,tempYear])
+    },[task, showToday, dateFilter, monthFilter, yearFilter, normalDate])
 
     
 
@@ -91,7 +91,7 @@ export const FilterPerDay = ({
         }
 
         
-    }, [filteredTasks, task, normalDate, setFilterTask,onFilterChange])
+    }, [filteredTasks, task, normalDate, setFilterTask,onFilterChange,dateFilter,monthFilter,yearFilter])
 
     const handleOpenFilterModal = () => {
         setTempMonth(monthFilter)

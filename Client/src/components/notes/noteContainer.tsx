@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 import { useEffect, useState } from "react";
 import type { INote, NoteContainerProps } from "../../interfaces/type.notes";
 import { Calendar, CheckCircle2, Pencil, PencilLine, Save, Trash2, X } from "lucide-react";
@@ -100,16 +101,19 @@ export const NoteContainer = ({
     const itemsToDisplay = filteredNotes && filteredNotes.length >= 0 ? filteredNotes : note
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+        
+        
+        
         setSkeleton(true)
         setLoading(true)
+        setCurrentPage(0)
         const timer = setTimeout(() => {
             setLoading(false)
             setSkeleton(false)
         }, 1000)
 
         return () => clearTimeout(timer)
-    }, [note.length])
+    }, [note.length,filteredNotes])
 
     
 

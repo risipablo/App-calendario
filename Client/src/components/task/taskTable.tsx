@@ -35,12 +35,12 @@ export const TaskTable = ({
 }: TaskTableProps) => {
     
     useEffect(() => {
-        
+        setCurrentPage(0)
         const timer = setTimeout(() => {
             setLoading(false)
         }, 100);
         return () => clearTimeout(timer)
-    },[task.length])
+    },[task.length,filterTask])
 
 
     const [date, setDate] = useState<string>("")

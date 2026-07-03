@@ -118,6 +118,7 @@ export const GoalContainer = ({
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoading(true)
         setSkeleton(true)
+        setCurrentPage(0)
         const timer = setTimeout(() => {
             setLoading(false)
             setSkeleton(false)
