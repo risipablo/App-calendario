@@ -44,7 +44,6 @@ export const TaskRow = ({
         
         const timer = setTimeout(() => {
             setIsLoadingSkeleton(false);
-
         }, 100);
 
         return () => clearTimeout(timer);

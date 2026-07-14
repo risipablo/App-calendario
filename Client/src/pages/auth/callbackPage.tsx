@@ -28,7 +28,7 @@ const CallbackPage = ({ setIsAuthenticated }: AuthenticatedProps) => {
             localStorage.setItem('token', token);
         
             setIsAuthenticated(true);
-            console.log('✅ setIsAuthenticated(true)');
+            console.log('setIsAuthenticated(true)');
             
         
             navigate('/dashboard');

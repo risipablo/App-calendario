@@ -15,7 +15,7 @@ passport.use('google', new GoogleStrategy(
         callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
     async (accessToken, refreshToken, profile, done) => { 
-        console.log('📸 Perfil de Google recibido:', profile.emails[0]?.value);
+        console.log('Perfil de Google recibido:', profile.emails[0]?.value);
         
         try {
             const email = profile.emails[0].value;

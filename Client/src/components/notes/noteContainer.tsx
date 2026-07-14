@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable react-hooks/immutability */
 import { useEffect, useState } from "react";
 import type { INote, NoteContainerProps } from "../../interfaces/type.notes";
@@ -17,6 +18,7 @@ export const NoteContainer = ({
     editNote,
     toogleComplete,
     filteredNotes,
+    
 }:NoteContainerProps) => {
 
     const [goalIndex, setGoalIndex] = useState<string | null>(null);
@@ -93,27 +95,26 @@ export const NoteContainer = ({
         setEditingId(null);
     };
 
-  
     const [loading,setLoading] = useState(true)
     const [skeleton, setSkeleton] = useState(true)
 
-
-    const itemsToDisplay = filteredNotes && filteredNotes.length >= 0 ? filteredNotes : note
-
     useEffect(() => {
-        
-        
         
         setSkeleton(true)
         setLoading(true)
-        setCurrentPage(0)
+        
         const timer = setTimeout(() => {
             setLoading(false)
             setSkeleton(false)
-        }, 1000)
-
+        }, 800)
+    
         return () => clearTimeout(timer)
-    }, [note.length,filteredNotes])
+    }, [note.length])  
+
+
+
+
+    const itemsToDisplay = filteredNotes && filteredNotes.length >= 0 ? filteredNotes : note
 
     
 
@@ -124,7 +125,16 @@ export const NoteContainer = ({
     const offSet = currentPage * itemsPerPage
     const currentItems = itemsToDisplay.slice(offSet, offSet + itemsPerPage)
 
+
     
+    useEffect(() => {
+        if(filteredNotes !== note){
+            setCurrentPage(0)
+        }
+        
+    }, [filteredNotes.length])
+    
+
 
     if (skeleton) {
         return (

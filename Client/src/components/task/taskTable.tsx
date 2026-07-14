@@ -34,13 +34,15 @@ export const TaskTable = ({
     ModalConfirm
 }: TaskTableProps) => {
     
+    
+
     useEffect(() => {
-        setCurrentPage(0)
+        setLoading(true)
         const timer = setTimeout(() => {
             setLoading(false)
-        }, 100);
+        }, 100)
         return () => clearTimeout(timer)
-    },[task.length,filterTask])
+    }, [task.length])
 
 
     const [date, setDate] = useState<string>("")
@@ -158,8 +160,9 @@ export const TaskTable = ({
       const offset = currentPage * itemsPerPage;
       const currentItems = itemsToDisplay.slice(offset, offset + itemsPerPage);
 
-      
-      
+      useEffect(() => {
+        setCurrentPage(0)
+    },[dateFilter,monthFilter,yearFilter,showToday])
 
     return (
         <div className="task-table-container">

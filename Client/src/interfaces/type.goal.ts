@@ -1,11 +1,11 @@
-
+export type GoalPriority = 'alta' | 'media' | 'baja' 
 
 // Goal Interfece
 export interface IGoal{
     _id:string
     title:string
     description:string
-    priority:'alta'|'media'|'baja'
+    priority:GoalPriority
     start_date: string 
     completed:boolean
     complete_note?: string | null
@@ -29,12 +29,13 @@ export interface GoalFormProps{
 export interface GoalContainerProps{
     goal:IGoal[]
     filteredGoal: IGoal[]
-    setFilterGoal: React.Dispatch<React.SetStateAction<IGoal[]>>;
+    setFilteredGoal: React.Dispatch<React.SetStateAction<IGoal[]>>;
     activeFilter?:string
     addGoal?:(title:string, description:string,priority:string, startDate?:string) => void
     deleteGoal:(id:string) => void
     editGoal: (id: string, editData: {title: string, description:string,priority: string, start_date: string}) => void;
     toogleComplete: (id: string) => void;
     allDeleteGoal: () => void;
+    onDeleteFiltered?:() => void
     onAddGoal?:() => void
 }

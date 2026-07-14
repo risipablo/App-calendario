@@ -109,7 +109,7 @@ export const useNotes = () => {
             toast.error('Error al eliminar tareas filtradas', TOAST_CONFIG)
             throw err
         }
-    },[])
+    },[setNote])
 
     
     const editNote = useCallback((id: string, editData: { date: Date; title: string; category: string }) => {
@@ -141,7 +141,7 @@ export const useNotes = () => {
                 console.error(err);
                 toast.error('Error al actualizar nota', TOAST_CONFIG);
             });
-    }, [setFilterNote]);
+    }, []);
 
     return {
         note,

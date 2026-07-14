@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import type { IGoal } from "../interfaces/type.goal"
+import type { GoalPriority, IGoal } from "../interfaces/type.goal"
 import toast from "react-hot-toast"
 import axiosInstance from "../utils/axiosIntance"
 
@@ -12,10 +12,11 @@ export const useGoals = () => {
 
     const [goal, setGoal] = useState<IGoal[]>([])
     const [loading, setLoading] = useState(true)
-    
+    const [filterGoal,setFilterGoal] = useState<IGoal[]>([])
     
     const loadGoals = useCallback(async () => {
         const token = localStorage.getItem('token')
+        
         
         if (!token) {
             console.error('No token')
@@ -88,18 +89,47 @@ export const useGoals = () => {
             })
     }, [])
 
+    const deleteFilteredGoals = useCallback(async (filters: {
+        filterType: GoalPriority | 'completadas' | 'pendientes' | 'fechas' | string
+        month?: string
+        year?: string
+    }) => {
+        try {
+            const response = await axiosInstance.delete('/api/goal/filter', { 
+                params: filters 
+            })
+            
+            
+            setGoal(prev => {
+                return prev
+            })
+            
+            
+            const { data } = await axiosInstance.get('/api/goal')
+            setGoal(data)
+            
+            toast.success(response.data.message, TOAST_CONFIG)
+            return response.data
+        } catch (err) {
+            console.error(err)
+            toast.error('Error al eliminar tareas filtradas', TOAST_CONFIG)
+            throw err
+        }
+    }, [setGoal])
+
    
     const editGoal = useCallback((id: string, editData: { title: string, description: string, priority: string, start_date: string }) => {
         axiosInstance.patch(`/api/goal/${id}`, editData)
             .then(response => {
                 setGoal(prev => prev.map(goa => goa._id === id ? response.data : goa))
+                setFilterGoal(prev => prev.map(goa => goa._id === id ? response.data : goa))
                 toast.success('Meta guardada', TOAST_CONFIG)
             })
             .catch(err => {
                 console.error(err)
                 toast.error('Error al guardar la meta', TOAST_CONFIG)
             })
-    }, [])  
+    }, [setFilterGoal])  
 
     
     
@@ -120,12 +150,15 @@ export const useGoals = () => {
     }, [])
 
     return { 
-        goal, 
+        goal,
+        setGoal, 
         loading, 
         addGoal, 
         deleteGoal, 
         editGoal, 
-        toogleComplete, 
-        allDeleteGoal 
+        toogleComplete,
+        allDeleteGoal,
+        filterGoal,
+        deleteFilteredGoals 
     }
 }

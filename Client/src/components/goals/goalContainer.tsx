@@ -102,7 +102,18 @@ export const GoalContainer = ({
     // Skeleton
     const [skeleton, setSkeleton] = useState(true)
     
-    
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSkeleton(true)
+        setLoading(true)
+
+        const timer = setTimeout(() => {
+            setLoading(false)
+            setSkeleton(false)
+        }, 100);
+
+        return() => clearTimeout(timer)
+    },[goal.length])
 
 
     // Paginate 
@@ -114,20 +125,13 @@ export const GoalContainer = ({
     const offSet = currentPage * itemsPerPage
     const currentItems = itemsToDisplay.slice(offSet, offSet + itemsPerPage)
 
+
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setLoading(true)
-        setSkeleton(true)
-        setCurrentPage(0)
-        const timer = setTimeout(() => {
-            setLoading(false)
-            setSkeleton(false)
-        }, 1000);
-
-        return () => clearTimeout(timer)
-    },[goal.length, filteredGoal])
-
-
+        if(filteredGoal !== goal){
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setCurrentPage(0)
+        }
+    },[filteredGoal.length])
     
     // Skeleton
     if (skeleton) {

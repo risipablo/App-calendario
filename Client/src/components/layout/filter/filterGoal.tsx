@@ -11,7 +11,7 @@ type Props = {
     onFilterChange?:(filters:{ monthFilter:string; yearFilter:string}) => void
 }
 
-export const FilterGoal = ({goal,setFilterActive,setGoalFilter,onFilterChange}:Props) => {
+export const FilterGoal = ({goal,setGoalFilter,setFilterActive,onFilterChange}:Props) => {
     
     const [priorityFilter,setPriorityFilter] = useState<string>('')
     const [monthFilter, setMonthFilter] = useState<string>('')
@@ -79,17 +79,23 @@ export const FilterGoal = ({goal,setFilterActive,setGoalFilter,onFilterChange}:P
     },[goal, monthFilter, yearFilter, normalDate,priorityFilter,completeFilter,setFilterActive])
 
 
+    
     useEffect(() => {
-
         setGoalFilter(filteredGoals)
 
-        if(onFilterChange){
+        if(priorityFilter){
+            setFilterActive(priorityFilter)
+        } else if (completeFilter){
+            setFilterActive(completeFilter === 'completadas' ? 'completadas' : 'pendientes')
+        } else if (monthFilter || yearFilter) {
+            setFilterActive('fechas')
+        } else {
+            setFilterActive('')
+        }
+        if (onFilterChange) {
             onFilterChange({monthFilter, yearFilter})
         }
-
-
-    },[setGoalFilter,setFilterActive,onFilterChange,filteredGoals])
-
+    },[setGoalFilter, setFilterActive, onFilterChange, filteredGoals, priorityFilter, completeFilter, monthFilter, yearFilter])
 
     const handleOpenFilterModal = () => {
         setTempMonth(monthFilter)
