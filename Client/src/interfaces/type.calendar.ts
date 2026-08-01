@@ -33,6 +33,13 @@ export interface CalendarContainerProps{
     deleteNote:(id: string) => void
     editNote:(id:string, editData: {title:string, date:string, priority:string, category:string, hour:string}) => void
     allDeleteNote:() => void
+    onAddEventFromModal: (data: {
+        title: string
+        date: string
+        category: string
+        priority: string
+        hour: string
+    }) => void 
 }
 
 export interface CalendarContextType{

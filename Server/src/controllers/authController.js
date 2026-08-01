@@ -377,6 +377,8 @@ exports.googleLogin = (req, res, next) => {
 };
 
 exports.googleCallback = (req, res, next) => {
+    console.log('📥 Query params:', req.query); 
+    console.log('📥 Code:', req.query.code);
     
     res.clearCookie('token', {
         httpOnly: true,

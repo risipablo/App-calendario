@@ -11,7 +11,6 @@ const noteRouter = require('./src/routes/noteRoutes')
 const authRouter = require('./src/routes/authRoutes')
 const validateRouter = require('./src/routes/validateRoutes')
 const imageRouter = require('./src/routes/imageRoute')
-const healthRouter = require('./src/routes/healthRoute')
 
 const {KeepSupabase} = require('./src/script/keepSupabase');
 
@@ -68,8 +67,26 @@ app.use(cors(corsOptions))
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParse())
-app.use(sanitizeInput);
-app.use(preventXSS);
+
+// Excluir passport para evitar problemas
+const excludeGoogleoAuth = (req,res,next) => {
+    if (req.path.includes('/auth/google')){
+        return next()
+    }
+
+    sanitizeInput(req,res,next)
+}
+app.use(excludeGoogleoAuth)
+
+// Evitar el passport en prevencion xss
+const excludeXSSForGoogle = (req,res,next) => {
+    if (req.path.includes('/auth/google')){
+        return next()
+    }
+    preventXSS(req,res,next)
+}
+app.use(excludeXSSForGoogle)
+
 app.use(preventHPP);
 app.use(detectAttack);
 app.use(checkOrigin);
@@ -77,7 +94,6 @@ app.use(checkOrigin);
 app.use('/api', generalLimiter)
 app.use('/api/auth',apiLimiter)
 
-app.use('/api', healthRouter)
 app.use('/api', todoRouter)
 app.use('/api', goalRouter)
 app.use('/api', calenderRouter)
@@ -88,13 +104,13 @@ app.use('/api/auth', validateRouter)
 
 
 
-app.get('/api/health', (req,res) => {
-    res.json({
-        succes:true,
-        message: 'Servidor funcionando correctamente',
-        timestamp: new Date().toISOString()
-    })
-})
+// app.get('/api/health', (req,res) => {
+//     res.json({
+//         succes:true,
+//         message: 'Servidor funcionando correctamente',
+//         timestamp: new Date().toISOString()
+//     })
+// })
 
 app.use((req, res) => {
     res.status(404).json({ 

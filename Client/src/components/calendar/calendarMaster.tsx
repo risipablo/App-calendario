@@ -30,6 +30,18 @@ export const CalendarMaster = () => {
         }
     }
 
+    const handleAddEventFromModal = (data: {
+        title: string
+        date: string
+        category: string
+        priority: string
+        hour: string
+         }) => {
+        if (data.title.trim() && data.category && data.date && data.priority && data.hour) {
+            addNote(data.title, data.date, data.category, data.priority, data.hour)
+        }
+    }
+
     const [showModal,setShowModal] = useState(false)
     const [deleteAction, setDeleteAction] = useState<(() => void) | null>(null)
     const [modalConfig, setModalConfig] = useState({
@@ -105,6 +117,7 @@ export const CalendarMaster = () => {
                 deleteNote={deleteNote}
                 editNote={editNote}
                 allDeleteNote={allDeleteNote}
+                onAddEventFromModal={handleAddEventFromModal}
             />
 
 
