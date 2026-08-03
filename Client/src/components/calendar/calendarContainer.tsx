@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock, RotateCcw } from "lucide-react"
+import { ChevronLeft, ChevronRight, Trash2, Pencil, Save, X, Clock, RotateCcw, Plus } from "lucide-react"
 import { useState, useMemo } from "react"
 import { Tooltip } from '@mui/material'
 import "../../style/calender.css"
@@ -24,7 +24,7 @@ export const CalendarContainer = ({
     const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     const weekDays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
 
-    // Estados para el modal de agregar evento
+    
     const [showAddModal, setShowAddModal] = useState(false)
     const [newEventDate, setNewEventDate] = useState<string>('')
     const [newEventHour, setNewEventHour] = useState<string>('')
@@ -32,7 +32,7 @@ export const CalendarContainer = ({
     const [newEventPriority, setNewEventPriority] = useState<string>('media')
     const [newEventCategory, setNewEventCategory] = useState<string>('')
 
-    // ✅ Función para limpiar el formulario
+    
     const resetNewEventForm = () => {
         setNewEventTitle('')
         setNewEventHour('')
@@ -40,7 +40,7 @@ export const CalendarContainer = ({
         setNewEventCategory('')
     }
 
-    // ✅ Función para manejar el guardado desde el modal
+    
     const handleAddNewEvent = () => {
         if (!newEventTitle.trim() || !newEventDate || !newEventHour) {
             return
@@ -378,7 +378,7 @@ export const CalendarContainer = ({
                                 <div className="empty-day-notes">
                                     <p>No hay eventos para este día</p>
                                     <button
-                                        className="add-event-btn"
+                                        className="btn-add-more-task"
                                         onClick={() => {
                                             const dateStr = formatDateForCompare(selectedDate)
                                             setNewEventDate(dateStr)
@@ -386,11 +386,24 @@ export const CalendarContainer = ({
                                             setShowAddModal(true)
                                         }}
                                     >
-                                        + Agregar evento
+                                        <Plus size={18} /> 
+                                        <span>Agregar evento </span>
                                     </button>
                                 </div>
                             ) : (
                                 <div className="day-notes-list">
+                                    <button
+                                        className="btn-add-more-task"
+                                        onClick={() => {
+                                            const dateStr = formatDateForCompare(selectedDate)
+                                            setNewEventDate(dateStr)
+                                            setShowDayModal(false)
+                                            setShowAddModal(true)
+                                        }}
+                                    >
+                                        <Plus size={18} /> 
+                                        <span>Agregar evento </span>
+                                    </button>
                                     {getNotesForDay(selectedDate)
                                         .sort((a, b) => a.hour.localeCompare(b.hour))
                                         .map((note) => (
@@ -410,7 +423,10 @@ export const CalendarContainer = ({
                                                             {note.category}
                                                         </span>
                                                     </div>
+                                                    
                                                 </div>
+
+                                                
 
                                                 <div className="note-actions">
                                                     <Tooltip title="Editar" arrow>
@@ -435,7 +451,9 @@ export const CalendarContainer = ({
                                                         </button>
                                                     </Tooltip>
                                                 </div>
+                                                
                                             </div>
+                                            
                                         ))}
                                 </div>
                             )}

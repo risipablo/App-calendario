@@ -162,7 +162,8 @@ export const TaskTable = ({
 
       useEffect(() => {
         setCurrentPage(0)
-    },[dateFilter,monthFilter,yearFilter,showToday])
+        
+    },[dateFilter,monthFilter,yearFilter,showToday,filterTask.length])
 
     return (
         <div className="task-table-container">
