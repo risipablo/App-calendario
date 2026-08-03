@@ -36,9 +36,9 @@ passport.use('google', new GoogleStrategy(
                     password:undefined
                 });
                 await user.save();
-                // console.log('✅ Nuevo usuario creado desde Google:', email);
+                
             } else {
-                // console.log('✅ Usuario existente:', email);
+                
                 // Actualizar avatar si no tiene
                 if (!user.avatarUrl && avatarUrl) {
                     user.avatarUrl = avatarUrl;
@@ -50,7 +50,7 @@ passport.use('google', new GoogleStrategy(
             return done(null, user);
             
         } catch (error) {
-            console.error('❌ Error en estrategia de Google:', error);
+            console.error('Error en estrategia de Google:', error);
             return done(error, null);
         }
     }
